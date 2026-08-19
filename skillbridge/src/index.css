@@ -1,0 +1,178 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --color-primary: #6366F1;
+  --color-primary-hover: #7C83FF;
+  --color-accent: #8B5CF6;
+  --color-success: #4ADE80;
+  --color-error: #F87171;
+  --color-warning: #FBBF24;
+  
+  --color-gray-bg: #0B1220;
+  --color-card-bg: rgba(15, 23, 42, 0.65);
+  --color-border-custom: rgba(255, 255, 255, 0.08);
+  
+  --color-text-main: #FFFFFF;
+  --color-text-section: #E2E8F0;
+  --color-text-sub: #CBD5E1;
+  --color-text-muted: #94A3B8;
+  --color-text-label: #A1AAB8;
+  
+  --color-input-bg: rgba(255, 255, 255, 0.04);
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.dark {
+  --color-primary: #6366F1;
+  --color-primary-hover: #7C83FF;
+  --color-accent: #8B5CF6;
+  --color-success: #4ADE80;
+  --color-error: #F87171;
+  --color-warning: #FBBF24;
+  
+  --color-gray-bg: #0B1220;
+  --color-card-bg: rgba(15, 23, 42, 0.65);
+  --color-border-custom: rgba(255, 255, 255, 0.08);
+  
+  --color-text-main: #FFFFFF;
+  --color-text-section: #E2E8F0;
+  --color-text-sub: #CBD5E1;
+  --color-text-muted: #94A3B8;
+  --color-text-label: #A1AAB8;
+  
+  --color-input-bg: rgba(255, 255, 255, 0.04);
+}
+
+/* Custom Base Styles */
+html, body {
+  background: 
+    radial-gradient(circle at 20% 10%, rgba(50, 45, 160, 0.35), transparent 35%),
+    radial-gradient(circle at 80% 20%, rgba(85, 45, 180, 0.25), transparent 35%),
+    linear-gradient(135deg, #0B1020 0%, #070B15 100%);
+  background-attachment: fixed;
+  color: var(--color-text-main);
+  font-family: var(--font-sans);
+  scroll-behavior: smooth;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Global Tailwind Overrides for Dark Mode Readability */
+.text-gray-900, .text-gray-950, .text-text-main {
+  color: var(--color-text-main) !important;
+}
+
+.text-gray-800, .text-text-section {
+  color: var(--color-text-section) !important;
+}
+
+.text-gray-700, .text-gray-650, .text-gray-600, .text-text-sub {
+  color: var(--color-text-sub) !important;
+}
+
+.text-gray-500, .text-gray-400, .text-text-muted {
+  color: var(--color-text-muted) !important;
+}
+
+.bg-white, .bg-card-bg {
+  background-color: var(--color-card-bg) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.border-gray-50, .border-gray-100, .border-gray-200, .border-gray-205, .border-gray-55, .border-border-custom {
+  border-color: var(--color-border-custom) !important;
+}
+
+.bg-gray-50, .bg-gray-50\/20, .bg-gray-50\/30, .bg-gray-50\/50, .bg-gray-50\/60, .bg-gray-bg {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+}
+
+@layer base {
+  input,
+  select,
+  textarea {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: #F8FAFC !important;
+    border-radius: 12px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #94A3B8 !important;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    border-color: #6366F1 !important;
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.08) !important;
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Custom Utility Classes */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.65) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 16px !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.btn-gradient {
+  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%) !important;
+  color: #FFFFFF !important;
+  transition: all 0.2s ease-in-out;
+}
+.btn-gradient:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+/* Custom CSS-only animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Standard utilities for layout spacing and structure */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

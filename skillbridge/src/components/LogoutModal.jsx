@@ -1,0 +1,107 @@
+import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { LogOut, X } from 'lucide-react';
+
+export default function LogoutModal({ isOpen, onClose, onConfirm, loading = false }) {
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  const modalContent = (
+    <div 
+      className="fixed inset-0 z-[99999] select-none"
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: '100vw',
+        height: '100vh',
+        zIndex: 99999
+      }}
+    >
+      {/* Fullscreen backdrop overlay */}
+      <div 
+        className="fixed inset-0 bg-black/80 backdrop-blur-md transition-opacity animate-fade-in"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          width: '100vw',
+          height: '100vh'
+        }}
+        onClick={onClose}
+      />
+
+      {/* Viewport dead-center modal card */}
+      <div 
+        className="fixed z-[100000] w-[90%] max-w-sm bg-[#0F172A] border border-white/10 rounded-3xl p-6 sm:p-8 shadow-2xl text-center space-y-5 animate-scale-up"
+        style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          margin: 0
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-text-muted hover:text-white p-1.5 rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
+          title="Close"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
+        <div className="w-14 h-14 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 mx-auto flex items-center justify-center shadow-inner">
+          <LogOut className="w-7 h-7 stroke-[2.2px]" />
+        </div>
+
+        <div className="space-y-1.5">
+          <h3 className="text-lg font-bold text-white leading-snug">
+            Are you sure you want to exit?
+          </h3>
+          <p className="text-xs text-text-muted">
+            You will be signed out of your current SkillBridge session.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 pt-2">
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={loading}
+            className="w-full py-2.5 px-4 rounded-xl border border-white/10 hover:bg-white/5 text-text-sub hover:text-white text-xs font-bold transition-all cursor-pointer"
+          >
+            No
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={loading}
+            className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-rose-500 to-red-600 hover:brightness-110 text-white text-xs font-bold shadow-md shadow-rose-500/20 transition-all cursor-pointer"
+          >
+            {loading ? 'Exiting...' : 'Yes'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  return typeof document !== 'undefined'
+    ? createPortal(modalContent, document.body)
+    : modalContent;
+}
