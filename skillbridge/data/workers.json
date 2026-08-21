@@ -1,0 +1,920 @@
+[
+  {
+    "workerId": "W001",
+    "userId": "W001",
+    "name": "Ramesh K",
+    "email": "w001@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Plumbing",
+    "categories": [
+      "Plumbing"
+    ],
+    "skills": [
+      "Pipe Leakage Repair",
+      "Toilet Repair",
+      "Drain Blockage"
+    ],
+    "experience": 6,
+    "experienceYears": 6,
+    "rating": 4.8,
+    "reviewCount": 52,
+    "completedJobs": 86,
+    "location": "RS Puram, Coimbatore",
+    "availability": true,
+    "verified": true,
+    "price": 450,
+    "priceRange": "₹450 – ₹650",
+    "bio": "Experienced Plumbing specialist with 6+ years of verified on-site service delivery in RS Puram, Coimbatore.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.754Z",
+    "updatedAt": "2026-08-20T14:20:17.756Z"
+  },
+  {
+    "workerId": "W002",
+    "userId": "W002",
+    "name": "Suresh M",
+    "email": "w002@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Electrical",
+    "categories": [
+      "Electrical"
+    ],
+    "skills": [
+      "Wiring Installation",
+      "Fan Installation",
+      "Switch / Socket Repair"
+    ],
+    "experience": 5,
+    "experienceYears": 5,
+    "rating": 4.7,
+    "reviewCount": 41,
+    "completedJobs": 73,
+    "location": "Gandhipuram, Coimbatore",
+    "availability": true,
+    "verified": true,
+    "price": 400,
+    "priceRange": "₹400 – ₹600",
+    "bio": "Experienced Electrical specialist with 5+ years of verified on-site service delivery in Gandhipuram, Coimbatore.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.756Z",
+    "updatedAt": "2026-08-20T14:20:17.756Z"
+  },
+  {
+    "workerId": "W003",
+    "userId": "W003",
+    "name": "Arun P",
+    "email": "w003@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Carpentry",
+    "categories": [
+      "Carpentry"
+    ],
+    "skills": [
+      "Door Repair",
+      "Furniture Repair",
+      "Cabinet Installation"
+    ],
+    "experience": 7,
+    "experienceYears": 7,
+    "rating": 4.9,
+    "reviewCount": 61,
+    "completedJobs": 102,
+    "location": "Saibaba Colony, Coimbatore",
+    "availability": true,
+    "verified": true,
+    "price": 500,
+    "priceRange": "₹500 – ₹700",
+    "bio": "Experienced Carpentry specialist with 7+ years of verified on-site service delivery in Saibaba Colony, Coimbatore.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.756Z",
+    "updatedAt": "2026-08-20T14:20:17.756Z"
+  },
+  {
+    "workerId": "W004",
+    "userId": "W004",
+    "name": "Karthik R",
+    "email": "w004@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Painting",
+    "categories": [
+      "Painting"
+    ],
+    "skills": [
+      "Interior Wall Painting",
+      "Exterior Painting",
+      "Repainting"
+    ],
+    "experience": 4,
+    "experienceYears": 4,
+    "rating": 4.5,
+    "reviewCount": 28,
+    "completedJobs": 49,
+    "location": "Peelamedu, Coimbatore",
+    "availability": true,
+    "verified": true,
+    "price": 600,
+    "priceRange": "₹600 – ₹800",
+    "bio": "Experienced Painting specialist with 4+ years of verified on-site service delivery in Peelamedu, Coimbatore.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.756Z",
+    "updatedAt": "2026-08-20T14:20:17.756Z"
+  },
+  {
+    "workerId": "W005",
+    "userId": "W005",
+    "name": "Manoj S",
+    "email": "w005@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Cleaning",
+    "categories": [
+      "Cleaning"
+    ],
+    "skills": [
+      "Home Deep Cleaning",
+      "Kitchen Cleaning",
+      "Bathroom Cleaning"
+    ],
+    "experience": 3,
+    "experienceYears": 3,
+    "rating": 4.4,
+    "reviewCount": 25,
+    "completedJobs": 57,
+    "location": "Singanallur, Coimbatore",
+    "availability": true,
+    "verified": true,
+    "price": 350,
+    "priceRange": "₹350 – ₹550",
+    "bio": "Experienced Cleaning specialist with 3+ years of verified on-site service delivery in Singanallur, Coimbatore.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.756Z",
+    "updatedAt": "2026-08-20T14:20:17.756Z"
+  },
+  {
+    "workerId": "W006",
+    "userId": "W006",
+    "name": "Vijay K",
+    "email": "w006@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Plumbing",
+    "categories": [
+      "Plumbing"
+    ],
+    "skills": [
+      "Tap / Faucet Repair",
+      "Water Tank Installation",
+      "Pipe Installation"
+    ],
+    "experience": 8,
+    "experienceYears": 8,
+    "rating": 4.8,
+    "reviewCount": 67,
+    "completedJobs": 118,
+    "location": "Gandhipuram, Coimbatore",
+    "availability": true,
+    "verified": true,
+    "price": 550,
+    "priceRange": "₹550 – ₹750",
+    "bio": "Experienced Plumbing specialist with 8+ years of verified on-site service delivery in Gandhipuram, Coimbatore.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.756Z",
+    "updatedAt": "2026-08-20T14:20:17.756Z"
+  },
+  {
+    "workerId": "W007",
+    "userId": "W007",
+    "name": "Prakash T",
+    "email": "w007@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Electrical",
+    "categories": [
+      "Electrical"
+    ],
+    "skills": [
+      "Short-Circuit Troubleshooting",
+      "Wiring Installation",
+      "Light Installation"
+    ],
+    "experience": 6,
+    "experienceYears": 6,
+    "rating": 4.6,
+    "reviewCount": 38,
+    "completedJobs": 81,
+    "location": "Peelamedu, Coimbatore",
+    "availability": true,
+    "verified": true,
+    "price": 450,
+    "priceRange": "₹450 – ₹650",
+    "bio": "Experienced Electrical specialist with 6+ years of verified on-site service delivery in Peelamedu, Coimbatore.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.756Z",
+    "updatedAt": "2026-08-20T14:20:17.756Z"
+  },
+  {
+    "workerId": "W008",
+    "userId": "W008",
+    "name": "Dinesh V",
+    "email": "w008@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Mason / Construction",
+    "categories": [
+      "Mason / Construction"
+    ],
+    "skills": [
+      "Tile Installation",
+      "Brick Wall Construction",
+      "Plastering"
+    ],
+    "experience": 9,
+    "experienceYears": 9,
+    "rating": 4.7,
+    "reviewCount": 54,
+    "completedJobs": 96,
+    "location": "Ukkadam, Coimbatore",
+    "availability": true,
+    "verified": true,
+    "price": 700,
+    "priceRange": "₹700 – ₹900",
+    "bio": "Experienced Mason / Construction specialist with 9+ years of verified on-site service delivery in Ukkadam, Coimbatore.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.756Z",
+    "updatedAt": "2026-08-20T14:20:17.756Z"
+  },
+  {
+    "workerId": "W009",
+    "userId": "W009",
+    "name": "Sanjay R",
+    "email": "w009@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Painting",
+    "categories": [
+      "Painting"
+    ],
+    "skills": [
+      "Exterior Painting",
+      "Repainting",
+      "Ceiling Painting"
+    ],
+    "experience": 5,
+    "experienceYears": 5,
+    "rating": 4.6,
+    "reviewCount": 31,
+    "completedJobs": 64,
+    "location": "Vadavalli, Coimbatore",
+    "availability": true,
+    "verified": true,
+    "price": 600,
+    "priceRange": "₹600 – ₹800",
+    "bio": "Experienced Painting specialist with 5+ years of verified on-site service delivery in Vadavalli, Coimbatore.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.756Z",
+    "updatedAt": "2026-08-20T14:20:17.756Z"
+  },
+  {
+    "workerId": "W010",
+    "userId": "W010",
+    "name": "Mohan K",
+    "email": "w010@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Cleaning",
+    "categories": [
+      "Cleaning"
+    ],
+    "skills": [
+      "Office Cleaning",
+      "Post-Construction Cleaning",
+      "Water Tank Cleaning"
+    ],
+    "experience": 4,
+    "experienceYears": 4,
+    "rating": 4.3,
+    "reviewCount": 22,
+    "completedJobs": 46,
+    "location": "Race Course, Coimbatore",
+    "availability": true,
+    "verified": false,
+    "price": 400,
+    "priceRange": "₹400 – ₹600",
+    "bio": "Experienced Cleaning specialist with 4+ years of verified on-site service delivery in Race Course, Coimbatore.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.756Z",
+    "updatedAt": "2026-08-20T14:20:17.756Z"
+  },
+  {
+    "workerId": "W011",
+    "userId": "W011",
+    "name": "Selvam P",
+    "email": "w011@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Plumbing",
+    "categories": [
+      "Plumbing"
+    ],
+    "skills": [
+      "Toilet Repair",
+      "Drain Blockage",
+      "Pipe Leakage Repair"
+    ],
+    "experience": 2,
+    "experienceYears": 2,
+    "rating": 4.2,
+    "reviewCount": 14,
+    "completedJobs": 23,
+    "location": "Kuniyamuthur, Coimbatore",
+    "availability": true,
+    "verified": false,
+    "price": 350,
+    "priceRange": "₹350 – ₹550",
+    "bio": "Experienced Plumbing specialist with 2+ years of verified on-site service delivery in Kuniyamuthur, Coimbatore.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.756Z",
+    "updatedAt": "2026-08-20T14:20:17.756Z"
+  },
+  {
+    "workerId": "W012",
+    "userId": "W012",
+    "name": "Hari S",
+    "email": "w012@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Electrical",
+    "categories": [
+      "Electrical"
+    ],
+    "skills": [
+      "Fan Installation",
+      "Switch / Socket Repair",
+      "Light Installation"
+    ],
+    "experience": 3,
+    "experienceYears": 3,
+    "rating": 4.5,
+    "reviewCount": 19,
+    "completedJobs": 35,
+    "location": "Saibaba Colony, Coimbatore",
+    "availability": true,
+    "verified": true,
+    "price": 400,
+    "priceRange": "₹400 – ₹600",
+    "bio": "Experienced Electrical specialist with 3+ years of verified on-site service delivery in Saibaba Colony, Coimbatore.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.756Z",
+    "updatedAt": "2026-08-20T14:20:17.757Z"
+  },
+  {
+    "workerId": "W013",
+    "userId": "W013",
+    "name": "Gopi N",
+    "email": "w013@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Carpentry",
+    "categories": [
+      "Carpentry"
+    ],
+    "skills": [
+      "Furniture Repair",
+      "Door Repair",
+      "Custom Furniture"
+    ],
+    "experience": 10,
+    "experienceYears": 10,
+    "rating": 4.9,
+    "reviewCount": 73,
+    "completedJobs": 141,
+    "location": "RS Puram, Coimbatore",
+    "availability": true,
+    "verified": true,
+    "price": 650,
+    "priceRange": "₹650 – ₹850",
+    "bio": "Experienced Carpentry specialist with 10+ years of verified on-site service delivery in RS Puram, Coimbatore.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "updatedAt": "2026-08-20T14:20:17.757Z"
+  },
+  {
+    "workerId": "W014",
+    "userId": "W014",
+    "name": "Ravi M",
+    "email": "w014@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Mason / Construction",
+    "categories": [
+      "Mason / Construction"
+    ],
+    "skills": [
+      "Cement Work",
+      "Plastering",
+      "Tile Installation"
+    ],
+    "experience": 6,
+    "experienceYears": 6,
+    "rating": 4.4,
+    "reviewCount": 30,
+    "completedJobs": 58,
+    "location": "Town Hall, Coimbatore",
+    "availability": true,
+    "verified": false,
+    "price": 650,
+    "priceRange": "₹650 – ₹850",
+    "bio": "Experienced Mason / Construction specialist with 6+ years of verified on-site service delivery in Town Hall, Coimbatore.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "updatedAt": "2026-08-20T14:20:17.757Z"
+  },
+  {
+    "workerId": "W015",
+    "userId": "W015",
+    "name": "Bala J",
+    "email": "w015@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Cleaning",
+    "categories": [
+      "Cleaning"
+    ],
+    "skills": [
+      "Bathroom Cleaning",
+      "Kitchen Cleaning",
+      "Home Deep Cleaning"
+    ],
+    "experience": 2,
+    "experienceYears": 2,
+    "rating": 4.1,
+    "reviewCount": 12,
+    "completedJobs": 19,
+    "location": "Peelamedu, Coimbatore",
+    "availability": true,
+    "verified": false,
+    "price": 300,
+    "priceRange": "₹300 – ₹500",
+    "bio": "Experienced Cleaning specialist with 2+ years of verified on-site service delivery in Peelamedu, Coimbatore.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "updatedAt": "2026-08-20T14:20:17.757Z"
+  },
+  {
+    "workerId": "W016",
+    "userId": "W016",
+    "name": "Sathish R",
+    "email": "w016@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Plumbing",
+    "categories": [
+      "Plumbing"
+    ],
+    "skills": [
+      "Water Tank Installation",
+      "Pipe Installation",
+      "Tap / Faucet Repair"
+    ],
+    "experience": 4,
+    "experienceYears": 4,
+    "rating": 4.6,
+    "reviewCount": 29,
+    "completedJobs": 51,
+    "location": "Saravanampatti, Coimbatore",
+    "availability": true,
+    "verified": true,
+    "price": 500,
+    "priceRange": "₹500 – ₹700",
+    "bio": "Experienced Plumbing specialist with 4+ years of verified on-site service delivery in Saravanampatti, Coimbatore.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "updatedAt": "2026-08-20T14:20:17.757Z"
+  },
+  {
+    "workerId": "W017",
+    "userId": "W017",
+    "name": "Rahul S",
+    "email": "w017@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Cleaning",
+    "categories": [
+      "Cleaning"
+    ],
+    "skills": [
+      "Kitchen Cleaning",
+      "Office Cleaning",
+      "Post-Construction Cleaning"
+    ],
+    "experience": 4,
+    "experienceYears": 4,
+    "rating": 4.6,
+    "reviewCount": 39,
+    "completedJobs": 64,
+    "location": "Saibaba Colony, Coimbatore",
+    "availability": true,
+    "verified": true,
+    "price": 400,
+    "priceRange": "₹400 – ₹600",
+    "bio": "Experienced Cleaning specialist with 4+ years of verified on-site service delivery in Saibaba Colony, Coimbatore.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "updatedAt": "2026-08-20T14:20:17.757Z"
+  },
+  {
+    "workerId": "W018",
+    "userId": "W018",
+    "name": "Imran A",
+    "email": "w018@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Cleaning",
+    "categories": [
+      "Cleaning"
+    ],
+    "skills": [
+      "Post-Construction Cleaning",
+      "Water Tank Cleaning"
+    ],
+    "experience": 6,
+    "experienceYears": 6,
+    "rating": 4.9,
+    "reviewCount": 58,
+    "completedJobs": 97,
+    "location": "Kalapatti, Coimbatore",
+    "availability": true,
+    "verified": true,
+    "price": 450,
+    "priceRange": "₹450 – ₹650",
+    "bio": "Experienced Cleaning specialist with 6+ years of verified on-site service delivery in Kalapatti, Coimbatore.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "updatedAt": "2026-08-20T14:20:17.757Z"
+  },
+  {
+    "workerId": "W019",
+    "userId": "W019",
+    "name": "Satish K",
+    "email": "w019@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Plumbing",
+    "categories": [
+      "Plumbing"
+    ],
+    "skills": [
+      "Water Tank Installation",
+      "Pipe Installation"
+    ],
+    "experience": 2,
+    "experienceYears": 2,
+    "rating": 4.3,
+    "reviewCount": 18,
+    "completedJobs": 46,
+    "location": "Chennai Central, Chennai",
+    "availability": true,
+    "verified": false,
+    "price": 450,
+    "priceRange": "₹450 – ₹650",
+    "bio": "Experienced Plumbing specialist with 2+ years of verified on-site service delivery in Chennai Central, Chennai.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "updatedAt": "2026-08-20T14:20:17.757Z"
+  },
+  {
+    "workerId": "W020",
+    "userId": "W020",
+    "name": "Vijay R",
+    "email": "w020@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Electrical",
+    "categories": [
+      "Electrical"
+    ],
+    "skills": [
+      "Short-Circuit Troubleshooting",
+      "Wiring Installation"
+    ],
+    "experience": 7,
+    "experienceYears": 7,
+    "rating": 4.7,
+    "reviewCount": 64,
+    "completedJobs": 98,
+    "location": "Anna Nagar, Chennai",
+    "availability": true,
+    "verified": true,
+    "price": 500,
+    "priceRange": "₹500 – ₹700",
+    "bio": "Experienced Electrical specialist with 7+ years of verified on-site service delivery in Anna Nagar, Chennai.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "updatedAt": "2026-08-20T14:20:17.757Z"
+  },
+  {
+    "workerId": "W021",
+    "userId": "W021",
+    "name": "Deepak J",
+    "email": "w021@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Carpentry",
+    "categories": [
+      "Carpentry"
+    ],
+    "skills": [
+      "Door Repair",
+      "Cabinet Installation"
+    ],
+    "experience": 4,
+    "experienceYears": 4,
+    "rating": 4.5,
+    "reviewCount": 33,
+    "completedJobs": 57,
+    "location": "Velachery, Chennai",
+    "availability": true,
+    "verified": true,
+    "price": 450,
+    "priceRange": "₹450 – ₹650",
+    "bio": "Experienced Carpentry specialist with 4+ years of verified on-site service delivery in Velachery, Chennai.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "updatedAt": "2026-08-20T14:20:17.757Z"
+  },
+  {
+    "workerId": "W022",
+    "userId": "W022",
+    "name": "Madhan P",
+    "email": "w022@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Mason / Construction",
+    "categories": [
+      "Mason / Construction"
+    ],
+    "skills": [
+      "Tile Installation",
+      "Brick Wall Construction"
+    ],
+    "experience": 8,
+    "experienceYears": 8,
+    "rating": 4.8,
+    "reviewCount": 72,
+    "completedJobs": 121,
+    "location": "Tambaram, Chennai",
+    "availability": true,
+    "verified": true,
+    "price": 700,
+    "priceRange": "₹700 – ₹900",
+    "bio": "Experienced Mason / Construction specialist with 8+ years of verified on-site service delivery in Tambaram, Chennai.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "updatedAt": "2026-08-20T14:20:17.757Z"
+  },
+  {
+    "workerId": "W023",
+    "userId": "W023",
+    "name": "Ravi S",
+    "email": "w023@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Painting",
+    "categories": [
+      "Painting"
+    ],
+    "skills": [
+      "Exterior Painting",
+      "Repainting"
+    ],
+    "experience": 5,
+    "experienceYears": 5,
+    "rating": 4.7,
+    "reviewCount": 41,
+    "completedJobs": 69,
+    "location": "Adyar, Chennai",
+    "availability": true,
+    "verified": true,
+    "price": 650,
+    "priceRange": "₹650 – ₹850",
+    "bio": "Experienced Painting specialist with 5+ years of verified on-site service delivery in Adyar, Chennai.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "updatedAt": "2026-08-20T14:20:17.757Z"
+  },
+  {
+    "workerId": "W024",
+    "userId": "W024",
+    "name": "Firoz A",
+    "email": "w024@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Cleaning",
+    "categories": [
+      "Cleaning"
+    ],
+    "skills": [
+      "Home Deep Cleaning",
+      "Office Cleaning"
+    ],
+    "experience": 6,
+    "experienceYears": 6,
+    "rating": 4.9,
+    "reviewCount": 79,
+    "completedJobs": 134,
+    "location": "T Nagar, Chennai",
+    "availability": true,
+    "verified": true,
+    "price": 500,
+    "priceRange": "₹500 – ₹700",
+    "bio": "Experienced Cleaning specialist with 6+ years of verified on-site service delivery in T Nagar, Chennai.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "updatedAt": "2026-08-20T14:20:17.757Z"
+  },
+  {
+    "workerId": "W025",
+    "userId": "W025",
+    "name": "Gokul M",
+    "email": "w025@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Plumbing",
+    "categories": [
+      "Plumbing"
+    ],
+    "skills": [
+      "Drain Blockage",
+      "Toilet Repair"
+    ],
+    "experience": 2,
+    "experienceYears": 2,
+    "rating": 4.3,
+    "reviewCount": 19,
+    "completedJobs": 31,
+    "location": "Kochi, Kerala",
+    "availability": true,
+    "verified": false,
+    "price": 350,
+    "priceRange": "₹350 – ₹550",
+    "bio": "Experienced Plumbing specialist with 2+ years of verified on-site service delivery in Kochi, Kerala.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "updatedAt": "2026-08-20T14:20:17.757Z"
+  },
+  {
+    "workerId": "W026",
+    "userId": "W026",
+    "name": "Nithin K",
+    "email": "w026@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Electrical",
+    "categories": [
+      "Electrical"
+    ],
+    "skills": [
+      "Fan Installation",
+      "Light Installation",
+      "Repair"
+    ],
+    "experience": 5,
+    "experienceYears": 5,
+    "rating": 4.6,
+    "reviewCount": 36,
+    "completedJobs": 63,
+    "location": "Ernakulam, Kerala",
+    "availability": true,
+    "verified": true,
+    "price": 450,
+    "priceRange": "₹450 – ₹650",
+    "bio": "Experienced Electrical specialist with 5+ years of verified on-site service delivery in Ernakulam, Kerala.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "updatedAt": "2026-08-20T14:20:17.757Z"
+  },
+  {
+    "workerId": "W027",
+    "userId": "W027",
+    "name": "Akhil S",
+    "email": "w027@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Carpentry",
+    "categories": [
+      "Carpentry"
+    ],
+    "skills": [
+      "Furniture Repair",
+      "Custom Furniture"
+    ],
+    "experience": 7,
+    "experienceYears": 7,
+    "rating": 4.8,
+    "reviewCount": 58,
+    "completedJobs": 101,
+    "location": "Thrissur, Kerala",
+    "availability": true,
+    "verified": true,
+    "price": 600,
+    "priceRange": "₹600 – ₹800",
+    "bio": "Experienced Carpentry specialist with 7+ years of verified on-site service delivery in Thrissur, Kerala.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "updatedAt": "2026-08-20T14:20:17.757Z"
+  },
+  {
+    "workerId": "W028",
+    "userId": "W028",
+    "name": "Shyam R",
+    "email": "w028@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Mason / Construction",
+    "categories": [
+      "Mason / Construction"
+    ],
+    "skills": [
+      "Plastering",
+      "Cement Work"
+    ],
+    "experience": 6,
+    "experienceYears": 6,
+    "rating": 4.5,
+    "reviewCount": 45,
+    "completedJobs": 74,
+    "location": "Kozhikode, Kerala",
+    "availability": true,
+    "verified": true,
+    "price": 600,
+    "priceRange": "₹600 – ₹800",
+    "bio": "Experienced Mason / Construction specialist with 6+ years of verified on-site service delivery in Kozhikode, Kerala.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "updatedAt": "2026-08-20T14:20:17.757Z"
+  },
+  {
+    "workerId": "W029",
+    "userId": "W029",
+    "name": "Jithin P",
+    "email": "w029@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Painting",
+    "categories": [
+      "Painting"
+    ],
+    "skills": [
+      "Interior Wall Painting",
+      "Ceiling Painting"
+    ],
+    "experience": 4,
+    "experienceYears": 4,
+    "rating": 4.7,
+    "reviewCount": 29,
+    "completedJobs": 52,
+    "location": "Kottayam, Kerala",
+    "availability": true,
+    "verified": true,
+    "price": 550,
+    "priceRange": "₹550 – ₹750",
+    "bio": "Experienced Painting specialist with 4+ years of verified on-site service delivery in Kottayam, Kerala.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "updatedAt": "2026-08-20T14:20:17.757Z"
+  },
+  {
+    "workerId": "W030",
+    "userId": "W030",
+    "name": "Nikhil T",
+    "email": "w030@skillbridge.demo",
+    "profileImageUrl": null,
+    "category": "Cleaning",
+    "categories": [
+      "Cleaning"
+    ],
+    "skills": [
+      "Bathroom Cleaning",
+      "Kitchen Cleaning"
+    ],
+    "experience": 3,
+    "experienceYears": 3,
+    "rating": 4.4,
+    "reviewCount": 21,
+    "completedJobs": 40,
+    "location": "Kochi, Kerala",
+    "availability": true,
+    "verified": false,
+    "price": 350,
+    "priceRange": "₹350 – ₹550",
+    "bio": "Experienced Cleaning specialist with 3+ years of verified on-site service delivery in Kochi, Kerala.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "updatedAt": "2026-08-20T14:20:17.757Z"
+  }
+]

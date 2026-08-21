@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { submitBulkRequest } from '../services/bulkService';
 import LoadingSpinner from './LoadingSpinner';
 import FormInput from './FormInput';
@@ -77,17 +77,17 @@ export default function BulkHireForm() {
 
   if (success) {
     return (
-      <div className="bg-white border border-gray-100 rounded-3xl p-8 shadow-xs max-w-xl mx-auto text-center animate-fade-in">
-        <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto text-emerald-600 mb-6">
+      <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-8 shadow-xs max-w-xl mx-auto text-center animate-fade-in">
+        <div className="w-16 h-16 bg-emerald-50 dark:bg-emerald-950/40 rounded-full flex items-center justify-center mx-auto text-emerald-600 dark:text-emerald-400 mb-6">
           <Check className="w-8 h-8 stroke-[3px]" />
         </div>
-        <h3 className="text-xl font-bold text-gray-900">Request Submitted Successfully</h3>
-        <p className="text-sm text-gray-500 mt-2 leading-relaxed">
+        <h3 className="text-xl font-bold text-[#283845] dark:text-white font-heading">Request Submitted Successfully</h3>
+        <p className="text-xs text-stone-500 dark:text-stone-400 mt-2 leading-relaxed">
           Thank you! Our operations team is reviewing your requirements and will reach out to you within 24 hours with suitable worker matches.
         </p>
         <button 
           onClick={() => setSuccess(false)}
-          className="mt-6 px-6 py-2.5 text-xs font-bold text-white btn-gradient rounded-xl shadow-xs"
+          className="mt-6 px-6 py-2.5 text-xs font-extrabold text-[#11171E] btn-gradient rounded-xl shadow-xs cursor-pointer"
         >
           Submit Another Request
         </button>
@@ -96,14 +96,14 @@ export default function BulkHireForm() {
   }
 
   return (
-    <div className="bg-white border border-gray-100 rounded-3xl p-6 sm:p-8 shadow-xs max-w-xl mx-auto text-left animate-fade-in">
+    <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-6 sm:p-8 shadow-xs max-w-xl mx-auto text-left animate-fade-in">
       <div className="mb-6">
-        <h3 className="text-xl font-bold text-gray-900">Business / Bulk Hiring Portal</h3>
-        <p className="text-xs text-gray-500 mt-1">Need multiple skilled workers for your workspace, retail center, or construction site? Let us handle the sourcing and vetting.</p>
+        <h3 className="text-xl font-bold text-[#283845] dark:text-white font-heading">Business / Bulk Hiring Portal</h3>
+        <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">Need multiple skilled workers for your workspace, retail center, or construction site? Let us handle the sourcing and vetting.</p>
       </div>
 
       {error && (
-        <div className="bg-rose-50 border border-rose-100 text-rose-600 rounded-xl p-4 text-xs font-medium mb-5">
+        <div className="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 rounded-xl p-4 text-xs font-medium mb-5">
           {error}
         </div>
       )}
@@ -124,16 +124,20 @@ export default function BulkHireForm() {
         {/* Row 2: Category & Worker Count */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-bold text-text-muted uppercase tracking-wider mb-1.5">Primary Category *</label>
+            <label className="block text-[11px] font-bold text-[#283845] dark:text-stone-300 uppercase tracking-wider mb-1.5">Primary Category *</label>
             <select
               name="category"
               value={formData.category}
               onChange={handleChange}
-              className="w-full border border-border-custom rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-primary bg-card-bg/60 text-text-main cursor-pointer"
+              className="w-full h-11 border border-[#EBE5DE] dark:border-white/10 rounded-xl px-3 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-[#FFA649] focus:ring-2 focus:ring-[#FFA649]/25 bg-stone-50/80 dark:bg-[#18222B] text-[#283845] dark:text-white cursor-pointer"
               required
             >
-              <option value="" className="bg-[#0F172A] text-white">Select category</option>
-              {CATEGORIES.map(cat => <option key={cat} value={cat} className="bg-[#0F172A] text-white">{cat}</option>)}
+              <option value="" className="bg-white dark:bg-[#18222B] text-[#283845] dark:text-white">Select category</option>
+              {CATEGORIES.map(cat => (
+                <option key={cat} value={cat} className="bg-white dark:bg-[#18222B] text-[#283845] dark:text-white">
+                  {cat}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -210,7 +214,7 @@ export default function BulkHireForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3 mt-2 text-sm font-bold text-white btn-gradient rounded-xl shadow-sm flex items-center justify-center gap-2"
+          className="w-full h-11 mt-2 text-xs sm:text-sm font-extrabold text-[#11171E] btn-gradient rounded-xl shadow-sm flex items-center justify-center gap-2 cursor-pointer"
         >
           {loading ? <LoadingSpinner size="sm" color="white" /> : 'Submit Bulk Request'}
         </button>

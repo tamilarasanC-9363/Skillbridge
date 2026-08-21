@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useEffect, useRef, useState, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { getWorkerProfile, toggleAvailability } from '../../services/workerService';
+import { getWorkerProfile, toggleAvailability, getWorkerEarningsData } from '../../services/workerService';
 import { getBookingsForUser, updateBookingStatus } from '../../services/bookingService';
+import { subscribeToReviewsForWorker } from '../../services/reviewService';
 import BookingCard from '../../components/BookingCard';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import RatingStars from '../../components/RatingStars';
@@ -13,37 +14,60 @@ import {
 
 export default function WorkerDashboard() {
   const { currentUser } = useAuth();
-  const navigate = useNavigate();
 
   const [profile, setProfile] = useState(null);
   const [bookings, setBookings] = useState([]);
+  const [feedbacks, setFeedbacks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [availabilityLoading, setAvailabilityLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('incoming'); // incoming | active | history
+  const reviewsUnsubscribeRef = useRef(() => {});
 
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
+    if (!currentUser?.uid) return;
     try {
-      // 1. Fetch worker profile
       const prof = await getWorkerProfile(currentUser.uid);
       setProfile(prof);
 
-      // 2. Fetch worker bookings
       const list = await getBookingsForUser(currentUser.uid, 'worker');
       setBookings(list);
+
+      const bookingMap = new Map((list || []).map(booking => [booking.bookingId, booking]));
+      reviewsUnsubscribeRef.current();
+      reviewsUnsubscribeRef.current = subscribeToReviewsForWorker(currentUser.uid, (reviews) => {
+        const enrichedReviews = (reviews || [])
+          .map(review => ({
+            ...review,
+            customerName: bookingMap.get(review.bookingId)?.customerName || JSON.parse(localStorage.getItem('sb_mock_users') || '{}')[review.customerId]?.name || 'Customer',
+            jobName: bookingMap.get(review.bookingId)?.jobType || bookingMap.get(review.bookingId)?.category || 'Service',
+            createdAtDate: review.createdAt?.seconds
+              ? new Date(review.createdAt.seconds * 1000)
+              : new Date(review.createdAt || Date.now())
+          }))
+          .sort((a, b) => b.createdAtDate - a.createdAtDate);
+
+        setFeedbacks(enrichedReviews);
+      });
     } catch (err) {
       console.error('Error loading worker dashboard:', err);
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentUser?.uid]);
 
   useEffect(() => {
+    if (!currentUser?.uid) return;
+
     loadDashboardData();
 
-    // Listen to global changes
-    window.addEventListener('sb_message_sent', loadDashboardData);
-    return () => window.removeEventListener('sb_message_sent', loadDashboardData);
-  }, [currentUser]);
+    const onMessageSent = () => loadDashboardData();
+    window.addEventListener('sb_message_sent', onMessageSent);
+
+    return () => {
+      reviewsUnsubscribeRef.current();
+      window.removeEventListener('sb_message_sent', onMessageSent);
+    };
+  }, [currentUser?.uid, loadDashboardData]);
 
   const handleToggleAvailability = async () => {
     if (!profile) return;
@@ -76,20 +100,19 @@ export default function WorkerDashboard() {
     );
   }
 
-  // Check if profile setup has been completed (i.e. has categories selected)
   const isSetupIncomplete = !profile || !profile.categories || profile.categories.length === 0;
   if (isSetupIncomplete) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-12 animate-fade-in text-center">
-        <div className="bg-white border border-gray-100 rounded-3xl p-8 sm:p-12 shadow-xs space-y-6">
-          <ShieldAlert className="w-16 h-16 text-amber-500 mx-auto animate-bounce" />
-          <h1 className="text-2xl font-bold text-gray-900">Onboarding Incomplete</h1>
-          <p className="text-sm text-gray-500 max-w-md mx-auto leading-relaxed">
-            Welcome to SkillBridge! Before you can toggle availability, match with clients, or receive booking notifications, you must complete your worker profile and upload identification documents.
+        <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-8 sm:p-12 shadow-xl space-y-6">
+          <ShieldAlert className="w-16 h-16 text-[#FFA649] mx-auto animate-bounce" />
+          <h1 className="text-2xl font-extrabold text-[#283845] dark:text-white font-heading">Onboarding Incomplete</h1>
+          <p className="text-xs sm:text-sm text-[#4A5B69] dark:text-stone-400 max-w-md mx-auto leading-relaxed">
+            Welcome to SkillBridge! Before you can match with clients and accept incoming jobs, please complete your trade profile and identity details.
           </p>
           <Link
             to="/worker/profile/setup"
-            className="inline-block px-8 py-3.5 text-sm font-bold text-white btn-gradient rounded-xl shadow-md"
+            className="inline-block px-8 py-3.5 text-xs font-extrabold text-[#11171E] btn-gradient rounded-xl shadow-md"
           >
             Complete Onboarding Now
           </Link>
@@ -98,20 +121,15 @@ export default function WorkerDashboard() {
     );
   }
 
-  // Filter Bookings
   const pendingRequests = bookings.filter(b => b.status === 'Pending');
   const activeJobs = bookings.filter(b => ['Accepted', 'In Progress'].includes(b.status));
   const completedJobs = bookings.filter(b => b.status === 'Completed');
 
-  // Calculate earnings
-  const mockEarnings = bookings
-    .filter(b => b.status === 'Completed')
-    .reduce((sum, b) => {
-      // Extract first number in string, e.g. "₹300 – ₹800" -> 300
-      const match = b.estimatedPrice?.replace(/[^0-9–]/g, '').split('–');
-      const baseVal = match ? Number(match[0]) : 300;
-      return sum + baseVal;
-    }, 0);
+  const earningsData = getWorkerEarningsData(profile, bookings);
+
+  const liveAverageRating = feedbacks.length > 0
+    ? feedbacks.reduce((sum, review) => sum + Number(review.rating || 0), 0) / feedbacks.length
+    : Number(profile?.rating || 0);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in text-left">
@@ -119,102 +137,151 @@ export default function WorkerDashboard() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 leading-tight">Worker Dashboard</h1>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#283845] dark:text-white font-heading leading-tight">
+              Worker Command Hub
+            </h1>
             {profile.verified ? (
-              <span className="bg-emerald-50 text-emerald-700 font-bold border border-emerald-100 text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider">Verified</span>
+              <span className="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 font-extrabold border border-emerald-200 dark:border-emerald-800/60 text-[10px] px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                ✓ Verified
+              </span>
             ) : (
-              <span className="bg-amber-50 text-amber-600 font-bold border border-amber-100 text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider">Verification Pending</span>
+              <span className="bg-[#FFA649]/15 text-[#283845] dark:text-[#FFA649] font-extrabold border border-[#FFA649]/30 text-[10px] px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                Audit Pending
+              </span>
             )}
           </div>
-          <p className="text-xs text-gray-500 mt-1">Select availability, receive incoming client bookings, and track your total earnings.</p>
+          <p className="text-xs text-[#4A5B69] dark:text-stone-400 mt-1">
+            Toggle your work availability, manage job requests, and track cumulative earnings.
+          </p>
         </div>
 
         {/* Availability Toggle */}
-        <div className="bg-white border border-gray-100 px-4 py-2.5 rounded-2xl flex items-center gap-4 shadow-3xs">
+        <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 px-4 py-2 rounded-2xl flex items-center gap-3 shadow-xs">
           <div className="text-left">
-            <span className="block text-[10px] font-bold text-gray-400 uppercase">Availability Status</span>
-            <span className={`text-xs font-bold ${profile.availability ? 'text-emerald-600' : 'text-gray-400'}`}>
-              {profile.availability ? 'Available for Jobs' : 'Offline / Unavailable'}
+            <span className="block text-[10px] font-extrabold text-stone-400 dark:text-stone-500 uppercase tracking-wider">Availability</span>
+            <span className={`text-xs font-bold ${profile.availability ? 'text-[#FFA649]' : 'text-stone-400'}`}>
+              {profile.availability ? 'Available for Jobs' : 'Offline'}
             </span>
           </div>
           <button 
             onClick={handleToggleAvailability}
             disabled={availabilityLoading}
-            className="text-primary hover:opacity-90 transition-opacity"
-            title="Toggle Availability"
+            className="text-[#FFA649] hover:opacity-90 transition-opacity cursor-pointer"
+            title="Toggle Status"
           >
             {profile.availability ? (
-              <ToggleRight className="w-10 h-10 text-emerald-500 fill-current" />
+              <ToggleRight className="w-9 h-9 text-[#FFA649] fill-current" />
             ) : (
-              <ToggleLeft className="w-10 h-10 text-gray-300" />
+              <ToggleLeft className="w-9 h-9 text-stone-300 dark:text-stone-600" />
             )}
           </button>
         </div>
       </div>
 
-      {/* Verification Pending Info Callout */}
+      {/* Verification Notice */}
       {!profile.verified && (
-        <div className="bg-amber-50 border border-amber-100 rounded-3xl p-5 mb-8 flex gap-3 text-xs text-amber-800 leading-relaxed">
-          <Info className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+        <div className="bg-[#FFA649]/15 border border-[#FFA649]/30 rounded-2xl p-4 mb-8 flex gap-3 text-xs text-[#283845] dark:text-[#FFA649] leading-relaxed">
+          <Info className="w-4.5 h-4.5 text-[#FFA649] flex-shrink-0 mt-0.5" />
           <div>
-            <span className="font-bold">Awaiting Document Approval:</span> Your uploaded Govt ID Proof and Skill Certificates are currently being verified by SkillBridge administration. You can accept jobs manually from the panel, but your profile will not appear in customer recommendation searches until verified.
+            <span className="font-bold">Awaiting Admin Verification:</span> Your uploaded certification documents are in review. You can still accept direct booking requests.
           </div>
         </div>
       )}
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-        <div className="bg-white border border-gray-100 p-4 rounded-2xl text-center shadow-3xs flex flex-col items-center">
-          <div className="w-10 h-10 rounded-xl bg-amber-100/90 dark:bg-amber-950/70 border border-amber-200/80 dark:border-amber-800/60 flex items-center justify-center mb-2">
-            <Clock className="w-5 h-5 text-[#78350F] dark:text-[#FCD34D] stroke-[2.2px]" />
+        <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 p-4 rounded-2xl text-center shadow-xs flex flex-col items-center">
+          <div className="w-10 h-10 rounded-xl bg-[#FFA649]/15 border border-[#FFA649]/30 flex items-center justify-center mb-2">
+            <Clock className="w-5 h-5 text-[#FFA649] stroke-[2.2px]" />
           </div>
-          <span className="block text-[10px] font-bold text-gray-400 uppercase">Pending Requests</span>
-          <span className="text-xl font-bold text-gray-900 mt-0.5 block">{pendingRequests.length}</span>
+          <span className="block text-[10px] font-extrabold text-stone-400 dark:text-stone-500 uppercase tracking-wider">New Requests</span>
+          <span className="text-xl font-extrabold text-[#283845] dark:text-white font-heading mt-0.5 block">{pendingRequests.length}</span>
         </div>
 
-        <div className="bg-white border border-gray-100 p-4 rounded-2xl text-center shadow-3xs flex flex-col items-center">
-          <div className="w-10 h-10 rounded-xl bg-blue-100/90 dark:bg-blue-950/70 border border-blue-200/80 dark:border-blue-800/60 flex items-center justify-center mb-2">
-            <Briefcase className="w-5 h-5 text-[#1E3A8A] dark:text-[#93C5FD] stroke-[2.2px]" />
+        <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 p-4 rounded-2xl text-center shadow-xs flex flex-col items-center">
+          <div className="w-10 h-10 rounded-xl bg-[#283845]/10 dark:bg-[#283845]/40 border border-[#283845]/20 dark:border-[#FFA649]/30 flex items-center justify-center mb-2">
+            <Briefcase className="w-5 h-5 text-[#283845] dark:text-[#FFA649] stroke-[2.2px]" />
           </div>
-          <span className="block text-[10px] font-bold text-gray-400 uppercase">Active Jobs</span>
-          <span className="text-xl font-bold text-gray-900 mt-0.5 block">{activeJobs.length}</span>
+          <span className="block text-[10px] font-extrabold text-stone-400 dark:text-stone-500 uppercase tracking-wider">Active Jobs</span>
+          <span className="text-xl font-extrabold text-[#283845] dark:text-white font-heading mt-0.5 block">{activeJobs.length}</span>
         </div>
 
-        <div className="bg-white border border-gray-100 p-4 rounded-2xl text-center shadow-3xs flex flex-col items-center">
-          <div className="w-10 h-10 rounded-xl bg-emerald-100/90 dark:bg-emerald-950/70 border border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-center mb-2">
-            <CheckCircle className="w-5 h-5 text-[#064E3B] dark:text-[#6EE7B7] stroke-[2.2px]" />
+        <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 p-4 rounded-2xl text-center shadow-xs flex flex-col items-center">
+          <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-center mb-2">
+            <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400 stroke-[2.2px]" />
           </div>
-          <span className="block text-[10px] font-bold text-gray-400 uppercase">Jobs Completed</span>
-          <span className="text-xl font-bold text-gray-900 mt-0.5 block">{profile.completedJobs || completedJobs.length}</span>
+          <span className="block text-[10px] font-extrabold text-stone-400 dark:text-stone-500 uppercase tracking-wider">Completed</span>
+          <span className="text-xl font-extrabold text-[#283845] dark:text-white font-heading mt-0.5 block">{earningsData.totalCompletedJobs}</span>
         </div>
 
-        <div className="bg-white border border-gray-100 p-4 rounded-2xl text-center shadow-3xs flex flex-col items-center">
-          <div className="w-10 h-10 rounded-xl bg-amber-100/90 dark:bg-amber-950/70 border border-amber-200/80 dark:border-amber-800/60 flex items-center justify-center mb-2">
-            <Star className="w-5 h-5 text-[#78350F] dark:text-[#FCD34D] fill-current" />
+        <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 p-4 rounded-2xl text-center shadow-xs flex flex-col items-center">
+          <div className="w-10 h-10 rounded-xl bg-[#FFA649]/15 border border-[#FFA649]/30 flex items-center justify-center mb-2">
+            <Star className="w-5 h-5 text-[#FFA649] fill-current" />
           </div>
-          <span className="block text-[10px] font-bold text-gray-400 uppercase">Rating average</span>
-          <span className="text-xl font-bold text-gray-900 mt-0.5 block flex items-center justify-center gap-0.5">
-            {profile.rating > 0 ? profile.rating.toFixed(1) : '—'} <span className="text-[10px] text-gray-400 font-semibold">({profile.reviewCount || 0})</span>
+          <span className="block text-[10px] font-extrabold text-stone-400 dark:text-stone-500 uppercase tracking-wider">Rating</span>
+          <span className="text-xl font-extrabold text-[#283845] dark:text-white font-heading mt-0.5 block">
+            {liveAverageRating > 0 ? liveAverageRating.toFixed(1) : '5.0'}
           </span>
         </div>
 
-        <div className="bg-white border border-gray-100 p-4 rounded-2xl col-span-2 md:col-span-1 text-center shadow-3xs flex flex-col items-center">
-          <div className="w-10 h-10 rounded-xl bg-emerald-100/90 dark:bg-emerald-950/70 border border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-center mb-2">
-            <IndianRupee className="w-5 h-5 text-[#064E3B] dark:text-[#6EE7B7] stroke-[2.2px]" />
+        <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 p-4 rounded-2xl col-span-2 md:col-span-1 text-center shadow-xs flex flex-col items-center">
+          <div className="w-10 h-10 rounded-xl bg-[#283845]/10 dark:bg-[#283845]/40 border border-[#283845]/20 dark:border-[#FFA649]/30 flex items-center justify-center mb-2">
+            <IndianRupee className="w-5 h-5 text-[#FFA649] stroke-[2.2px]" />
           </div>
-          <span className="block text-[10px] font-bold text-gray-600 uppercase">Est. Earnings</span>
-          <span className="text-xl font-bold text-gray-900 mt-0.5 block">₹{mockEarnings}</span>
+          <span className="block text-[10px] font-extrabold text-stone-400 dark:text-stone-500 uppercase tracking-wider">Est. Earnings</span>
+          <span className="text-xl font-extrabold text-[#283845] dark:text-white font-heading mt-0.5 block">₹{earningsData.totalIncome.toLocaleString('en-IN')}</span>
         </div>
       </div>
 
-      {/* Booking Tabs Selector */}
-      <div className="flex border-b border-gray-100 mb-6 gap-6">
+      {/* Customer Feedback Snippet */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between gap-4 mb-4">
+          <h2 className="text-lg font-extrabold text-[#283845] dark:text-white font-heading">Customer Feedbacks</h2>
+          <Link to="/worker/feedbacks" className="text-xs font-bold text-[#283845] dark:text-[#FFA649] hover:text-[#FFA649] transition-colors">
+            View all
+          </Link>
+        </div>
+
+        {feedbacks.length === 0 ? (
+          <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-6 text-center text-stone-500 shadow-xs">
+            <Star className="w-8 h-8 text-stone-300 dark:text-stone-600 mx-auto mb-2" />
+            <h3 className="text-sm font-bold text-[#283845] dark:text-white">No reviews yet</h3>
+            <p className="text-xs text-stone-400 mt-1">Customer ratings will appear here after completed bookings are reviewed.</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {feedbacks.slice(0, 3).map(feedback => (
+              <div key={feedback.reviewId || `${feedback.bookingId}-${feedback.customerId}`} className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-2xl p-4 shadow-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                  <div className="flex items-center gap-2 text-sm font-bold text-[#283845] dark:text-white">
+                    <Users className="w-4 h-4 text-[#FFA649]" />
+                    {feedback.customerName}
+                  </div>
+                  <div className="text-[11px] text-stone-500 dark:text-stone-400">
+                    {feedback.createdAtDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between gap-3 mb-2 flex-wrap">
+                  <RatingStars rating={Number(feedback.rating || 0)} showNumber={true} />
+                  <span className="text-[11px] font-bold text-stone-500 dark:text-stone-400">{feedback.jobName}</span>
+                </div>
+
+                <p className="text-xs text-stone-600 dark:text-stone-300 italic leading-relaxed">“{feedback.comment || 'No additional comment provided.'}”</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Booking Tabs */}
+      <div className="flex border-b border-[#EBE5DE] dark:border-white/10 mb-6 gap-6">
         <button
           onClick={() => setActiveTab('incoming')}
-          className={`pb-3 text-sm font-semibold flex items-center gap-1.5 border-b-2 transition-all ${
+          className={`pb-3 text-xs sm:text-sm font-bold flex items-center gap-1.5 border-b-2 transition-all cursor-pointer ${
             activeTab === 'incoming' 
-              ? 'border-primary text-primary' 
-              : 'border-transparent text-gray-500 hover:text-gray-950'
+              ? 'border-[#FFA649] text-[#283845] dark:text-[#FFA649]' 
+              : 'border-transparent text-stone-500 hover:text-[#283845] dark:hover:text-white'
           }`}
         >
           Incoming Requests ({pendingRequests.length})
@@ -222,21 +289,21 @@ export default function WorkerDashboard() {
 
         <button
           onClick={() => setActiveTab('active')}
-          className={`pb-3 text-sm font-semibold flex items-center gap-1.5 border-b-2 transition-all ${
+          className={`pb-3 text-xs sm:text-sm font-bold flex items-center gap-1.5 border-b-2 transition-all cursor-pointer ${
             activeTab === 'active' 
-              ? 'border-primary text-primary' 
-              : 'border-transparent text-gray-500 hover:text-gray-950'
+              ? 'border-[#FFA649] text-[#283845] dark:text-[#FFA649]' 
+              : 'border-transparent text-stone-500 hover:text-[#283845] dark:hover:text-white'
           }`}
         >
-          Active Assignments ({activeJobs.length})
+          Active Tasks ({activeJobs.length})
         </button>
 
         <button
           onClick={() => setActiveTab('history')}
-          className={`pb-3 text-sm font-semibold flex items-center gap-1.5 border-b-2 transition-all ${
+          className={`pb-3 text-xs sm:text-sm font-bold flex items-center gap-1.5 border-b-2 transition-all cursor-pointer ${
             activeTab === 'history' 
-              ? 'border-primary text-primary' 
-              : 'border-transparent text-gray-500 hover:text-gray-950'
+              ? 'border-[#FFA649] text-[#283845] dark:text-[#FFA649]' 
+              : 'border-transparent text-stone-500 hover:text-[#283845] dark:hover:text-white'
           }`}
         >
           Completed History ({completedJobs.length})
@@ -246,10 +313,10 @@ export default function WorkerDashboard() {
       {/* Render selected tabs */}
       {activeTab === 'incoming' ? (
         pendingRequests.length === 0 ? (
-          <div className="bg-white border border-gray-100 rounded-3xl p-12 text-center text-gray-500 shadow-3xs">
-            <ClipboardList className="w-12 h-12 text-gray-200 mx-auto mb-3" />
-            <h3 className="text-sm font-bold text-gray-800">No New Requests</h3>
-            <p className="text-xs text-gray-400 mt-1">You have no pending customer requests waiting for your acceptance.</p>
+          <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-12 text-center text-stone-500 shadow-xs">
+            <ClipboardList className="w-12 h-12 text-stone-300 dark:text-stone-600 mx-auto mb-3" />
+            <h3 className="text-sm font-bold text-[#283845] dark:text-white">No New Requests</h3>
+            <p className="text-xs text-stone-400 mt-1">Pending client requests will appear here in real time.</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -265,10 +332,10 @@ export default function WorkerDashboard() {
         )
       ) : activeTab === 'active' ? (
         activeJobs.length === 0 ? (
-          <div className="bg-white border border-gray-100 rounded-3xl p-12 text-center text-gray-500 shadow-3xs">
-            <ClipboardList className="w-12 h-12 text-gray-200 mx-auto mb-3" />
-            <h3 className="text-sm font-bold text-gray-800">No Active Jobs</h3>
-            <p className="text-xs text-gray-400 mt-1">Accept pending requests to begin working and unlock chats.</p>
+          <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-12 text-center text-stone-500 shadow-xs">
+            <ClipboardList className="w-12 h-12 text-stone-300 dark:text-stone-600 mx-auto mb-3" />
+            <h3 className="text-sm font-bold text-[#283845] dark:text-white">No Active Jobs</h3>
+            <p className="text-xs text-stone-400 mt-1">Accept incoming requests to start work and open chat.</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -284,10 +351,10 @@ export default function WorkerDashboard() {
         )
       ) : (
         completedJobs.length === 0 ? (
-          <div className="bg-white border border-gray-100 rounded-3xl p-12 text-center text-gray-500 shadow-3xs">
-            <ClipboardList className="w-12 h-12 text-gray-200 mx-auto mb-3" />
-            <h3 className="text-sm font-bold text-gray-800">No Completed History</h3>
-            <p className="text-xs text-gray-400 mt-1">Complete your active jobs to build your client rating and profile history.</p>
+          <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-12 text-center text-stone-500 shadow-xs">
+            <ClipboardList className="w-12 h-12 text-stone-300 dark:text-stone-600 mx-auto mb-3" />
+            <h3 className="text-sm font-bold text-[#283845] dark:text-white">No Completed History</h3>
+            <p className="text-xs text-stone-400 mt-1">Finished tasks will be logged here with customer ratings.</p>
           </div>
         ) : (
           <div className="space-y-4">

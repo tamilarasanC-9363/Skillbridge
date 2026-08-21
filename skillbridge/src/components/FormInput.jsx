@@ -1,4 +1,4 @@
-import React from 'react';
+// FormInput component
 
 export default function FormInput({
   label,
@@ -14,24 +14,25 @@ export default function FormInput({
   disabled = false,
   required = false,
   className = '',
-  rows
+  rows,
+  rightElement
 }) {
   const isTextArea = type === 'textarea';
 
   return (
     <div className="flex flex-col text-left w-full animate-fade-in select-none">
       {label && (
-        <label htmlFor={name} className="block text-xs font-bold text-text-muted uppercase tracking-wider mb-1.5">
-          {label} {required && <span className="text-red-500">*</span>}
+        <label htmlFor={name} className="block text-[11px] font-bold text-[#283845] dark:text-stone-300 uppercase tracking-wider mb-1.5">
+          {label} {required && <span className="text-[#FFA649]">*</span>}
         </label>
       )}
 
       <div className="input-wrapper relative w-full group">
         {Icon && (
-          <span className={`input-icon absolute left-4 pointer-events-none text-[#94A3B8] group-focus-within:text-[#8B9CFF] transition-colors duration-150 ${
-            isTextArea ? 'top-4' : 'top-1/2 -translate-y-1/2'
+          <span className={`input-icon absolute left-3.5 pointer-events-none text-stone-400 dark:text-stone-500 group-focus-within:text-[#FFA649] transition-colors duration-150 ${
+            isTextArea ? 'top-3.5' : 'top-1/2 -translate-y-1/2'
           }`}>
-            <Icon className="w-4.5 h-4.5 stroke-[2.2px]" aria-hidden="true" />
+            <Icon className="w-4 h-4 stroke-[2.2px]" aria-hidden="true" />
           </span>
         )}
 
@@ -45,9 +46,9 @@ export default function FormInput({
             disabled={disabled}
             required={required}
             rows={rows || 3}
-            className={`w-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.12)] text-[#F8FAFC] placeholder-[#94A3B8] focus:border-[#6366F1] focus:bg-[rgba(255,255,255,0.08)] outline-none rounded-xl py-2.5 pr-4 text-sm transition-all duration-150 ${
-              Icon ? 'pl-12' : 'pl-4'
-            } ${error ? 'border-red-500/50 focus:border-red-500' : ''} ${className}`}
+            className={`w-full bg-stone-50/80 dark:bg-[#18222B] border border-[#EBE5DE] dark:border-white/10 text-[#283845] dark:text-white placeholder-stone-400 dark:placeholder-stone-500 focus:border-[#FFA649] focus:bg-white dark:focus:bg-[#18222B] focus:ring-2 focus:ring-[#FFA649]/25 outline-none rounded-xl py-2.5 pr-4 text-xs sm:text-sm transition-all duration-150 ${
+              Icon ? 'pl-10' : 'pl-3.5'
+            } ${error ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20' : ''} ${className}`}
           />
         ) : (
           <input
@@ -61,15 +62,21 @@ export default function FormInput({
             required={required}
             autoComplete={autoComplete}
             inputMode={inputMode}
-            className={`w-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.12)] text-[#F8FAFC] placeholder-[#94A3B8] focus:border-[#6366F1] focus:bg-[rgba(255,255,255,0.08)] outline-none rounded-xl h-11 pr-4 text-sm transition-all duration-150 ${
-              Icon ? 'pl-12' : 'pl-4'
-            } ${error ? 'border-red-500/50 focus:border-red-500' : ''} ${className}`}
+            className={`w-full bg-stone-50/80 dark:bg-[#18222B] border border-[#EBE5DE] dark:border-white/10 text-[#283845] dark:text-white placeholder-stone-400 dark:placeholder-stone-500 focus:border-[#FFA649] focus:bg-white dark:focus:bg-[#18222B] focus:ring-2 focus:ring-[#FFA649]/25 outline-none rounded-xl h-11 ${rightElement ? 'pr-10' : 'pr-4'} text-xs sm:text-sm transition-all duration-150 ${
+              Icon ? 'pl-10' : 'pl-3.5'
+            } ${error ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20' : ''} ${className}`}
           />
+        )}
+
+        {rightElement && !isTextArea && (
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center">
+            {rightElement}
+          </div>
         )}
       </div>
 
       {error && (
-        <span className="text-[11px] font-bold text-red-400 mt-1.5 animate-fade-in">
+        <span className="text-[11px] font-bold text-rose-500 dark:text-rose-400 mt-1.5 animate-fade-in">
           {error}
         </span>
       )}

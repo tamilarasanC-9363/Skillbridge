@@ -1,4 +1,3 @@
-import React from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import ChatBox from '../../components/ChatBox';
@@ -16,10 +15,10 @@ export default function WorkerChat() {
       <BackButton to="/worker" label="Back to Dashboard" className="mb-6" />
 
       <div className="mb-6">
-        <h1 className="text-xl font-bold text-gray-900">Client Message Board</h1>
+        <h1 className="text-xl font-bold text-[#283845] dark:text-white font-heading">Client Message Board</h1>
         {booking.jobType && (
-          <p className="text-xs text-gray-500 mt-0.5">
-            Discussing job: <span className="font-semibold text-gray-700">{booking.jobType}</span> with client <span className="font-semibold text-gray-700">{booking.customerName}</span>.
+          <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
+            Discussing job: <span className="font-bold text-[#283845] dark:text-[#FFA649]">{booking.jobType}</span> with client <span className="font-bold text-[#283845] dark:text-[#FFA649]">{booking.customerName}</span>.
           </p>
         )}
       </div>

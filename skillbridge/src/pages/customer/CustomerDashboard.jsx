@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getBookingsForUser, updateBookingStatus } from '../../services/bookingService';
 import ServiceCard from '../../components/ServiceCard';
 import BookingCard from '../../components/BookingCard';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { Briefcase, ArrowRight, ClipboardList, PlusCircle } from 'lucide-react';
+import { Briefcase, ArrowRight, ClipboardList, PlusCircle, Sparkles } from 'lucide-react';
 
 const CATEGORIES = [
   { name: 'Plumbing', desc: 'Pipe leakages, tap repairs, water tank installation' },
@@ -22,7 +22,8 @@ export default function CustomerDashboard() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchBookings = async () => {
+  const fetchBookings = useCallback(async () => {
+    if (!currentUser?.uid) return;
     try {
       const list = await getBookingsForUser(currentUser.uid, 'customer');
       setBookings(list);
@@ -31,15 +32,14 @@ export default function CustomerDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentUser?.uid]);
 
   useEffect(() => {
     fetchBookings();
     
-    // Refresh listener for mock mode updates
     window.addEventListener('sb_message_sent', fetchBookings);
     return () => window.removeEventListener('sb_message_sent', fetchBookings);
-  }, [currentUser]);
+  }, [fetchBookings]);
 
   const handleBookingAction = async (bookingId, newStatus) => {
     try {
@@ -62,21 +62,32 @@ export default function CustomerDashboard() {
       {/* Welcome Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 leading-tight">Welcome, {currentUser.name}!</h1>
-          <p className="text-xs text-gray-500 mt-1">Hire background-verified home maintenance specialists in your locality.</p>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#283845] dark:text-white font-heading leading-tight">
+              Welcome, {currentUser?.name?.split(' ')[0]}!
+            </h1>
+            <span className="p-1 rounded-full bg-[#FFA649]/15 text-[#FFA649]">
+              <Sparkles className="w-4 h-4" />
+            </span>
+          </div>
+          <p className="text-xs text-[#4A5B69] dark:text-stone-400 mt-1">
+            Hire background-verified trade specialists and master craftsmen in your locality.
+          </p>
         </div>
         <Link 
           to="/customer/search"
-          className="flex items-center gap-2 px-5 py-3 text-xs font-bold text-white btn-gradient rounded-xl shadow-xs"
+          className="flex items-center gap-2 px-5 py-2.5 text-xs font-extrabold text-[#11171E] btn-gradient rounded-xl shadow-xs"
         >
           <PlusCircle className="w-4 h-4" />
-          Book New Service
+          <span>Book New Service</span>
         </Link>
       </div>
 
       {/* Main Call to Action: What service do you need? */}
       <div className="mb-10">
-        <h2 className="text-lg font-bold text-gray-900 mb-4">What service do you need?</h2>
+        <h2 className="text-base sm:text-lg font-bold text-[#283845] dark:text-white font-heading mb-4">
+          What service do you need today?
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {CATEGORIES.map(cat => (
             <ServiceCard 
@@ -92,13 +103,14 @@ export default function CustomerDashboard() {
       {/* Ongoing / Active Bookings */}
       <div className="mb-10">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-            <Briefcase className="w-5 h-5 text-primary" />
-            Ongoing Bookings
+          <h2 className="text-base sm:text-lg font-bold text-[#283845] dark:text-white font-heading flex items-center gap-2">
+            <Briefcase className="w-4.5 h-4.5 text-[#FFA649]" />
+            Active Bookings
           </h2>
           {activeBookings.length > 0 && (
-            <Link to="/customer/bookings" className="text-xs font-semibold text-primary hover:underline flex items-center gap-0.5">
-              View All <ArrowRight className="w-3 h-3" />
+            <Link to="/customer/bookings" className="text-xs font-bold text-[#FFA649] hover:underline flex items-center gap-1">
+              <span>View All Bookings</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           )}
         </div>
@@ -106,10 +118,12 @@ export default function CustomerDashboard() {
         {loading ? (
           <LoadingSpinner size="md" />
         ) : activeBookings.length === 0 ? (
-          <div className="bg-white border border-gray-100 rounded-2xl p-8 text-center text-gray-500 shadow-3xs">
-            <ClipboardList className="w-10 h-10 text-gray-300 mx-auto mb-2" />
-            <p className="text-sm font-medium">You have no active ongoing bookings.</p>
-            <p className="text-xs text-gray-400 mt-1">Select a category above to find and request worker assistance.</p>
+          <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-8 text-center text-stone-500 shadow-xs">
+            <div className="w-12 h-12 rounded-2xl bg-stone-100 dark:bg-stone-800 text-stone-400 mx-auto flex items-center justify-center mb-3">
+              <ClipboardList className="w-6 h-6" />
+            </div>
+            <p className="text-sm font-bold text-[#283845] dark:text-stone-200">No active ongoing bookings</p>
+            <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">Select a category above to request worker assistance.</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -129,9 +143,12 @@ export default function CustomerDashboard() {
       {pastBookings.length > 0 && (
         <div>
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold text-gray-900">Recent Service History</h2>
-            <Link to="/customer/bookings" className="text-xs font-semibold text-primary hover:underline flex items-center gap-0.5">
-              All History <ArrowRight className="w-3 h-3" />
+            <h2 className="text-base sm:text-lg font-bold text-[#283845] dark:text-white font-heading">
+              Recent Service History
+            </h2>
+            <Link to="/customer/bookings" className="text-xs font-bold text-[#FFA649] hover:underline flex items-center gap-1">
+              <span>Full History</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
           <div className="space-y-4">

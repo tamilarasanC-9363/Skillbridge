@@ -7,8 +7,7 @@ import {
   getDocs, 
   addDoc,
   query, 
-  where,
-  orderBy
+  where
 } from 'firebase/firestore';
 
 // Fallback seed bookings for Local Simulation Mode
@@ -164,7 +163,7 @@ export async function createBooking(bookingData) {
       return { bookingId: docRef.id, ...bookingData, status: 'Pending' };
     } catch (error) {
       console.error('Error creating booking:', error);
-      throw new Error('Booking could not be created. Please try again.');
+      throw new Error('Booking could not be created. Please try again.', { cause: error });
     }
   }
 }

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import PriceEstimate from '../../components/PriceEstimate';
 import BackButton from '../../components/BackButton';
-import { MapPin, Calendar, Clock } from 'lucide-react';
+import { MapPin, Calendar, Clock, Zap, CalendarDays } from 'lucide-react';
 import FormInput from '../../components/FormInput';
 
 const CATEGORY_JOBS = {
@@ -49,10 +49,10 @@ export default function ServiceSearch() {
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
 
-  // Reset selected job if category changes
-  useEffect(() => {
+  const handleCategoryChange = (newCat) => {
+    setCategory(newCat);
     setSelectedJob('');
-  }, [category]);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -92,14 +92,14 @@ export default function ServiceSearch() {
     <div className="max-w-3xl mx-auto px-4 py-8 animate-fade-in text-left">
       <BackButton to="/customer" label="Back to Dashboard" className="mb-6" />
 
-      <div className="bg-card-bg border border-border-custom rounded-3xl p-6 sm:p-8 shadow-xs">
-        <div className="mb-6 border-b border-border-custom pb-5">
-          <h1 className="text-xl font-bold text-text-main">Define Service Requirements</h1>
-          <p className="text-xs text-text-muted mt-1">Specify your exact job needs so our recommendation system can find the best local matching specialist.</p>
+      <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-6 sm:p-8 shadow-xs">
+        <div className="mb-6 border-b border-[#EBE5DE] dark:border-white/10 pb-5">
+          <h1 className="text-xl font-bold text-[#283845] dark:text-white font-heading">Define Service Requirements</h1>
+          <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">Specify your exact job needs so our recommendation system can find the best local matching specialist.</p>
         </div>
 
         {error && (
-          <div className="bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-xl p-3.5 text-xs font-medium mb-5">
+          <div className="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 rounded-xl p-3.5 text-xs font-medium mb-5">
             {error}
           </div>
         )}
@@ -107,21 +107,21 @@ export default function ServiceSearch() {
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Category Dropdown */}
           <div>
-            <label className="block text-xs font-bold text-text-muted uppercase tracking-wider mb-1.5">Service Category</label>
+            <label className="block text-[11px] font-bold text-[#283845] dark:text-stone-300 uppercase tracking-wider mb-1.5">Service Category</label>
             <select
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-full border border-border-custom rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-primary bg-card-bg/60 text-text-main cursor-pointer"
+              onChange={(e) => handleCategoryChange(e.target.value)}
+              className="w-full h-11 border border-[#EBE5DE] dark:border-white/10 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-[#FFA649] focus:ring-2 focus:ring-[#FFA649]/25 bg-stone-50/80 dark:bg-[#18222B] text-[#283845] dark:text-white cursor-pointer"
             >
               {Object.keys(CATEGORY_JOBS).map(cat => (
-                <option key={cat} value={cat} className="bg-[#0F172A] text-white">{cat}</option>
+                <option key={cat} value={cat} className="bg-white dark:bg-[#18222B] text-[#283845] dark:text-white">{cat}</option>
               ))}
             </select>
           </div>
 
           {/* Job Selection Grid */}
           <div>
-            <label className="block text-xs font-bold text-text-muted uppercase tracking-wider mb-2">Select Specific Job Type *</label>
+            <label className="block text-[11px] font-bold text-[#283845] dark:text-stone-300 uppercase tracking-wider mb-2">Select Specific Job Type *</label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {jobsList.map(job => (
                 <button
@@ -130,8 +130,8 @@ export default function ServiceSearch() {
                   onClick={() => setSelectedJob(job)}
                   className={`px-4 py-3 border rounded-xl text-xs font-bold text-left transition-all cursor-pointer ${
                     selectedJob === job 
-                      ? 'bg-primary/20 border-primary text-white shadow-3xs' 
-                      : 'border-border-custom text-text-sub hover:bg-white/5 hover:text-white'
+                      ? 'bg-[#FFA649]/20 border-[#FFA649] text-[#283845] dark:text-[#FFA649] shadow-sm font-extrabold' 
+                      : 'border-[#EBE5DE] dark:border-white/10 text-stone-700 dark:text-stone-300 bg-stone-50/50 dark:bg-[#18222B]/60 hover:bg-stone-100 dark:hover:bg-[#18222B]'
                   }`}
                 >
                   {job}
@@ -140,7 +140,7 @@ export default function ServiceSearch() {
             </div>
           </div>
 
-          {/* Pricing Estimation preview (interactive helper) */}
+          {/* Pricing Estimation preview */}
           {selectedJob && (
             <PriceEstimate category={category} jobType={selectedJob} showDisclaimer={true} />
           )}
@@ -157,32 +157,32 @@ export default function ServiceSearch() {
               onChange={(e) => setLocation(e.target.value)}
               required
             />
-            <div className="text-[10px] text-text-muted mt-1.5">Try entering "Chennai Central" or "Adyar" to test location proximity scores!</div>
+            <div className="text-[10px] text-stone-500 dark:text-stone-400 mt-1.5 font-medium">Try entering "Chennai Central" or "Adyar" to test location proximity scores!</div>
           </div>
 
           {/* Urgency */}
           <div>
-            <label className="block text-xs font-bold text-text-muted uppercase tracking-wider mb-2">Urgency Level</label>
-            <div className="flex gap-4">
-              <label className="flex items-center gap-2 text-sm text-text-sub cursor-pointer font-medium hover:text-white">
+            <label className="block text-[11px] font-bold text-[#283845] dark:text-stone-300 uppercase tracking-wider mb-2">Urgency Level</label>
+            <div className="flex flex-wrap gap-4">
+              <label className="flex items-center gap-2 text-xs text-[#283845] dark:text-stone-300 cursor-pointer font-semibold">
                 <input 
                   type="radio" 
                   name="urgency" 
                   value="normal" 
                   checked={urgency === 'normal'} 
                   onChange={() => setUrgency('normal')}
-                  className="text-primary focus:ring-primary w-4 h-4 cursor-pointer"
+                  className="text-[#FFA649] focus:ring-[#FFA649] w-4 h-4 cursor-pointer accent-[#FFA649]"
                 />
                 Normal (Regular schedule)
               </label>
-              <label className="flex items-center gap-2 text-sm text-text-sub cursor-pointer font-medium hover:text-white">
+              <label className="flex items-center gap-2 text-xs text-[#283845] dark:text-stone-300 cursor-pointer font-semibold">
                 <input 
                   type="radio" 
                   name="urgency" 
-                  value="urgent"
+                  value="urgent" 
                   checked={urgency === 'urgent'} 
                   onChange={() => setUrgency('urgent')}
-                  className="text-primary focus:ring-primary w-4 h-4 cursor-pointer"
+                  className="text-[#FFA649] focus:ring-[#FFA649] w-4 h-4 cursor-pointer accent-[#FFA649]"
                 />
                 Urgent (Immediate assistance required)
               </label>
@@ -191,90 +191,79 @@ export default function ServiceSearch() {
 
           {/* Booking Type selection tabs */}
           <div>
-            <label className="block text-xs font-bold text-text-muted uppercase tracking-wider mb-2">Booking Type *</label>
-            <div className="grid grid-cols-2 gap-2 p-1.5 bg-[#0F172A]/90 border border-white/10 rounded-full max-w-lg select-none">
+            <label className="block text-[11px] font-bold text-[#283845] dark:text-stone-300 uppercase tracking-wider mb-2">Booking Type *</label>
+            <div className="grid grid-cols-2 gap-2 p-1 bg-stone-100 dark:bg-[#11171E] border border-[#EBE5DE] dark:border-white/10 rounded-2xl max-w-lg select-none">
               <button
                 type="button"
                 onClick={() => setBookingType('instant')}
-                className={`py-2.5 text-xs font-bold rounded-full transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 ${
+                className={`py-2.5 text-xs font-bold rounded-xl transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 ${
                   bookingType === 'instant' 
-                    ? 'bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white shadow-md shadow-indigo-500/20' 
-                    : 'text-text-muted hover:text-white border border-transparent bg-transparent'
+                    ? 'bg-white dark:bg-[#283845] text-[#283845] dark:text-[#FFA649] shadow-sm font-extrabold border border-[#EBE5DE] dark:border-white/15' 
+                    : 'text-stone-600 dark:text-stone-400 hover:text-[#283845] dark:hover:text-white'
                 }`}
               >
-                <span className={`inline-block w-1.5 h-1.5 rounded-full bg-white transition-transform duration-300 ${bookingType === 'instant' ? 'scale-100' : 'scale-0'}`} />
-                Instant Booking
+                <Zap className="w-3.5 h-3.5" />
+                <span>Instant Dispatch (ASAP)</span>
               </button>
+
               <button
                 type="button"
                 onClick={() => setBookingType('pre-booking')}
-                className={`py-2.5 text-xs font-bold rounded-full transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 ${
+                className={`py-2.5 text-xs font-bold rounded-xl transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 ${
                   bookingType === 'pre-booking' 
-                    ? 'bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white shadow-md shadow-indigo-500/20' 
-                    : 'text-text-muted hover:text-white border border-transparent bg-transparent'
+                    ? 'bg-white dark:bg-[#283845] text-[#283845] dark:text-[#FFA649] shadow-sm font-extrabold border border-[#EBE5DE] dark:border-white/15' 
+                    : 'text-stone-600 dark:text-stone-400 hover:text-[#283845] dark:hover:text-white'
                 }`}
               >
-                <span className={`inline-block w-1.5 h-1.5 rounded-full bg-white transition-transform duration-300 ${bookingType === 'pre-booking' ? 'scale-100' : 'scale-0'}`} />
-                Pre-Booking (Schedule later)
+                <CalendarDays className="w-3.5 h-3.5" />
+                <span>Schedule Later</span>
               </button>
             </div>
           </div>
 
-          {/* Date & Time fields if Pre-Booking */}
+          {/* Schedule fields if pre-booking is selected */}
           {bookingType === 'pre-booking' && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-fade-in">
-              <div>
-                <FormInput
-                  label="Preferred Date"
-                  icon={Calendar}
-                  type="date"
-                  name="scheduledDate"
-                  value={scheduledDate}
-                  onChange={(e) => setScheduledDate(e.target.value)}
-                  min={new Date().toISOString().split('T')[0]}
-                  required
-                />
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-2xl bg-stone-50 dark:bg-[#11171E] border border-[#EBE5DE] dark:border-white/10 animate-fade-in">
+              <FormInput
+                label="Preferred Service Date"
+                icon={Calendar}
+                type="date"
+                name="scheduledDate"
+                value={scheduledDate}
+                onChange={(e) => setScheduledDate(e.target.value)}
+                required
+              />
 
-              <div>
-                <label className="block text-xs font-bold text-text-muted uppercase tracking-wider mb-1.5">Preferred Time Slot</label>
-                <div className="relative">
-                  <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-text-muted">
-                    <Clock className="w-4 h-4" />
-                  </span>
-                  <select
-                    value={scheduledTime}
-                    onChange={(e) => setScheduledTime(e.target.value)}
-                    className="w-full border border-border-custom rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-primary bg-card-bg/60 text-text-main cursor-pointer"
-                    required
-                  >
-                    <option value="" className="bg-[#0F172A] text-white">Choose slot</option>
-                    <option value="09:00 AM – 12:00 PM" className="bg-[#0F172A] text-white">Morning (9 AM - 12 PM)</option>
-                    <option value="12:00 PM – 03:00 PM" className="bg-[#0F172A] text-white">Noon (12 PM - 3 PM)</option>
-                    <option value="03:00 PM – 06:00 PM" className="bg-[#0F172A] text-white">Afternoon (3 PM - 6 PM)</option>
-                    <option value="06:00 PM – 09:00 PM" className="bg-[#0F172A] text-white">Evening (6 PM - 9 PM)</option>
-                  </select>
-                </div>
-              </div>
+              <FormInput
+                label="Preferred Time Slot"
+                icon={Clock}
+                type="time"
+                name="scheduledTime"
+                value={scheduledTime}
+                onChange={(e) => setScheduledTime(e.target.value)}
+                required
+              />
             </div>
           )}
 
-          {/* Optional description */}
-          <FormInput
-            label="Optional Description (Describe the problem)"
-            type="textarea"
-            name="description"
-            placeholder="e.g. Faucet is leaking from the joint. Need a washers replacement or complete valve fix."
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={3}
-          />
+          {/* Optional details textarea */}
+          <div>
+            <FormInput
+              label="Job Notes / Problem Details (Optional)"
+              type="textarea"
+              name="description"
+              placeholder="Tell the worker specifics about the issue (e.g. 2nd floor bathroom, pipe broken behind sink)..."
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={3}
+            />
+          </div>
 
           <button
             type="submit"
-            className="w-full py-3.5 mt-4 text-sm font-bold text-white btn-gradient rounded-xl shadow-xs text-center cursor-pointer"
+            className="w-full h-11 mt-4 text-xs sm:text-sm font-extrabold text-[#11171E] btn-gradient rounded-xl shadow-md flex items-center justify-center gap-2 cursor-pointer"
           >
-            Find Matching Specialists
+            Find Recommended Pros
           </button>
         </form>
       </div>

@@ -1,6 +1,6 @@
-import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { LoadingProvider } from './context/LoadingContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 
@@ -8,6 +8,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
 
 // Customer pages
 import CustomerDashboard from './pages/customer/CustomerDashboard';
@@ -25,6 +26,7 @@ import WorkerDashboard from './pages/worker/WorkerDashboard';
 import WorkerJobs from './pages/worker/WorkerJobs';
 import WorkerProfileSetup from './pages/worker/WorkerProfileSetup';
 import WorkerProfileEdit from './pages/worker/WorkerProfileEdit';
+import WorkerFeedbacks from './pages/worker/WorkerFeedbacks';
 import WorkerChat from './pages/worker/WorkerChat';
 import Earnings from './pages/worker/Earnings';
 import Availability from './pages/worker/Availability';
@@ -35,12 +37,14 @@ import VerificationQueue from './pages/admin/VerificationQueue';
 import UsersList from './pages/admin/UsersList';
 import BookingsList from './pages/admin/BookingsList';
 import Reports from './pages/admin/Reports';
+import AdminRegister from './pages/admin/AdminRegister';
 
 export default function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <div className="flex flex-col min-h-screen bg-gray-bg">
+      <LoadingProvider>
+        <AuthProvider>
+          <div className="flex flex-col min-h-screen bg-[var(--color-bg)] transition-colors duration-300 text-slate-900 dark:text-slate-100">
           <Navbar />
           
           <main className="flex-grow">
@@ -49,6 +53,10 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/admin/register" element={<AdminRegister />} />
+              <Route path="/admin-register" element={<AdminRegister />} />
+              <Route path="/register/admin" element={<AdminRegister />} />
 
               {/* Customer Routes (Guarded: 'customer') */}
               <Route path="/customer" element={
@@ -128,6 +136,11 @@ export default function App() {
                   <WorkerJobs />
                 </ProtectedRoute>
               } />
+              <Route path="/worker/feedbacks" element={
+                <ProtectedRoute allowedRoles={['worker']}>
+                  <WorkerFeedbacks />
+                </ProtectedRoute>
+              } />
               <Route path="/worker/chat/:chatId" element={
                 <ProtectedRoute allowedRoles={['worker']}>
                   <WorkerChat />
@@ -187,6 +200,7 @@ export default function App() {
           </main>
         </div>
       </AuthProvider>
-    </BrowserRouter>
+    </LoadingProvider>
+  </BrowserRouter>
   );
 }

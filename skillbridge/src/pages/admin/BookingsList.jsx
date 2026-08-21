@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getBookingsForUser } from '../../services/bookingService';
 import Sidebar from '../../components/Sidebar';
 import LoadingSpinner from '../../components/LoadingSpinner';
@@ -9,12 +9,12 @@ import {
 import { Link } from 'react-router-dom';
 
 const STATUS_THEMES = {
-  'Pending': 'bg-amber-50 text-amber-700 border-amber-200/50',
-  'Accepted': 'bg-blue-50 text-blue-700 border-blue-200/50',
-  'In Progress': 'bg-indigo-50 text-indigo-700 border-indigo-200/50',
-  'Completed': 'bg-emerald-50 text-emerald-700 border-emerald-200/50',
-  'Rejected': 'bg-rose-50 text-rose-700 border-rose-200/50',
-  'Cancelled': 'bg-gray-100 text-gray-600 border-gray-200'
+  'Pending': 'bg-[#FFA649]/15 text-[#283845] dark:text-[#FFA649] border-[#FFA649]/30 font-bold',
+  'Accepted': 'bg-[#283845]/10 dark:bg-[#283845]/40 text-[#283845] dark:text-[#FFA649] border-[#283845]/30 font-bold',
+  'In Progress': 'bg-[#FFA649]/25 text-[#1B2731] dark:text-[#FFA649] border-[#FFA649]/40 font-bold',
+  'Completed': 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/80 font-bold',
+  'Rejected': 'bg-rose-50 dark:bg-rose-950/50 text-rose-800 dark:text-rose-300 border-rose-200 dark:border-rose-800/80 font-bold',
+  'Cancelled': 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-400 border-stone-200 dark:border-stone-700 font-bold'
 };
 
 export default function BookingsList() {
@@ -50,24 +50,26 @@ export default function BookingsList() {
 
       <div className="flex-grow space-y-6">
         <div>
-          <h1 className="text-2xl font-extrabold text-gray-900 leading-tight">All Platform Bookings</h1>
-          <p className="text-xs text-gray-500 mt-1">Audit transactions, schedules, and completion statuses across all clients.</p>
+          <h1 className="text-2xl font-extrabold text-[#283845] dark:text-white leading-tight font-heading">All Platform Bookings</h1>
+          <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">Audit transactions, schedules, and completion statuses across all clients.</p>
         </div>
 
         {loading ? (
-          <LoadingSpinner size="lg" />
+          <div className="py-16 flex justify-center">
+            <LoadingSpinner size="lg" />
+          </div>
         ) : bookings.length === 0 ? (
-          <div className="bg-white border border-gray-100 rounded-3xl p-12 text-center text-gray-500 shadow-3xs">
-            <ClipboardList className="w-12 h-12 text-gray-200 mx-auto mb-3" />
-            <h3 className="text-sm font-bold text-gray-800">No Booking Records</h3>
-            <p className="text-xs text-gray-400 mt-1">There are currently no transaction bookings placed on the platform.</p>
+          <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-12 text-center text-stone-500 shadow-xs">
+            <ClipboardList className="w-12 h-12 text-stone-300 dark:text-stone-600 mx-auto mb-3" />
+            <h3 className="text-sm font-bold text-[#283845] dark:text-white font-heading">No Booking Records</h3>
+            <p className="text-xs text-stone-400 mt-1">There are currently no transaction bookings placed on the platform.</p>
           </div>
         ) : (
-          <div className="bg-white border border-gray-100 rounded-3xl p-6 shadow-xs overflow-hidden">
+          <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-6 shadow-xs overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-xs text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-gray-100 text-gray-400 uppercase font-bold tracking-wider">
+                  <tr className="border-b border-[#EBE5DE] dark:border-white/10 text-stone-400 uppercase font-bold tracking-wider">
                     <th className="py-3 px-2">Booking ID</th>
                     <th className="py-3 px-2">Customer</th>
                     <th className="py-3 px-2">Worker</th>
@@ -77,17 +79,17 @@ export default function BookingsList() {
                     <th className="py-3 px-2 text-right">Estimate</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-50 text-gray-700">
+                <tbody className="divide-y divide-[#EBE5DE] dark:divide-white/10 text-stone-700 dark:text-stone-300">
                   {bookings.map(b => (
-                    <tr key={b.bookingId} className="hover:bg-gray-50/50">
-                      <td className="py-4 px-2 font-bold text-gray-900">
-                        <Link to={`/customer/booking/${b.bookingId}`} className="text-primary hover:underline">
+                    <tr key={b.bookingId} className="hover:bg-stone-50/50 dark:hover:bg-white/5 transition-colors">
+                      <td className="py-4 px-2 font-bold">
+                        <Link to={`/customer/booking/${b.bookingId}`} className="text-[#283845] dark:text-[#FFA649] hover:underline">
                           #{b.bookingId.substr(-6).toUpperCase()}
                         </Link>
                       </td>
-                      <td className="py-4 px-2 font-semibold">{b.customerName || 'Client'}</td>
-                      <td className="py-4 px-2 font-semibold">{b.workerName || 'Worker'}</td>
-                      <td className="py-4 px-2">{b.jobType}</td>
+                      <td className="py-4 px-2 font-semibold text-[#283845] dark:text-white">{b.customerName || 'Client'}</td>
+                      <td className="py-4 px-2 font-semibold text-[#283845] dark:text-white">{b.workerName || 'Worker'}</td>
+                      <td className="py-4 px-2 font-medium">{b.jobType}</td>
                       <td className="py-4 px-2">
                         {new Date(b.scheduledDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                       </td>
@@ -96,7 +98,9 @@ export default function BookingsList() {
                           {b.status}
                         </span>
                       </td>
-                      <td className="py-4 px-2 font-bold text-gray-900 text-right">{b.estimatedPrice?.split('–')[0]}</td>
+                      <td className="py-4 px-2 font-bold text-[#283845] dark:text-[#FFA649] text-right">
+                        {b.estimatedPrice?.split('–')[0]}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

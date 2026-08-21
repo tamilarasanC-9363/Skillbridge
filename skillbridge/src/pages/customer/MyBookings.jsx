@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { getBookingsForUser, updateBookingStatus } from '../../services/bookingService';
 import BookingCard from '../../components/BookingCard';
@@ -12,8 +12,8 @@ export default function MyBookings() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('active');
 
-  const fetchBookings = async () => {
-    setLoading(true);
+  const fetchBookings = useCallback(async () => {
+    if (!currentUser?.uid) return;
     try {
       const list = await getBookingsForUser(currentUser.uid, 'customer');
       setBookings(list);
@@ -22,7 +22,7 @@ export default function MyBookings() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentUser?.uid]);
 
   useEffect(() => {
     fetchBookings();
@@ -30,7 +30,7 @@ export default function MyBookings() {
     // Refresh listener for mock responses
     window.addEventListener('sb_message_sent', fetchBookings);
     return () => window.removeEventListener('sb_message_sent', fetchBookings);
-  }, [currentUser]);
+  }, [fetchBookings]);
 
   const handleBookingAction = async (bookingId, newStatus) => {
     try {
@@ -49,45 +49,47 @@ export default function MyBookings() {
       <BackButton to="/customer" label="Back to Dashboard" className="mb-6" />
 
       <div className="mb-6">
-        <h1 className="text-2xl font-extrabold text-gray-900">My Bookings</h1>
-        <p className="text-xs text-gray-500 mt-1">Track status, chat with specialists, and review completed service works.</p>
+        <h1 className="text-2xl font-extrabold text-[#283845] dark:text-white font-heading">My Bookings</h1>
+        <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">Track status, chat with specialists, and review completed service works.</p>
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-gray-100 mb-6 gap-6">
+      <div className="flex border-b border-[#EBE5DE] dark:border-white/10 mb-6 gap-6">
         <button
           onClick={() => setActiveTab('active')}
-          className={`pb-3 text-sm font-semibold flex items-center gap-1.5 border-b-2 transition-all ${
+          className={`pb-3 text-xs sm:text-sm font-bold flex items-center gap-1.5 border-b-2 transition-all cursor-pointer ${
             activeTab === 'active' 
-              ? 'border-primary text-primary' 
-              : 'border-transparent text-gray-500 hover:text-gray-950'
+              ? 'border-[#FFA649] text-[#283845] dark:text-[#FFA649]' 
+              : 'border-transparent text-stone-500 hover:text-[#283845] dark:hover:text-white'
           }`}
         >
-          <Briefcase className="w-4 h-4" />
+          <Briefcase className="w-4 h-4 text-[#FFA649]" />
           Active Bookings ({activeBookings.length})
         </button>
 
         <button
           onClick={() => setActiveTab('past')}
-          className={`pb-3 text-sm font-semibold flex items-center gap-1.5 border-b-2 transition-all ${
+          className={`pb-3 text-xs sm:text-sm font-bold flex items-center gap-1.5 border-b-2 transition-all cursor-pointer ${
             activeTab === 'past' 
-              ? 'border-primary text-primary' 
-              : 'border-transparent text-gray-500 hover:text-gray-950'
+              ? 'border-[#FFA649] text-[#283845] dark:text-[#FFA649]' 
+              : 'border-transparent text-stone-500 hover:text-[#283845] dark:hover:text-white'
           }`}
         >
-          <History className="w-4 h-4" />
+          <History className="w-4 h-4 text-[#FFA649]" />
           Completed & History ({pastBookings.length})
         </button>
       </div>
 
       {loading ? (
-        <LoadingSpinner size="lg" />
+        <div className="py-12 flex justify-center">
+          <LoadingSpinner size="lg" />
+        </div>
       ) : activeTab === 'active' ? (
         activeBookings.length === 0 ? (
-          <div className="bg-white border border-gray-100 rounded-3xl p-12 text-center text-gray-500 shadow-3xs">
-            <ClipboardList className="w-12 h-12 text-gray-200 mx-auto mb-3" />
-            <h3 className="text-sm font-bold text-gray-800">No Active Bookings</h3>
-            <p className="text-xs text-gray-400 mt-1">You have no pending requests or active jobs at this time.</p>
+          <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-12 text-center text-stone-500 shadow-xs">
+            <ClipboardList className="w-12 h-12 text-stone-300 dark:text-stone-600 mx-auto mb-3" />
+            <h3 className="text-sm font-bold text-[#283845] dark:text-white">No Active Bookings</h3>
+            <p className="text-xs text-stone-400 mt-1">You have no pending requests or active jobs at this time.</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -103,10 +105,10 @@ export default function MyBookings() {
         )
       ) : (
         pastBookings.length === 0 ? (
-          <div className="bg-white border border-gray-100 rounded-3xl p-12 text-center text-gray-500 shadow-3xs">
-            <ClipboardList className="w-12 h-12 text-gray-200 mx-auto mb-3" />
-            <h3 className="text-sm font-bold text-gray-800">No Service History</h3>
-            <p className="text-xs text-gray-400 mt-1">You haven't completed any booking transactions yet.</p>
+          <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-12 text-center text-stone-500 shadow-xs">
+            <ClipboardList className="w-12 h-12 text-stone-300 dark:text-stone-600 mx-auto mb-3" />
+            <h3 className="text-sm font-bold text-[#283845] dark:text-white">No Service History</h3>
+            <p className="text-xs text-stone-400 mt-1">You haven't completed any booking transactions yet.</p>
           </div>
         ) : (
           <div className="space-y-4">

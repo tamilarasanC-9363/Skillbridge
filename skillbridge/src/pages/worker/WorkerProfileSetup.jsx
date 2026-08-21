@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { updateWorkerProfile, uploadWorkerFile } from '../../services/workerService';
+import { performAIVerification, PROOF_OF_WORK_TYPES } from '../../services/aiVerificationService';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import FormInput from '../../components/FormInput';
 import BackButton from '../../components/BackButton';
-import { ShieldAlert, FileText, UserPlus, Image, Award, Check } from 'lucide-react';
+import AIVerificationCard from '../../components/AIVerificationCard';
+import { Check, Camera, Wrench, PhoneCall } from 'lucide-react';
 
 const CATEGORIES = [
   'Plumbing', 'Electrical', 'Carpentry', 'Mason / Construction', 'Painting', 'Cleaning'
@@ -22,14 +24,26 @@ export default function WorkerProfileSetup() {
   const [priceRange, setPriceRange] = useState('₹300 – ₹800');
   const [bio, setBio] = useState('');
   
-  // Files
+  // Work Verification Files & Metadata
   const [profileFile, setProfileFile] = useState(null);
-  const [idFile, setIdFile] = useState(null);
-  const [certFile, setCertFile] = useState(null);
+  const [proofOfWorkFile, setProofOfWorkFile] = useState(null);
+  const [proofOfWorkType, setProofOfWorkType] = useState('previous_work');
+  const [proofDescription, setProofDescription] = useState('');
+  
+  // Local Reference (Optional)
+  const [referenceName, setReferenceName] = useState('');
+  const [referencePhone, setReferencePhone] = useState('');
+  const [referenceRelation, setReferenceRelation] = useState('Previous Customer');
+
+  // AI Verification State
+  const [aiReport, setAiReport] = useState(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+
+  const workerName = currentUser?.displayName || currentUser?.name || 'Worker Specialist';
 
   const handleCategoryToggle = (category) => {
     if (selectedCategories.includes(category)) {
@@ -37,6 +51,45 @@ export default function WorkerProfileSetup() {
     } else {
       setSelectedCategories([...selectedCategories, category]);
     }
+  };
+
+  const runQualityAudit = async (newProfileFile, newProofFile, newType, newDesc, newRef) => {
+    const pFile = newProfileFile !== undefined ? newProfileFile : profileFile;
+    const wFile = newProofFile !== undefined ? newProofFile : proofOfWorkFile;
+    const pType = newType !== undefined ? newType : proofOfWorkType;
+    const pDesc = newDesc !== undefined ? newDesc : proofDescription;
+    const pRef = newRef !== undefined ? newRef : (referenceName && referencePhone ? { name: referenceName, phone: referencePhone, relation: referenceRelation } : null);
+
+    if (pFile || wFile) {
+      setIsAnalyzing(true);
+      try {
+        const report = await performAIVerification({
+          workerName,
+          categories: selectedCategories,
+          profilePhoto: pFile,
+          proofOfWorkFile: wFile,
+          proofOfWorkType: pType,
+          proofDescription: pDesc,
+          localReference: pRef,
+          currentUserId: currentUser?.uid
+        });
+        setAiReport(report);
+      } catch (err) {
+        console.error('Work verification audit error:', err);
+      } finally {
+        setIsAnalyzing(false);
+      }
+    }
+  };
+
+  const handleProfileFileChange = (file) => {
+    setProfileFile(file);
+    runQualityAudit(file, proofOfWorkFile, proofOfWorkType, proofDescription);
+  };
+
+  const handleProofFileChange = (file) => {
+    setProofOfWorkFile(file);
+    runQualityAudit(profileFile, file, proofOfWorkType, proofDescription);
   };
 
   const handleSubmit = async (e) => {
@@ -63,29 +116,54 @@ export default function WorkerProfileSetup() {
       setError('Bio must be at least 20 characters long.');
       return;
     }
+    if (!profileFile) {
+      setError('Please upload your Profile Photo (Required for worker identity).');
+      return;
+    }
+    if (!proofOfWorkFile) {
+      setError('Please upload Proof of Work (Photo/video of previous work, invoice, or setup).');
+      return;
+    }
 
     setLoading(true);
     try {
       let profileImageUrl = '';
-      let idProofUrl = '';
-      let certificateUrl = '';
+      let proofOfWorkUrl = '';
 
-      // Upload files sequentially
+      // Upload files
       if (profileFile) {
         profileImageUrl = await uploadWorkerFile(currentUser.uid, 'profile', profileFile);
       }
-      if (idFile) {
-        idProofUrl = await uploadWorkerFile(currentUser.uid, 'id_proof', idFile);
+      if (proofOfWorkFile) {
+        proofOfWorkUrl = await uploadWorkerFile(currentUser.uid, 'proof_of_work', proofOfWorkFile);
       }
-      if (certFile) {
-        certificateUrl = await uploadWorkerFile(currentUser.uid, 'certificate', certFile);
+
+      // Generate final AI Audit Report
+      const localRefObj = (referenceName.trim() && referencePhone.trim()) ? {
+        name: referenceName.trim(),
+        phone: referencePhone.trim(),
+        relation: referenceRelation
+      } : null;
+
+      let finalAIReport = aiReport;
+      if (!finalAIReport) {
+        finalAIReport = await performAIVerification({
+          workerName,
+          categories: selectedCategories,
+          profilePhoto: profileImageUrl || profileFile,
+          proofOfWorkFile: proofOfWorkUrl || proofOfWorkFile,
+          proofOfWorkType,
+          proofDescription,
+          localReference: localRefObj,
+          currentUserId: currentUser.uid
+        });
       }
 
       const skills = skillsText.split(',').map(s => s.trim()).filter(Boolean);
 
       // Save worker profile fields
       await updateWorkerProfile(currentUser.uid, {
-        name: currentUser.displayName || currentUser.name || 'Worker Specialist',
+        name: workerName,
         email: currentUser.email,
         phone: currentUser.phone || '',
         categories: selectedCategories,
@@ -95,21 +173,26 @@ export default function WorkerProfileSetup() {
         priceRange,
         bio,
         profileImageUrl,
-        idProofUrl,
-        certificateUrl,
-        verified: false, // Wait for admin review
-        availability: true,
-        rating: 5.0,
+        proofOfWorkUrl,
+        proofOfWorkType,
+        proofDescription,
+        localReference: localRefObj,
+        aiAuditReport: finalAIReport,
+        workVerificationStatus: 'Pending Admin Approval',
+        verified: false, // Verified badge activates once approved by Admin and meeting Rating/Exp criteria
+        rating: 0,
         reviewCount: 0,
-        completedJobs: 0
+        completedJobs: 0,
+        availability: true
       });
 
       setSuccess(true);
       setTimeout(() => {
         navigate('/worker');
-      }, 3000);
+      }, 1500);
     } catch (err) {
-      setError(err.message || 'Failed to save profile. Please try again.');
+      console.error(err);
+      setError('Failed to setup worker profile. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -121,11 +204,13 @@ export default function WorkerProfileSetup() {
         <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto text-emerald-500 mb-6">
           <Check className="w-8 h-8 stroke-[3px]" />
         </div>
-        <h1 className="text-2xl font-bold text-text-main">Profile Setup Complete!</h1>
-        <p className="text-sm text-text-sub mt-2 leading-relaxed">
-          Your credentials and proofs are submitted. The system administrator will review them shortly. You are being redirected to your dashboard.
+        <h1 className="text-2xl font-bold text-[#283845] dark:text-white font-heading">Work Verification Submitted!</h1>
+        <p className="text-sm text-stone-500 dark:text-stone-400 mt-2 leading-relaxed">
+          Your profile photo, proof of work, and trade details have been quality-audited and sent to Admin for review.
         </p>
-        <LoadingSpinner size="sm" />
+        <div className="mt-4 flex justify-center">
+          <LoadingSpinner size="sm" />
+        </div>
       </div>
     );
   }
@@ -134,14 +219,16 @@ export default function WorkerProfileSetup() {
     <div className="max-w-3xl mx-auto px-4 py-8 animate-fade-in text-left">
       <BackButton to="/worker" label="Back to Dashboard" className="mb-6" />
 
-      <div className="bg-card-bg border border-border-custom rounded-3xl p-6 sm:p-8 shadow-xs">
-        <div className="mb-6 border-b border-border-custom pb-5">
-          <h1 className="text-xl font-bold text-text-main">Worker Profile Registration</h1>
-          <p className="text-xs text-text-muted mt-1">Complete your professional registration. Admins will verify certificates to unlock your badge.</p>
+      <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-6 sm:p-8 shadow-xs">
+        <div className="mb-6 border-b border-[#EBE5DE] dark:border-white/10 pb-5">
+          <h1 className="text-xl font-bold text-[#283845] dark:text-white font-heading">SkillBridge Work Verification</h1>
+          <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">
+            Complete your trade registration with proof of your actual work. Submissions are quality-audited and reviewed by Admin.
+          </p>
         </div>
 
         {error && (
-          <div className="bg-rose-500/10 border border-rose-500/20 text-rose-450 rounded-xl p-3.5 text-xs font-semibold mb-5">
+          <div className="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 rounded-xl p-3.5 text-xs font-semibold mb-5">
             {error}
           </div>
         )}
@@ -149,7 +236,9 @@ export default function WorkerProfileSetup() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Categories select */}
           <div>
-            <label className="block text-xs font-bold text-text-muted uppercase tracking-wider mb-2">Select Your Categories * (Select all that apply)</label>
+            <label className="block text-[11px] font-bold text-[#283845] dark:text-stone-300 uppercase tracking-wider mb-2">
+              Select Your Trade Categories * (Select all that apply)
+            </label>
             <div className="flex flex-wrap gap-2">
               {CATEGORIES.map(cat => {
                 const isSelected = selectedCategories.includes(cat);
@@ -160,8 +249,8 @@ export default function WorkerProfileSetup() {
                     onClick={() => handleCategoryToggle(cat)}
                     className={`px-4 py-2 border rounded-xl text-xs font-bold transition-all cursor-pointer ${
                       isSelected 
-                        ? 'bg-primary border-primary text-white shadow-3xs' 
-                        : 'border-border-custom text-text-sub hover:bg-white/5 hover:text-white'
+                        ? 'bg-[#FFA649]/20 border-[#FFA649] text-[#283845] dark:text-[#FFA649] shadow-xs' 
+                        : 'border-[#EBE5DE] dark:border-white/10 text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-white/5'
                     }`}
                   >
                     {cat}
@@ -173,10 +262,10 @@ export default function WorkerProfileSetup() {
 
           {/* Specific skills */}
           <FormInput
-            label="Specific Skills (Comma separated)"
+            label="Specific Skills (Comma separated) *"
             type="text"
             name="skills"
-            placeholder="e.g. Pipe Leakage Repair, Tap Repair, Water Tank Installation"
+            placeholder="e.g. Pipe Leakage Repair, Tap Fitting, Water Tank Installation"
             value={skillsText}
             onChange={(e) => setSkillsText(e.target.value)}
             required
@@ -185,110 +274,187 @@ export default function WorkerProfileSetup() {
           {/* Experience & Location & Price range */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <FormInput
-              label="Years of Experience"
+              label="Years of Experience *"
               type="number"
               name="experience"
-              placeholder="e.g. 5"
+              placeholder="e.g. 4"
+              min="0"
               value={experience}
               onChange={(e) => setExperience(e.target.value)}
               required
             />
 
             <FormInput
-              label="Service Location"
+              label="Primary Service Location *"
               type="text"
               name="location"
-              placeholder="e.g. Chennai Central"
+              placeholder="e.g. T. Nagar, Chennai"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               required
             />
 
-            <div>
-              <label className="block text-xs font-bold text-text-muted uppercase tracking-wider mb-1.5">Price Range Estimate *</label>
-              <select
-                value={priceRange}
-                onChange={(e) => setPriceRange(e.target.value)}
-                className="w-full h-11 border border-border-custom rounded-xl px-3.5 text-sm focus:outline-none focus:border-primary bg-card-bg/60 text-text-main cursor-pointer"
-                required
-              >
-                <option value="₹300 – ₹800" className="bg-[#0F172A] text-white">₹300 – ₹800 (Plumbing/Cleaning)</option>
-                <option value="₹400 – ₹1,000" className="bg-[#0F172A] text-white">₹400 – ₹1,000 (Electrical)</option>
-                <option value="₹500 – ₹1,500" className="bg-[#0F172A] text-white">₹500 – ₹1,500 (Carpentry/Painting)</option>
-                <option value="₹600 – ₹2,000" className="bg-[#0F172A] text-white">₹600 – ₹2,000 (Masonry)</option>
-                <option value="₹1,000 – ₹3,000" className="bg-[#0F172A] text-white">₹1,000 – ₹3,000 (Bulk/Custom)</option>
-              </select>
-            </div>
+            <FormInput
+              label="Price Range / Visiting Charge"
+              type="text"
+              name="priceRange"
+              placeholder="e.g. ₹300 – ₹800"
+              value={priceRange}
+              onChange={(e) => setPriceRange(e.target.value)}
+            />
           </div>
 
-          {/* Short Bio */}
-          <FormInput
-            label="Short Bio (Introduce yourself)"
-            type="textarea"
-            name="bio"
-            placeholder="e.g. Punctual, background-verified electrician with specialized training. Expert in switchboard repairs and troubleshooting."
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            required
-            rows={3}
-          />
+          {/* Bio */}
+          <div>
+            <label className="block text-[11px] font-bold text-[#283845] dark:text-stone-300 uppercase tracking-wider mb-2">
+              Professional Work Bio * (Min. 20 characters)
+            </label>
+            <textarea
+              className="w-full px-4 py-3 rounded-xl border border-[#EBE5DE] dark:border-white/10 bg-stone-50/50 dark:bg-stone-900/50 text-xs text-[#283845] dark:text-stone-100 focus:outline-none focus:border-[#FFA649] transition-colors"
+              placeholder="Describe your hands-on expertise, tools you use, and commitment to quality service..."
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              rows={3}
+              required
+            />
+          </div>
 
-          {/* File Uploads (ID proof & Certs) */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4 border-t border-border-custom">
-            {/* Profile pic */}
-            <div className="space-y-1.5 text-left">
-              <label className="block text-xs font-bold text-text-muted uppercase tracking-wider flex items-center gap-1">
-                <Image className="w-4 h-4 text-primary" />
-                Profile Photo
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => setProfileFile(e.target.files[0])}
-                className="w-full text-xs text-text-sub file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border border-border-custom file:border-0 file:text-xs file:font-bold file:bg-white/5 file:text-text-sub hover:file:bg-white/10 file:cursor-pointer"
-              />
+          {/* ========================================================================= */}
+          {/* SKILLBRIDGE WORK VERIFICATION SECTION */}
+          {/* ========================================================================= */}
+          <div className="border-t border-[#EBE5DE] dark:border-white/10 pt-6 space-y-5">
+            <div>
+              <h3 className="text-sm font-bold text-[#283845] dark:text-white flex items-center gap-2 font-heading">
+                <Wrench className="w-4.5 h-4.5 text-[#FFA649]" />
+                SkillBridge Work Verification Uploads
+              </h3>
+              <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">
+                Upload your profile portrait, practical proof of work, and optional local customer reference.
+              </p>
             </div>
 
-            {/* ID Proof */}
-            <div className="space-y-1.5 text-left">
-              <label className="block text-xs font-bold text-text-muted uppercase tracking-wider flex items-center gap-1">
-                <FileText className="w-4 h-4 text-primary" />
-                Govt ID Proof
-              </label>
-              <input
-                type="file"
-                accept=".pdf,image/*"
-                onChange={(e) => setIdFile(e.target.files[0])}
-                className="w-full text-xs text-text-sub file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border border-border-custom file:border-0 file:text-xs file:font-bold file:bg-white/5 file:text-text-sub hover:file:bg-white/10 file:cursor-pointer"
-              />
+            {/* 1. 📸 Profile Photo (Required) & 2. 🛠️ Proof of Work (Required) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              {/* Profile Photo */}
+              <div className="p-4 border border-[#EBE5DE] dark:border-white/10 rounded-2xl bg-stone-50 dark:bg-[#11171E] space-y-2.5">
+                <div className="flex items-center gap-1.5">
+                  <Camera className="w-3.5 h-3.5 text-[#FFA649]" />
+                  <label className="block text-[11px] font-extrabold text-[#283845] dark:text-stone-200 uppercase">
+                    1. Profile Photo <span className="text-rose-500">*</span>
+                  </label>
+                </div>
+                <p className="text-[11px] text-stone-500 dark:text-stone-400">
+                  Upload a clear portrait photo showing your face.
+                </p>
+                <input 
+                  type="file" 
+                  accept="image/*"
+                  onChange={(e) => handleProfileFileChange(e.target.files[0])}
+                  className="w-full text-[11px] text-stone-600 dark:text-stone-300 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#FFA649]/20 file:text-[#283845] dark:file:text-[#FFA649] cursor-pointer"
+                  required
+                />
+              </div>
+
+              {/* Proof of Work */}
+              <div className="p-4 border border-[#EBE5DE] dark:border-white/10 rounded-2xl bg-stone-50 dark:bg-[#11171E] space-y-2.5">
+                <div className="flex items-center gap-1.5">
+                  <Wrench className="w-3.5 h-3.5 text-[#FFA649]" />
+                  <label className="block text-[11px] font-extrabold text-[#283845] dark:text-stone-200 uppercase">
+                    2. Proof of Work <span className="text-rose-500">*</span>
+                  </label>
+                </div>
+
+                {/* Proof Type Selector */}
+                <select
+                  value={proofOfWorkType}
+                  onChange={(e) => {
+                    setProofOfWorkType(e.target.value);
+                    runQualityAudit(profileFile, proofOfWorkFile, e.target.value, proofDescription);
+                  }}
+                  className="w-full px-2.5 py-1.5 rounded-lg border border-[#EBE5DE] dark:border-white/10 bg-white dark:bg-[#1B2731] text-[11px] text-stone-700 dark:text-stone-200 focus:outline-none focus:border-[#FFA649]"
+                >
+                  {PROOF_OF_WORK_TYPES.map(type => (
+                    <option key={type.id} value={type.id}>{type.label}</option>
+                  ))}
+                </select>
+
+                <input 
+                  type="file" 
+                  accept="image/*,video/*,.pdf"
+                  onChange={(e) => handleProofFileChange(e.target.files[0])}
+                  className="w-full text-[11px] text-stone-600 dark:text-stone-300 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#FFA649]/20 file:text-[#283845] dark:file:text-[#FFA649] cursor-pointer"
+                  required
+                />
+
+                <input 
+                  type="text"
+                  placeholder="Short work description (e.g. Bathroom pipeline fitting)"
+                  value={proofDescription}
+                  onChange={(e) => {
+                    setProofDescription(e.target.value);
+                    runQualityAudit(profileFile, proofOfWorkFile, proofOfWorkType, e.target.value);
+                  }}
+                  className="w-full px-3 py-1.5 rounded-lg border border-[#EBE5DE] dark:border-white/10 bg-white dark:bg-[#1B2731] text-[11px] text-[#283845] dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:border-[#FFA649]"
+                />
+              </div>
             </div>
 
-            {/* Certificate */}
-            <div className="space-y-1.5 text-left">
-              <label className="block text-xs font-bold text-text-muted uppercase tracking-wider flex items-center gap-1">
-                <Award className="w-4 h-4 text-primary" />
-                Skill Certificate
-              </label>
-              <input
-                type="file"
-                accept=".pdf,image/*"
-                onChange={(e) => setCertFile(e.target.files[0])}
-                className="w-full text-xs text-text-sub file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border border-border-custom file:border-0 file:text-xs file:font-bold file:bg-white/5 file:text-text-sub hover:file:bg-white/10 file:cursor-pointer"
-              />
+            {/* 3. 🤝 Local Reference (Optional) */}
+            <div className="p-4 border border-[#EBE5DE] dark:border-white/10 rounded-2xl bg-stone-50 dark:bg-[#11171E] space-y-3 text-xs">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <PhoneCall className="w-3.5 h-3.5 text-[#FFA649]" />
+                  <label className="block text-[11px] font-extrabold text-[#283845] dark:text-stone-200 uppercase">
+                    3. Local Reference <span className="text-stone-400 font-normal">(Optional)</span>
+                  </label>
+                </div>
+                <span className="text-[10px] text-stone-400">Previous customer or contractor</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <input 
+                  type="text"
+                  placeholder="Referee Name (e.g. S. Rajendran)"
+                  value={referenceName}
+                  onChange={(e) => setReferenceName(e.target.value)}
+                  className="px-3 py-2 rounded-lg border border-[#EBE5DE] dark:border-white/10 bg-white dark:bg-[#1B2731] text-[11px] text-[#283845] dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:border-[#FFA649]"
+                />
+                <input 
+                  type="tel"
+                  placeholder="Referee Phone (e.g. 9840123456)"
+                  value={referencePhone}
+                  onChange={(e) => setReferencePhone(e.target.value)}
+                  className="px-3 py-2 rounded-lg border border-[#EBE5DE] dark:border-white/10 bg-white dark:bg-[#1B2731] text-[11px] text-[#283845] dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:border-[#FFA649]"
+                />
+                <select
+                  value={referenceRelation}
+                  onChange={(e) => setReferenceRelation(e.target.value)}
+                  className="px-2.5 py-2 rounded-lg border border-[#EBE5DE] dark:border-white/10 bg-white dark:bg-[#1B2731] text-[11px] text-stone-700 dark:text-stone-200 focus:outline-none focus:border-[#FFA649]"
+                >
+                  <option value="Previous Customer">Previous Customer</option>
+                  <option value="General Contractor">General Contractor</option>
+                  <option value="Trade Master / Supervisor">Trade Master / Supervisor</option>
+                  <option value="Hardware Shop Owner">Hardware Shop Owner</option>
+                </select>
+              </div>
             </div>
+
+            {/* AI Automated Quality Audit Live Card */}
+            {(isAnalyzing || aiReport) && (
+              <AIVerificationCard 
+                report={aiReport} 
+                isAnalyzing={isAnalyzing} 
+                className="mt-4 animate-fade-in"
+              />
+            )}
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full h-11 mt-6 text-sm font-bold text-white btn-gradient rounded-xl shadow-xs text-center flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full h-11 mt-6 text-sm font-extrabold text-[#11171E] btn-gradient rounded-xl shadow-xs text-center flex items-center justify-center gap-2 cursor-pointer"
           >
-            {loading ? <LoadingSpinner size="sm" color="white" /> : (
-              <>
-                <UserPlus className="w-4 h-4" />
-                Register Profile & Submit documents
-              </>
-            )}
+            {loading ? <LoadingSpinner size="sm" color="white" /> : 'Submit for Admin Work Verification'}
           </button>
         </form>
       </div>

@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getRecommendedWorkers } from '../../services/recommendationService';
 import WorkerCard from '../../components/WorkerCard';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import BackButton from '../../components/BackButton';
-import { RefreshCw, Star, Info } from 'lucide-react';
+import { RefreshCw, Star, Info, ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
 
 export default function WorkerList() {
   const { state } = useLocation();
@@ -12,9 +12,10 @@ export default function WorkerList() {
   const [workers, setWorkers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [showDetails, setShowDetails] = useState(false);
 
   // Safeguard if state is lost on page refreshes
-  const searchCriteria = state || {
+  const searchCriteria = useMemo(() => state || {
     category: 'Plumbing',
     jobType: 'Pipe Leakage Repair',
     location: 'Chennai Central',
@@ -23,9 +24,9 @@ export default function WorkerList() {
     scheduledDate: new Date().toISOString().split('T')[0],
     scheduledTime: 'Immediate',
     description: ''
-  };
+  }, [state]);
 
-  const fetchRecommendations = async () => {
+  const fetchRecommendations = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
@@ -41,17 +42,17 @@ export default function WorkerList() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchCriteria.category, searchCriteria.jobType, searchCriteria.location]);
 
   useEffect(() => {
     fetchRecommendations();
-  }, [state]);
+  }, [fetchRecommendations]);
 
   const handleWorkerSelect = (worker) => {
     // Navigate to WorkerProfile passing search requirements too
     navigate(`/customer/worker/${worker.userId}`, {
       state: {
-        bookingRequest: searchCriteria,
+        bookingCriteria: searchCriteria,
         worker
       }
     });
@@ -68,58 +69,80 @@ export default function WorkerList() {
 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Recommended Specialists</h1>
-          <p className="text-xs text-gray-500 mt-0.5">
-            Matching <span className="font-semibold text-gray-700">{searchCriteria.jobType}</span> in <span className="font-semibold text-gray-700">{searchCriteria.location}</span>.
+          <h1 className="text-xl font-bold text-[#283845] dark:text-white font-heading">Recommended Specialists</h1>
+          <p className="text-xs text-stone-600 dark:text-stone-400 mt-1">
+            Matching <span className="font-bold text-[#283845] dark:text-[#FFA649]">{searchCriteria.jobType}</span> in <span className="font-bold text-[#283845] dark:text-[#FFA649]">{searchCriteria.location}</span>.
           </p>
         </div>
 
         <button 
           onClick={fetchRecommendations}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-gray-600 border border-gray-200 rounded-xl hover:bg-gray-50"
+          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-[#283845] dark:text-stone-300 border border-[#EBE5DE] dark:border-white/10 rounded-xl hover:bg-stone-100 dark:hover:bg-white/5 cursor-pointer"
         >
-          <RefreshCw className="w-3.5 h-3.5" />
+          <RefreshCw className="w-3.5 h-3.5 text-[#FFA649]" />
           Refresh Matches
         </button>
       </div>
 
-      {/* Recommendation System breakdown disclosure */}
-      <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 mb-6 flex gap-3 text-xs text-blue-800 leading-relaxed items-start">
-        <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-        <div>
-          <span className="font-bold">Smart Recommendation Algorithm:</span> Sorting is calculated using a weighted balance of star ratings (35%), exact job skill matches (25%), availability status (15%), location proximity (15%), and experience duration (10%).
+      {/* Smart Recommendation explanation compact card */}
+      <div 
+        onClick={() => setShowDetails(!showDetails)}
+        className="group bg-white dark:bg-[#1B2731] border border-[#FFA649]/30 hover:border-[#FFA649]/60 rounded-2xl p-3.5 sm:p-4 mb-6 transition-all duration-300 shadow-sm cursor-pointer select-none"
+      >
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-6 h-6 rounded-lg bg-[#FFA649]/15 border border-[#FFA649]/30 text-[#FFA649] flex items-center justify-center flex-shrink-0">
+              <Info className="w-3.5 h-3.5" />
+            </div>
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 min-w-0">
+              <span className="text-xs font-bold text-[#283845] dark:text-stone-200">Why are these workers recommended?</span>
+              <span className="hidden sm:inline text-stone-400 text-xs">·</span>
+              <span className="text-[11px] font-medium text-stone-500 dark:text-stone-400">
+                Ranked by proximity, verified rating & past success
+              </span>
+            </div>
+          </div>
+          <div className="text-stone-400 group-hover:text-[#FFA649] transition-colors flex-shrink-0">
+            {showDetails ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </div>
         </div>
+
+        {/* Collapsible Details Content */}
+        {showDetails && (
+          <div className="mt-3.5 pt-3.5 border-t border-[#EBE5DE] dark:border-white/10 text-xs text-stone-600 dark:text-stone-300 space-y-2 animate-fade-in">
+            <div className="flex items-start gap-2">
+              <Sparkles className="w-3.5 h-3.5 text-[#FFA649] mt-0.5 flex-shrink-0" />
+              <span><strong className="text-[#283845] dark:text-white">Matching algorithm:</strong> Specialists within {searchCriteria.location} are prioritized to ensure sub-15 minute arrival.</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <Star className="w-3.5 h-3.5 text-[#FFA649] mt-0.5 flex-shrink-0" />
+              <span><strong className="text-[#283845] dark:text-white">Trust weighting:</strong> Completed job history and high reviews increase ranking in the match feed.</span>
+            </div>
+          </div>
+        )}
       </div>
 
       {loading ? (
-        <LoadingSpinner size="lg" />
+        <div className="py-12 flex justify-center">
+          <LoadingSpinner size="lg" />
+        </div>
       ) : error ? (
-        <div className="bg-rose-50 border border-rose-100 text-rose-600 rounded-xl p-4 text-xs font-medium text-center">
+        <div className="bg-rose-50 border border-rose-100 text-rose-600 rounded-2xl p-6 text-center text-xs font-semibold">
           {error}
         </div>
       ) : workers.length === 0 ? (
-        <div className="bg-white border border-gray-100 rounded-3xl p-12 text-center text-gray-500 shadow-3xs">
-          <Star className="w-12 h-12 text-amber-300 mx-auto mb-3 animate-pulse" />
-          <h3 className="text-lg font-bold text-gray-800">No Verified Workers Found</h3>
-          <p className="text-xs text-gray-400 mt-1.5 max-w-md mx-auto leading-relaxed">
-            We couldn't find any verified, available workers matching this category in "{searchCriteria.location}". Try selecting a broader location like "Chennai Central" or check back shortly.
-          </p>
-          <Link 
-            to="/customer/search"
-            className="inline-block mt-6 px-6 py-2.5 text-xs font-bold text-white btn-gradient rounded-xl shadow-xs"
-          >
-            Refine Search Criteria
-          </Link>
+        <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-10 text-center shadow-xs">
+          <p className="text-base font-bold text-[#283845] dark:text-white">No available specialists matched your exact query.</p>
+          <p className="text-xs text-stone-500 dark:text-stone-400 mt-2">Try adjusting the service locality or expanding to neighboring pin codes.</p>
         </div>
       ) : (
         <div className="space-y-4">
-          <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest px-1">Recommended For You</h2>
-          {workers.map((worker, idx) => (
+          {workers.map(worker => (
             <WorkerCard 
               key={worker.userId}
               worker={worker}
               onSelect={handleWorkerSelect}
-              actionText="View Profile & Book"
+              actionText="Select & Book"
             />
           ))}
         </div>

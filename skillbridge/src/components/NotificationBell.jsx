@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Bell } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { getNotificationsForUser, markNotificationAsRead } from '../services/notificationService';
@@ -66,7 +66,7 @@ export default function NotificationBell() {
         if (userRole === 'customer') {
           navigate(`/customer/booking/${notif.bookingId}`);
         } else if (userRole === 'worker') {
-          navigate(`/worker/bookings`);
+          navigate(`/worker/jobs`);
         } else if (userRole === 'admin') {
           navigate(`/admin/bookings`);
         }
@@ -82,44 +82,44 @@ export default function NotificationBell() {
     <div className="relative" ref={bellRef}>
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 text-gray-500 hover:text-primary transition-colors duration-150 rounded-full hover:bg-gray-100"
+        className="relative p-2 text-stone-600 dark:text-stone-300 hover:text-[#FFA649] dark:hover:text-[#FFA649] transition-colors duration-150 rounded-full hover:bg-stone-100 dark:hover:bg-white/10 cursor-pointer"
         aria-label="Notifications"
       >
         <Bell className="w-5 h-5" />
         {unreadCount > 0 && (
-          <span className="absolute top-1.5 right-1.5 w-4 h-4 text-[10px] font-bold text-white bg-red-500 rounded-full flex items-center justify-center animate-pulse">
+          <span className="absolute top-1.5 right-1.5 w-4 h-4 text-[10px] font-bold text-[#11171E] bg-[#FFA649] rounded-full flex items-center justify-center animate-pulse shadow-sm">
             {unreadCount}
           </span>
         )}
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50 animate-fade-in max-h-96 overflow-y-auto">
-          <div className="px-4 py-2 border-b border-gray-100 font-semibold text-sm text-gray-800 flex justify-between items-center">
+        <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-[#1B2731] rounded-2xl shadow-xl border border-[#EBE5DE] dark:border-white/10 py-2 z-50 animate-fade-in max-h-96 overflow-y-auto text-left">
+          <div className="px-4 py-2 border-b border-[#EBE5DE] dark:border-white/10 font-bold text-sm text-[#283845] dark:text-white flex justify-between items-center font-heading">
             <span>Notifications</span>
             {unreadCount > 0 && (
-              <span className="text-[11px] font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+              <span className="text-[11px] font-bold text-[#283845] dark:text-[#FFA649] bg-[#FFA649]/20 px-2 py-0.5 rounded-full">
                 {unreadCount} new
               </span>
             )}
           </div>
           {notifications.length === 0 ? (
-            <div className="px-4 py-6 text-center text-sm text-gray-500">
+            <div className="px-4 py-6 text-center text-xs text-stone-400 font-medium">
               No notifications yet.
             </div>
           ) : (
-            <div className="divide-y divide-gray-50">
+            <div className="divide-y divide-[#EBE5DE] dark:divide-white/10">
               {notifications.map((notif) => (
                 <button
                   key={notif.notificationId}
                   onClick={() => handleNotificationClick(notif)}
-                  className={`w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors duration-150 flex flex-col items-start ${!notif.read ? 'bg-blue-50/30' : ''}`}
+                  className={`w-full text-left px-4 py-3 hover:bg-stone-50 dark:hover:bg-white/5 transition-colors duration-150 flex flex-col items-start cursor-pointer ${!notif.read ? 'bg-[#FFA649]/10 dark:bg-[#FFA649]/10' : ''}`}
                 >
-                  <span className={`text-xs font-semibold text-gray-900 ${!notif.read ? 'text-primary' : ''}`}>
+                  <span className={`text-xs font-bold text-[#283845] dark:text-white ${!notif.read ? 'text-[#FFA649] dark:text-[#FFA649]' : ''}`}>
                     {notif.type.replace('_', ' ').toUpperCase()}
                   </span>
-                  <p className="text-xs text-gray-600 mt-0.5 leading-relaxed">{notif.message}</p>
-                  <span className="text-[9px] text-gray-400 mt-1">
+                  <p className="text-xs text-stone-600 dark:text-stone-300 mt-0.5 leading-relaxed">{notif.message}</p>
+                  <span className="text-[9px] text-stone-400 mt-1">
                     {new Date(notif.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </button>

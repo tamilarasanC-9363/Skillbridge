@@ -1,8 +1,9 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { 
   loginUser, 
   logoutUser, 
   registerUser, 
+  sendPasswordReset,
   subscribeToAuth 
 } from '../services/authService';
 
@@ -38,12 +39,11 @@ export function AuthProvider({ children }) {
     setLoading(true);
     try {
       const user = await loginUser(email, password);
-      setCurrentUser(user);
-      setUserRole(user.role || null);
-      setUserProfile(user);
-      return user;
-    } catch (error) {
-      throw error;
+      const normalizedUser = user ? { ...user, role: user.role || userRole || null } : user;
+      setCurrentUser(normalizedUser);
+      setUserRole(normalizedUser?.role || null);
+      setUserProfile(normalizedUser);
+      return normalizedUser;
     } finally {
       setLoading(false);
     }
@@ -67,12 +67,12 @@ export function AuthProvider({ children }) {
     setLoading(true);
     try {
       const user = await registerUser(email, password, name, phone, role);
-      setCurrentUser(user);
-      setUserRole(user.role || null);
-      setUserProfile(user);
-      return user;
-    } catch (error) {
-      throw error;
+      const safeRole = user?.role || role || null;
+      const normalizedUser = user ? { ...user, role: safeRole } : user;
+      setCurrentUser(normalizedUser);
+      setUserRole(safeRole);
+      setUserProfile(normalizedUser);
+      return normalizedUser;
     } finally {
       setLoading(false);
     }
@@ -88,7 +88,8 @@ export function AuthProvider({ children }) {
     loading,
     login,
     logout,
-    register
+    register,
+    resetPassword: sendPasswordReset
   };
 
   return (

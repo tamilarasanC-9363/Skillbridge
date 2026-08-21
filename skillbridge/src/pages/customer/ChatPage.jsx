@@ -1,4 +1,3 @@
-import React from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import ChatBox from '../../components/ChatBox';
@@ -20,10 +19,10 @@ export default function ChatPage() {
       />
 
       <div className="mb-6">
-        <h1 className="text-xl font-bold text-gray-900">Conversation Details</h1>
+        <h1 className="text-xl font-bold text-[#283845] dark:text-white font-heading">Conversation Details</h1>
         {booking.jobType && (
-          <p className="text-xs text-gray-500 mt-0.5">
-            Discussing job: <span className="font-semibold text-gray-700">{booking.jobType}</span> with worker <span className="font-semibold text-gray-700">{booking.workerName}</span>.
+          <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
+            Discussing job: <span className="font-bold text-[#283845] dark:text-[#FFA649]">{booking.jobType}</span> with worker <span className="font-bold text-[#283845] dark:text-[#FFA649]">{booking.workerName}</span>.
           </p>
         )}
       </div>

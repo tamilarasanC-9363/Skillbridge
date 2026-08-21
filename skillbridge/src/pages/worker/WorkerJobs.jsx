@@ -1,325 +1,334 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { getBookingsForUser, updateBookingStatus } from '../../services/bookingService';
-import { getReviewsForWorker } from '../../services/reviewService';
-import BookingCard from '../../components/BookingCard';
+import Sidebar from '../../components/Sidebar';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import BackButton from '../../components/BackButton';
-import RatingStars from '../../components/RatingStars';
-import { useNavigate } from 'react-router-dom';
 import { 
-  Briefcase, 
-  Clock, 
-  CheckCircle2, 
-  Calendar, 
-  MapPin, 
-  IndianRupee, 
-  Star, 
-  MessageSquare, 
-  Filter,
-  CheckCircle,
-  AlertCircle,
-  Sparkles
+  Briefcase, Calendar, Clock, MapPin, CheckCircle, 
+  XCircle, Play, CheckSquare, MessageSquare, AlertCircle, 
+  IndianRupee, User, Star
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-const CATEGORY_IMAGES = {
-  'Plumbing': 'https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=800&q=80',
-  'Electrical': 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80',
-  'Painting': 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=800&q=80',
-  'Carpentry': 'https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=800&q=80',
-  'Cleaning': 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80',
-  'Appliance Repair': 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80'
+const STATUS_PILL_STYLES = {
+  'Pending': 'bg-[#FFA649]/15 text-[#283845] dark:text-[#FFA649] border-[#FFA649]/30',
+  'Accepted': 'bg-[#283845]/10 dark:bg-[#283845]/40 text-[#283845] dark:text-[#FFA649] border-[#283845]/30',
+  'In Progress': 'bg-[#FFA649]/25 text-[#1B2731] dark:text-[#FFA649] border-[#FFA649]/40',
+  'Completed': 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/80',
+  'Rejected': 'bg-rose-50 dark:bg-rose-950/50 text-rose-800 dark:text-rose-300 border-rose-200 dark:border-rose-800/80',
+  'Cancelled': 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-400 border-stone-200 dark:border-stone-700'
 };
-
-const DEFAULT_JOB_IMAGE = 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80';
 
 export default function WorkerJobs() {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
-  const [bookings, setBookings] = useState([]);
-  const [reviews, setReviews] = useState([]);
+  const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('all'); // 'all', 'upcoming', 'in_progress', 'completed'
-  const [actionError, setActionError] = useState('');
+  const [activeTab, setActiveTab] = useState('all'); // 'all', 'incoming', 'ongoing', 'completed'
+  const [actionLoadingId, setActionLoadingId] = useState(null);
+
+  const fetchJobs = useCallback(async () => {
+    if (!currentUser?.uid) return;
+    try {
+      const list = await getBookingsForUser(currentUser.uid, 'worker');
+      setJobs(list || []);
+    } catch (err) {
+      console.error('Error loading worker jobs:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [currentUser?.uid]);
 
   useEffect(() => {
-    const fetchJobsAndReviews = async () => {
-      try {
-        if (!currentUser?.uid) return;
-        const [userBookings, workerReviews] = await Promise.all([
-          getBookingsForUser(currentUser.uid, 'worker'),
-          getReviewsForWorker(currentUser.uid)
-        ]);
-        setBookings(userBookings || []);
-        setReviews(workerReviews || []);
-      } catch (err) {
-        console.error('Error fetching jobs:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    fetchJobs();
 
-    fetchJobsAndReviews();
-  }, [currentUser]);
+    window.addEventListener('sb_message_sent', fetchJobs);
+    return () => window.removeEventListener('sb_message_sent', fetchJobs);
+  }, [fetchJobs]);
 
-  const handleBookingAction = async (bookingId, newStatus) => {
+  const handleStatusChange = async (bookingId, newStatus) => {
+    setActionLoadingId(bookingId);
     try {
-      setActionError('');
-      const updated = await updateBookingStatus(bookingId, newStatus);
-      setBookings(prev => prev.map(b => b.bookingId === bookingId ? { ...b, status: newStatus } : b));
+      await updateBookingStatus(bookingId, newStatus);
+      await fetchJobs();
     } catch (err) {
       console.error(err);
-      setActionError('Could not update job status. Please try again.');
+    } finally {
+      setActionLoadingId(null);
     }
   };
 
-  const upcomingJobs = bookings.filter(b => b.status === 'Pending' || b.status === 'Accepted');
-  const inProgressJobs = bookings.filter(b => b.status === 'In Progress');
-  const completedJobs = bookings.filter(b => b.status === 'Completed');
+  const incomingJobs = jobs.filter(j => j.status === 'Pending');
+  const ongoingJobs = jobs.filter(j => ['Accepted', 'In Progress'].includes(j.status));
+  const completedJobs = jobs.filter(j => ['Completed', 'Rejected', 'Cancelled'].includes(j.status));
 
-  const displayedJobs = activeTab === 'upcoming'
-    ? upcomingJobs
-    : activeTab === 'in_progress'
-    ? inProgressJobs
-    : activeTab === 'completed'
-    ? completedJobs
-    : bookings;
+  const displayedJobs = activeTab === 'incoming' 
+    ? incomingJobs 
+    : activeTab === 'ongoing' 
+    ? ongoingJobs 
+    : activeTab === 'completed' 
+    ? completedJobs 
+    : jobs;
 
-  // Map review ratings to completed bookings
-  const getReviewForBooking = (bookingId) => {
-    return reviews.find(r => r.bookingId === bookingId);
-  };
-
-  if (loading) {
-    return (
-      <div className="max-w-6xl mx-auto py-16 flex justify-center">
-        <LoadingSpinner size="lg" />
-      </div>
-    );
-  }
+  const sidebarLinks = [
+    { label: 'Overview Dashboard', path: '/worker', icon: Briefcase, end: true },
+    { label: 'Incoming Job Requests', path: '/worker/requests', icon: Clock, badge: incomingJobs.length },
+    { label: 'Active Service Tasks', path: '/worker/jobs', icon: Play, badge: ongoingJobs.length },
+    { label: 'My Bookings History', path: '/worker/bookings', icon: CheckSquare },
+    { label: 'Customer Feedbacks', path: '/worker/feedbacks', icon: Star }
+  ];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 animate-fade-in text-left">
-      <BackButton to="/worker" label="Back to Dashboard" className="mb-6" />
+    <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-6 p-4 animate-fade-in text-left">
+      <Sidebar links={sidebarLinks} title="Worker Portal" />
 
-      {/* Header section */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-        <div>
-          <h1 className="text-2xl font-extrabold text-white flex items-center gap-2.5">
-            <Briefcase className="w-6 h-6 text-primary" />
-            My Work / Job History
-          </h1>
-          <p className="text-xs text-text-muted mt-1">
-            Track upcoming assignments, active work in progress, and review completed service history.
-          </p>
+      <div className="flex-grow space-y-6">
+        {/* Header Title */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h1 className="text-2xl font-extrabold text-[#283845] dark:text-white font-heading flex items-center gap-2.5">
+              <Briefcase className="w-6 h-6 text-[#FFA649]" />
+              Manage Job Assignments
+            </h1>
+            <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">
+              Review direct customer hire requests, track in-progress projects, and update completed statuses.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="px-3.5 py-1.5 rounded-xl bg-[#FFA649]/15 border border-[#FFA649]/30 text-[#283845] dark:text-[#FFA649] text-xs font-bold flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5 text-[#FFA649]" />
+              {incomingJobs.length} New Requests
+            </span>
+            <span className="px-3.5 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-xs font-bold flex items-center gap-1.5">
+              <Play className="w-3.5 h-3.5" />
+              {ongoingJobs.length} Active
+            </span>
+          </div>
         </div>
 
-        {/* Quick summary badges */}
-        <div className="flex items-center gap-2">
-          <span className="px-3 py-1.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold flex items-center gap-1.5">
-            <Clock className="w-3.5 h-3.5" />
-            {upcomingJobs.length + inProgressJobs.length} Active
-          </span>
-          <span className="px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center gap-1.5">
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            {completedJobs.length} Completed
-          </span>
+        {/* Filter Navigation Tabs */}
+        <div className="flex border-b border-[#EBE5DE] dark:border-white/10 gap-3 sm:gap-6 overflow-x-auto pb-1 select-none">
+          <button
+            type="button"
+            onClick={() => setActiveTab('all')}
+            className={`pb-3 text-xs sm:text-sm font-bold flex items-center gap-2 border-b-2 transition-all cursor-pointer whitespace-nowrap ${
+              activeTab === 'all'
+                ? 'border-[#FFA649] text-[#283845] dark:text-[#FFA649]'
+                : 'border-transparent text-stone-500 hover:text-[#283845] dark:hover:text-white'
+            }`}
+          >
+            All Assigned Jobs ({jobs.length})
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('incoming')}
+            className={`pb-3 text-xs sm:text-sm font-bold flex items-center gap-2 border-b-2 transition-all cursor-pointer whitespace-nowrap ${
+              activeTab === 'incoming'
+                ? 'border-[#FFA649] text-[#283845] dark:text-[#FFA649]'
+                : 'border-transparent text-stone-500 hover:text-[#283845] dark:hover:text-white'
+            }`}
+          >
+            <span className="w-2 h-2 rounded-full bg-[#FFA649] animate-pulse" />
+            Incoming Requests ({incomingJobs.length})
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('ongoing')}
+            className={`pb-3 text-xs sm:text-sm font-bold flex items-center gap-2 border-b-2 transition-all cursor-pointer whitespace-nowrap ${
+              activeTab === 'ongoing'
+                ? 'border-[#FFA649] text-[#283845] dark:text-[#FFA649]'
+                : 'border-transparent text-stone-500 hover:text-[#283845] dark:hover:text-white'
+            }`}
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-400" />
+            Active Tasks ({ongoingJobs.length})
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('completed')}
+            className={`pb-3 text-xs sm:text-sm font-bold flex items-center gap-2 border-b-2 transition-all cursor-pointer whitespace-nowrap ${
+              activeTab === 'completed'
+                ? 'border-[#FFA649] text-[#283845] dark:text-[#FFA649]'
+                : 'border-transparent text-stone-500 hover:text-[#283845] dark:hover:text-white'
+            }`}
+          >
+            Completed History ({completedJobs.length})
+          </button>
         </div>
-      </div>
 
-      {actionError && (
-        <div className="bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-xl p-3.5 text-xs font-semibold mb-6 flex items-center gap-2">
-          <AlertCircle className="w-4 h-4 flex-shrink-0" />
-          <span>{actionError}</span>
-        </div>
-      )}
+        {/* Loading / Content List */}
+        {loading ? (
+          <div className="py-16 flex justify-center">
+            <LoadingSpinner size="lg" />
+          </div>
+        ) : displayedJobs.length === 0 ? (
+          <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-12 text-center text-stone-500 shadow-xs space-y-3">
+            <AlertCircle className="w-12 h-12 text-stone-300 dark:text-stone-600 mx-auto" />
+            <h3 className="text-base font-bold text-[#283845] dark:text-white font-heading">No jobs found in this section</h3>
+            <p className="text-xs text-stone-500 dark:text-stone-400 max-w-sm mx-auto">
+              New client bookings matching your trade skills and active location will appear here automatically.
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {displayedJobs.map(job => {
+              const formattedDate = job.scheduledDate
+                ? new Date(job.scheduledDate).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })
+                : 'Immediate';
 
-      {/* Navigation Filter Tabs */}
-      <div className="flex border-b border-white/10 mb-8 gap-2 sm:gap-6 overflow-x-auto pb-1 select-none">
-        <button
-          type="button"
-          onClick={() => setActiveTab('all')}
-          className={`pb-3 text-xs sm:text-sm font-bold flex items-center gap-2 border-b-2 transition-all cursor-pointer whitespace-nowrap ${
-            activeTab === 'all'
-              ? 'border-indigo-500 text-white'
-              : 'border-transparent text-text-muted hover:text-white'
-          }`}
-        >
-          All Jobs ({bookings.length})
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveTab('upcoming')}
-          className={`pb-3 text-xs sm:text-sm font-bold flex items-center gap-2 border-b-2 transition-all cursor-pointer whitespace-nowrap ${
-            activeTab === 'upcoming'
-              ? 'border-indigo-500 text-white'
-              : 'border-transparent text-text-muted hover:text-white'
-          }`}
-        >
-          <span className="w-2 h-2 rounded-full bg-blue-400" />
-          Upcoming ({upcomingJobs.length})
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveTab('in_progress')}
-          className={`pb-3 text-xs sm:text-sm font-bold flex items-center gap-2 border-b-2 transition-all cursor-pointer whitespace-nowrap ${
-            activeTab === 'in_progress'
-              ? 'border-indigo-500 text-white'
-              : 'border-transparent text-text-muted hover:text-white'
-          }`}
-        >
-          <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
-          In Progress ({inProgressJobs.length})
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveTab('completed')}
-          className={`pb-3 text-xs sm:text-sm font-bold flex items-center gap-2 border-b-2 transition-all cursor-pointer whitespace-nowrap ${
-            activeTab === 'completed'
-              ? 'border-indigo-500 text-white'
-              : 'border-transparent text-text-muted hover:text-white'
-          }`}
-        >
-          <span className="w-2 h-2 rounded-full bg-emerald-400" />
-          Completed ({completedJobs.length})
-        </button>
-      </div>
-
-      {/* Main Jobs Display List */}
-      {displayedJobs.length === 0 ? (
-        <div className="bg-card-bg border border-border-custom rounded-3xl p-12 text-center text-text-muted space-y-3">
-          <Briefcase className="w-12 h-12 text-text-muted mx-auto opacity-40" />
-          <h3 className="text-base font-bold text-white">No jobs found in this section</h3>
-          <p className="text-xs max-w-sm mx-auto">
-            {activeTab === 'completed'
-              ? 'Completed service works with ratings, earnings, and realistic project photos will appear here.'
-              : 'New customer bookings and assignments will appear here automatically.'}
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-6">
-          {displayedJobs.map(job => {
-            const isCompleted = job.status === 'Completed';
-            const review = getReviewForBooking(job.bookingId);
-            const jobImage = CATEGORY_IMAGES[job.category] || DEFAULT_JOB_IMAGE;
-
-            if (isCompleted) {
-              // Rich Completed Job History Card with realistic photo, earnings, rating, and location
               return (
                 <div 
-                  key={job.bookingId} 
-                  className="bg-card-bg border border-border-custom rounded-3xl overflow-hidden hover:border-primary/40 transition-all duration-300 shadow-md group flex flex-col md:flex-row"
+                  key={job.bookingId}
+                  className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-6 sm:p-7 shadow-xs hover:border-[#FFA649]/60 transition-all duration-300 relative overflow-hidden group"
                 >
-                  {/* Left: Realistic Project Photo */}
-                  <div className="md:w-72 h-48 md:h-auto relative overflow-hidden bg-slate-900 flex-shrink-0">
-                    <img 
-                      src={jobImage} 
-                      alt={job.jobType}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = DEFAULT_JOB_IMAGE;
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-slate-950/40" />
-                    <span className="absolute top-3 left-3 bg-slate-950/85 backdrop-blur-md border border-white/10 text-white font-bold text-[10px] px-2.5 py-1 rounded-full uppercase tracking-wider">
-                      {job.category}
-                    </span>
+                  {/* Top Row: Tag, Booking ID, Price */}
+                  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#EBE5DE] dark:border-white/10 pb-4 mb-4">
+                    <div className="flex items-center gap-2">
+                      <span className={`px-3 py-1 text-xs font-bold rounded-full border ${STATUS_PILL_STYLES[job.status] || STATUS_PILL_STYLES.Pending}`}>
+                        {job.status}
+                      </span>
+                      <span className="text-[11px] font-mono text-stone-400 font-bold">
+                        #{job.bookingId?.toUpperCase()}
+                      </span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-stone-100 dark:bg-[#11171E] text-[#283845] dark:text-[#FFA649] border border-[#EBE5DE] dark:border-white/10">
+                        {job.bookingType || 'Instant'}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-1 text-base font-extrabold text-[#283845] dark:text-white">
+                      <IndianRupee className="w-4 h-4 text-[#FFA649]" />
+                      <span>{job.estimatedPrice || '₹300 – ₹1,000'}</span>
+                    </div>
                   </div>
 
-                  {/* Right: Job Details, Earnings, Location, Rating */}
-                  <div className="p-6 flex-grow flex flex-col justify-between space-y-4">
-                    <div className="space-y-2">
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <span className="text-[11px] font-bold text-text-muted">
-                          ID: #{job.bookingId.substr(-6).toUpperCase()}
-                        </span>
-                        <span className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
-                          <CheckCircle className="w-3.5 h-3.5" />
-                          Completed Job
-                        </span>
+                  {/* Main Job Information */}
+                  <div className="space-y-3">
+                    <div>
+                      <h3 className="text-lg font-extrabold text-[#283845] dark:text-white font-heading group-hover:text-[#FFA649] transition-colors">
+                        {job.jobType} <span className="text-xs text-stone-500 font-normal">({job.category})</span>
+                      </h3>
+                      
+                      <div className="flex items-center gap-2 mt-1 text-xs text-stone-600 dark:text-stone-300">
+                        <User className="w-3.5 h-3.5 text-stone-400" />
+                        <span>Client: <span className="font-bold text-[#283845] dark:text-white">{job.customerName || 'Local Resident'}</span></span>
+                        {job.customerPhone && (
+                          <>
+                            <span>•</span>
+                            <span className="text-stone-500 font-mono">{job.customerPhone}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Logistics Row */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3.5 rounded-2xl bg-stone-50 dark:bg-[#11171E] border border-[#EBE5DE] dark:border-white/10 text-xs">
+                      <div className="flex items-center gap-2 text-stone-700 dark:text-stone-300">
+                        <Calendar className="w-4 h-4 text-[#FFA649] flex-shrink-0" />
+                        <div>
+                          <span className="block text-[10px] font-bold text-stone-400 uppercase tracking-wider">Scheduled Date</span>
+                          <span className="font-bold text-[#283845] dark:text-white">{formattedDate}</span>
+                        </div>
                       </div>
 
-                      <h3 className="text-lg font-extrabold text-white group-hover:text-primary transition-colors">
-                        {job.jobType}
-                      </h3>
+                      <div className="flex items-center gap-2 text-stone-700 dark:text-stone-300">
+                        <Clock className="w-4 h-4 text-[#FFA649] flex-shrink-0" />
+                        <div>
+                          <span className="block text-[10px] font-bold text-stone-400 uppercase tracking-wider">Time Window</span>
+                          <span className="font-bold text-[#283845] dark:text-white">{job.scheduledTime || 'Immediate'}</span>
+                        </div>
+                      </div>
 
-                      <p className="text-xs text-text-sub font-medium">
-                        Client: <span className="text-white font-semibold">{job.customerName || 'Local Resident'}</span>
+                      <div className="flex items-center gap-2 text-stone-700 dark:text-stone-300">
+                        <MapPin className="w-4 h-4 text-[#FFA649] flex-shrink-0" />
+                        <div>
+                          <span className="block text-[10px] font-bold text-stone-400 uppercase tracking-wider">Location</span>
+                          <span className="font-bold text-[#283845] dark:text-white">{job.location || 'Local Area'}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {job.description && (
+                      <p className="text-xs text-stone-600 dark:text-stone-300 italic bg-stone-50 dark:bg-[#11171E] p-3 rounded-xl border border-[#EBE5DE] dark:border-white/10">
+                        "{job.description}"
                       </p>
+                    )}
+                  </div>
 
-                      {job.description && (
-                        <p className="text-xs text-text-muted italic bg-slate-900/60 p-2.5 rounded-xl border border-white/5 line-clamp-2">
-                          "{job.description}"
-                        </p>
+                  {/* Actions & Next Steps */}
+                  <div className="mt-5 pt-4 border-t border-[#EBE5DE] dark:border-white/10 flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex items-center gap-2">
+                      {['Accepted', 'In Progress', 'Completed'].includes(job.status) && (
+                        <button
+                          type="button"
+                          onClick={() => navigate(`/worker/chat/chat_${job.bookingId}`, { state: { booking: job } })}
+                          className="px-4 py-2 bg-[#FFA649]/15 hover:bg-[#FFA649]/25 text-[#283845] dark:text-[#FFA649] font-bold text-xs rounded-xl border border-[#FFA649]/30 transition-all flex items-center gap-1.5 cursor-pointer"
+                        >
+                          <MessageSquare className="w-3.5 h-3.5 text-[#FFA649]" />
+                          Open Direct Chat
+                        </button>
                       )}
                     </div>
 
-                    {/* Meta information: Date, Location, Earnings, Rating */}
-                    <div className="pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
-                      <div className="flex flex-wrap items-center gap-4 text-xs text-text-muted">
-                        <span className="flex items-center gap-1.5">
-                          <Calendar className="w-3.5 h-3.5 text-text-muted" />
-                          {job.scheduledDate ? new Date(job.scheduledDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : 'Completed'}
-                        </span>
-                        <span className="flex items-center gap-1.5">
-                          <MapPin className="w-3.5 h-3.5 text-text-muted" />
-                          {job.location}
-                        </span>
-                        <span className="flex items-center gap-1 text-emerald-400 font-extrabold text-xs">
-                          <IndianRupee className="w-3.5 h-3.5" />
-                          {job.estimatedPrice || '₹500'} Payout
-                        </span>
-                      </div>
+                    {/* Status Triggers */}
+                    <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                      {job.status === 'Pending' && (
+                        <>
+                          <button
+                            type="button"
+                            disabled={actionLoadingId === job.bookingId}
+                            onClick={() => handleStatusChange(job.bookingId, 'Accepted')}
+                            className="flex-1 sm:flex-initial px-5 py-2 btn-gradient text-[#11171E] font-extrabold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                          >
+                            <CheckCircle className="w-4 h-4" />
+                            Accept Job Request
+                          </button>
+                          <button
+                            type="button"
+                            disabled={actionLoadingId === job.bookingId}
+                            onClick={() => handleStatusChange(job.bookingId, 'Rejected')}
+                            className="flex-1 sm:flex-initial px-4 py-2 border border-rose-200 dark:border-rose-800/60 hover:bg-rose-50 dark:hover:bg-rose-950/20 text-rose-600 dark:text-rose-400 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                          >
+                            <XCircle className="w-4 h-4" />
+                            Decline
+                          </button>
+                        </>
+                      )}
 
-                      {/* Client Rating */}
-                      <div className="flex items-center gap-2">
-                        {review ? (
-                          <div className="flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full">
-                            <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                            <span className="text-xs font-extrabold text-amber-400">{review.rating}.0</span>
-                            <span className="text-[10px] text-amber-300 font-medium">Reviewed</span>
-                          </div>
-                        ) : (
-                          <div className="flex items-center gap-1 text-amber-400 text-xs font-bold bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full">
-                            <Star className="w-3.5 h-3.5 fill-amber-400" />
-                            <span>5.0 Satisfied</span>
-                          </div>
-                        )}
-
+                      {job.status === 'Accepted' && (
                         <button
                           type="button"
-                          onClick={() => {
-                            const chatId = `chat_${job.bookingId}`;
-                            navigate(`/worker/chat/${chatId}`, { state: { booking: job } });
-                          }}
-                          className="p-2 text-text-muted hover:text-primary hover:bg-white/5 rounded-xl border border-white/10 transition-colors cursor-pointer"
-                          title="View Conversation"
+                          disabled={actionLoadingId === job.bookingId}
+                          onClick={() => handleStatusChange(job.bookingId, 'In Progress')}
+                          className="flex-1 sm:flex-initial px-5 py-2 btn-gradient text-[#11171E] font-extrabold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                         >
-                          <MessageSquare className="w-4 h-4" />
+                          <Play className="w-4 h-4" />
+                          Start Job (Begin Service)
                         </button>
-                      </div>
+                      )}
+
+                      {job.status === 'In Progress' && (
+                        <button
+                          type="button"
+                          disabled={actionLoadingId === job.bookingId}
+                          onClick={() => handleStatusChange(job.bookingId, 'Completed')}
+                          className="flex-1 sm:flex-initial px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                        >
+                          <CheckCircle className="w-4 h-4" />
+                          Mark Job Completed
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
               );
-            }
-
-            // Upcoming / In Progress standard card
-            return (
-              <BookingCard
-                key={job.bookingId}
-                booking={job}
-                role="worker"
-                onAction={handleBookingAction}
-              />
-            );
-          })}
-        </div>
-      )}
+            })}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

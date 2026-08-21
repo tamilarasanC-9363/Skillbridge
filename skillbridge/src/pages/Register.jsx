@@ -1,31 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLoading } from '../context/LoadingContext';
 import LoadingSpinner from '../components/LoadingSpinner';
 import FormInput from '../components/FormInput';
-import { User, Mail, Phone, Lock, UserPlus } from 'lucide-react';
+import { User, Mail, Phone, Lock, UserPlus, Shield, ShieldCheck, Briefcase, UserCheck, Eye, EyeOff } from 'lucide-react';
 
 export default function Register() {
   const { register } = useAuth();
+  const { withLoading } = useLoading();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+
+  const roleParam = searchParams.get('role');
+  const initialRole = (roleParam === 'worker' || roleParam === 'customer') ? roleParam : 'customer';
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('customer');
+  const [showPassword, setShowPassword] = useState(false);
+  const [role, setRole] = useState(initialRole);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [phoneError, setPhoneError] = useState('');
-
-  // Extract role from search queries (e.g. /register?role=worker)
-  useEffect(() => {
-    const roleParam = searchParams.get('role');
-    if (roleParam === 'worker' || roleParam === 'customer') {
-      setRole(roleParam);
-    }
-  }, [searchParams]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,7 +35,6 @@ export default function Register() {
       return;
     }
 
-    // Indian Phone format validation (10 digits starting with 6-9)
     const phoneRegex = /^[6-9]\d{9}$/;
     if (!phoneRegex.test(phone)) {
       setPhoneError('Enter a valid 10-digit mobile number.');
@@ -47,38 +44,50 @@ export default function Register() {
 
     setLoading(true);
     try {
-      await register(email, password, name, phone, role);
-      if (role === 'worker') {
-        navigate('/worker/profile/setup');
-      } else {
-        navigate('/customer');
-      }
+      await withLoading(async () => {
+        const registeredUser = await register(email, password, name, phone, role);
+        const nextRole = registeredUser?.role || role;
+
+        if (nextRole === 'worker') {
+          navigate('/worker', { replace: true });
+        } else {
+          navigate('/customer', { replace: true });
+        }
+      }, {
+        title: 'Almost there!',
+        subtitle: 'Setting everything up for you…'
+      });
     } catch (err) {
-      setError(err.message || 'Registration failed. Please try again.');
+      console.error('Registration failed:', err);
+      setError(err?.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 animate-fade-in text-left">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <Link to="/" className="inline-block">
-          <span className="text-3xl font-extrabold tracking-tight text-gradient">SkillBridge</span>
+    <div className="min-h-[calc(100vh-4rem)] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 animate-fade-in text-left">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center mb-6">
+        <Link to="/" className="inline-flex items-center gap-2 mb-3">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#283845] via-[#384F60] to-[#FFA649] p-[1.5px] shadow-sm">
+            <div className="w-full h-full bg-[#283845] rounded-[9px] flex items-center justify-center">
+              <Shield className="w-4.5 h-4.5 text-[#FFA649]" />
+            </div>
+          </div>
+          <span className="text-2xl font-extrabold font-heading text-gradient">SkillBridge</span>
         </Link>
-        <h2 className="mt-4 text-2xl font-bold text-text-main">Create your new account</h2>
-        <p className="mt-2 text-xs text-text-sub font-medium">
-          Already have an account?{' '}
-          <Link to="/login" className="font-semibold text-primary hover:text-primary-hover">
-            Sign in here
-          </Link>
+        <h2 className="text-2xl font-extrabold text-[#283845] dark:text-white font-heading">
+          Create an account
+        </h2>
+        <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">
+          Join the trusted network for on-demand home & commercial trade services.
         </p>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-card-bg py-8 px-4 border border-border-custom shadow-xs sm:rounded-2xl sm:px-10">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-6 sm:p-8 shadow-xl backdrop-blur-xl">
           {error && (
-            <div className="bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-xl p-3.5 text-xs font-medium mb-5">
+            <div className="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 rounded-xl p-3.5 text-xs font-semibold mb-5">
               {error}
             </div>
           )}
@@ -86,29 +95,41 @@ export default function Register() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Role Selection Tabs */}
             <div>
-              <label className="block text-xs font-bold text-text-muted uppercase tracking-wider mb-2">Select User Account Type</label>
-              <div className="grid grid-cols-2 gap-2 p-1 bg-slate-900/80 border border-white/10 rounded-xl select-none">
+              <label className="block text-[11px] font-bold text-stone-500 dark:text-stone-400 uppercase tracking-wider mb-2">
+                Select Registration Role
+              </label>
+              <div className="grid grid-cols-3 gap-1.5 p-1 bg-stone-100 dark:bg-[#11171E] border border-[#EBE5DE] dark:border-white/10 rounded-2xl select-none">
                 <button
                   type="button"
                   onClick={() => setRole('customer')}
-                  className={`py-2.5 px-3 text-xs font-bold rounded-lg transition-all duration-200 cursor-pointer border ${
+                  className={`py-2.5 px-2 text-xs font-bold rounded-xl transition-all duration-200 flex flex-col sm:flex-row items-center justify-center gap-1.5 cursor-pointer ${
                     role === 'customer' 
-                      ? 'bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white border-indigo-400/40 shadow-md shadow-indigo-500/25 scale-[1.02]' 
-                      : 'text-text-muted hover:text-white border-transparent bg-transparent hover:bg-white/5'
+                      ? 'bg-white dark:bg-[#283845] text-[#283845] dark:text-[#FFA649] shadow-sm border border-[#EBE5DE] dark:border-white/15 font-extrabold' 
+                      : 'text-stone-600 dark:text-stone-400 hover:text-[#283845] dark:hover:text-white'
                   }`}
                 >
-                  Customer (Hire Help)
+                  <UserCheck className="w-3.5 h-3.5" />
+                  <span>Customer</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setRole('worker')}
-                  className={`py-2.5 px-3 text-xs font-bold rounded-lg transition-all duration-200 cursor-pointer border ${
+                  className={`py-2.5 px-2 text-xs font-bold rounded-xl transition-all duration-200 flex flex-col sm:flex-row items-center justify-center gap-1.5 cursor-pointer ${
                     role === 'worker' 
-                      ? 'bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white border-indigo-400/40 shadow-md shadow-indigo-500/25 scale-[1.02]' 
-                      : 'text-text-muted hover:text-white border-transparent bg-transparent hover:bg-white/5'
+                      ? 'bg-white dark:bg-[#283845] text-[#283845] dark:text-[#FFA649] shadow-sm border border-[#EBE5DE] dark:border-white/15 font-extrabold' 
+                      : 'text-stone-600 dark:text-stone-400 hover:text-[#283845] dark:hover:text-white'
                   }`}
                 >
-                  Skilled Worker (Find Jobs)
+                  <Briefcase className="w-3.5 h-3.5" />
+                  <span>Skilled Pro</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate('/admin/register')}
+                  className="py-2.5 px-2 text-xs font-bold rounded-xl transition-all duration-200 flex flex-col sm:flex-row items-center justify-center gap-1.5 cursor-pointer text-stone-600 dark:text-stone-400 hover:text-[#283845] dark:hover:text-white"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>Admin</span>
                 </button>
               </div>
             </div>
@@ -120,7 +141,7 @@ export default function Register() {
               type="text"
               name="name"
               autoComplete="name"
-              placeholder="e.g. John Doe"
+              placeholder="e.g. Rahul Sharma"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -133,7 +154,7 @@ export default function Register() {
               type="email"
               name="email"
               autoComplete="email"
-              placeholder="john@example.com"
+              placeholder="rahul@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -141,7 +162,7 @@ export default function Register() {
 
             {/* Phone */}
             <FormInput
-              label="Phone Number"
+              label="Mobile Number"
               icon={Phone}
               type="tel"
               name="phone"
@@ -159,30 +180,64 @@ export default function Register() {
 
             {/* Password */}
             <FormInput
-              label="Password"
+              label="Create Password"
               icon={Lock}
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               name="password"
               autoComplete="new-password"
-              placeholder="Min 6 characters"
+              placeholder="Minimum 6 characters"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              rightElement={
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(prev => !prev)}
+                  className="text-stone-400 hover:text-[#FFA649] transition-colors p-1 cursor-pointer focus:outline-none"
+                  title={showPassword ? 'Hide password' : 'Show password'}
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              }
               required
             />
+
+            {/* Show Password Option */}
+            <div className="flex items-center justify-between text-xs pt-1 select-none">
+              <label className="flex items-center gap-2 text-stone-600 dark:text-stone-300 font-medium cursor-pointer hover:text-[#283845] dark:hover:text-white transition-colors">
+                <input
+                  type="checkbox"
+                  id="register-show-password"
+                  checked={showPassword}
+                  onChange={(e) => setShowPassword(e.target.checked)}
+                  className="w-4 h-4 rounded border-[#EBE5DE] dark:border-white/20 text-[#FFA649] focus:ring-[#FFA649] accent-[#FFA649] cursor-pointer"
+                />
+                <span>Show password</span>
+              </label>
+            </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-11 mt-6 text-sm font-bold text-white btn-gradient rounded-xl shadow-xs flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full h-11 mt-6 text-xs sm:text-sm font-extrabold text-[#11171E] btn-gradient rounded-xl shadow-md flex items-center justify-center gap-2 cursor-pointer"
             >
               {loading ? <LoadingSpinner size="sm" color="white" /> : (
                 <>
                   <UserPlus className="w-4 h-4" />
-                  Create Account
+                  Create {role === 'worker' ? 'Worker' : 'Customer'} Account
                 </>
               )}
             </button>
           </form>
+
+          <div className="mt-6 pt-5 border-t border-[#EBE5DE] dark:border-white/10 text-center">
+            <p className="text-xs text-stone-600 dark:text-stone-400">
+              Already have an account?{' '}
+              <Link to="/login" className="font-extrabold text-[#283845] dark:text-[#FFA649] hover:underline">
+                Sign In
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>
