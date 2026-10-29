@@ -1,10 +1,11 @@
 import { useEffect, useState, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getBookingsForUser, updateBookingStatus } from '../../services/bookingService';
 import BookingCard from '../../components/BookingCard';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import BackButton from '../../components/BackButton';
-import { ClipboardList, Briefcase, History } from 'lucide-react';
+import { ClipboardList, Briefcase, History, ShieldAlert } from 'lucide-react';
 
 export default function MyBookings() {
   const { currentUser } = useAuth();
@@ -48,9 +49,18 @@ export default function MyBookings() {
     <div className="max-w-4xl mx-auto px-4 py-8 animate-fade-in text-left">
       <BackButton to="/customer" label="Back to Dashboard" className="mb-6" />
 
-      <div className="mb-6">
-        <h1 className="text-2xl font-extrabold text-[#283845] dark:text-white font-heading">My Bookings</h1>
-        <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">Track status, chat with specialists, and review completed service works.</p>
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-extrabold text-[#283845] dark:text-white font-heading">My Bookings</h1>
+          <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">Track status, chat with specialists, and review completed service works.</p>
+        </div>
+        <Link
+          to="/customer/reports"
+          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#FFA649]/10 hover:bg-[#FFA649]/20 text-[#283845] dark:text-[#FFA649] border border-[#FFA649]/30 text-xs font-bold transition-all w-fit"
+        >
+          <ShieldAlert className="w-4 h-4 text-[#FFA649]" />
+          Disputes & Reports
+        </Link>
       </div>
 
       {/* Tabs */}

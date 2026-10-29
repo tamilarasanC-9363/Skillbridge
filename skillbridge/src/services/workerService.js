@@ -187,93 +187,134 @@ const SAMPLE_CUSTOMER_NAMES = [
 /**
  * Calculate dynamic and consistent worker earnings and history matching dataset
  */
+/**
+ * Calculate dynamic and consistent worker earnings and history matching dataset records
+ */
 export function getWorkerEarningsData(profile, bookings = []) {
   if (!profile) {
     return {
       totalCompletedJobs: 0,
       totalIncome: 0,
+      grossEarnings: 0,
+      deductions: 0,
+      netEarnings: 0,
       averageEarnings: 0,
       allCompletedJobs: []
     };
   }
 
-  const liveCompleted = (bookings || []).filter(b => b && b.status === 'Completed');
-  const targetCompletedCount = Math.max(
-    Number(profile.completedJobs) || 0,
-    liveCompleted.length
+  const workerId = profile.workerId || profile.userId || '';
+  const isDemoWorker = /^W\d+$/i.test(workerId);
+
+  // Filter actual live completed bookings for this worker
+  const liveCompleted = (bookings || []).filter(b => 
+    b && 
+    (b.workerId === workerId || b.workerId === profile.userId) && 
+    b.status === 'Completed'
   );
 
-  // New worker with 0 completed jobs
-  if (targetCompletedCount === 0) {
+  // If real registered worker (not demo dataset) and 0 completed bookings:
+  if (!isDemoWorker && liveCompleted.length === 0) {
     return {
       totalCompletedJobs: 0,
       totalIncome: 0,
+      grossEarnings: 0,
+      deductions: 0,
+      netEarnings: 0,
       averageEarnings: 0,
       allCompletedJobs: []
     };
   }
 
-  const basePrice = Number(profile.price) || 400;
+  const basePrice = Number(profile.price) || 450;
   const skills = (Array.isArray(profile.skills) && profile.skills.length > 0)
     ? profile.skills
     : (Array.isArray(profile.categories) && profile.categories.length > 0)
       ? profile.categories
       : [profile.category || 'General Service'];
 
-  // Parse live completed bookings
+  // Parse live completed bookings with locked agreed prices
   const liveJobs = liveCompleted.map(b => {
-    let amount = basePrice;
-    if (b.price && !isNaN(Number(b.price))) {
-      amount = Number(b.price);
+    let gross = basePrice;
+    if (b.agreedPrice && !isNaN(Number(b.agreedPrice))) {
+      gross = Number(b.agreedPrice);
+    } else if (b.price && !isNaN(Number(b.price))) {
+      gross = Number(b.price);
+    } else if (b.payoutAmount && !isNaN(Number(b.payoutAmount))) {
+      gross = Number(b.payoutAmount);
     } else if (b.estimatedPrice) {
-      const match = String(b.estimatedPrice).replace(/[^0-9–]/g, '').split('–');
-      amount = (match && match[0] && !isNaN(Number(match[0]))) ? Number(match[0]) : basePrice;
+      const match = String(b.estimatedPrice).replace(/[^0-9]/g, ' ').trim().split(/\s+/);
+      gross = (match && match[0] && !isNaN(Number(match[0]))) ? Number(match[0]) : basePrice;
     }
+
+    const deduction = b.platformFee ? Number(b.platformFee) : Math.round(gross * 0.10);
+    const net = b.netEarnings ? Number(b.netEarnings) : (gross - deduction);
+
     return {
-      bookingId: b.bookingId || b.id || `live_${Math.random().toString(36).substr(2, 6)}`,
+      bookingId: b.bookingId || b.id || ('live_' + Math.random().toString(36).substr(2, 6)),
       jobType: b.jobType || b.serviceName || skills[0],
-      scheduledDate: b.scheduledDate || b.date || b.createdAt || new Date().toISOString(),
+      scheduledDate: b.completedAt || b.scheduledDate || b.date || b.createdAt || new Date().toISOString(),
       customerName: b.customerName || 'Direct Client',
-      estimatedPrice: `₹${amount}`,
-      payoutAmount: amount,
+      location: b.location || profile.location || 'Local Area',
+      estimatedPrice: '₹' + gross,
+      grossAmount: gross,
+      deduction,
+      netEarnings: net,
+      payoutAmount: net,
       status: 'Completed',
-      isLive: true
+      isLive: true,
+      completionEvidence: b.completionEvidence || null
     };
   });
+
+  // For demo workers, determine target count from verified dataset (e.g. 86 for W001)
+  const targetCompletedCount = isDemoWorker 
+    ? Math.max(Number(profile.completedJobs) || 0, liveJobs.length)
+    : liveJobs.length;
 
   const historicalNeeded = Math.max(0, targetCompletedCount - liveJobs.length);
   const historicalJobs = [];
 
-  const workerSeed = (profile.workerId || profile.userId || 'W001')
-    .toString()
-    .split('')
-    .reduce((acc, c) => acc + c.charCodeAt(0), 0);
+  if (isDemoWorker && historicalNeeded > 0) {
+    const workerSeed = workerId
+      .toString()
+      .split('')
+      .reduce((acc, c) => acc + c.charCodeAt(0), 0);
 
-  const now = Date.now();
-  const ONE_DAY = 24 * 60 * 60 * 1000;
+    const now = Date.now();
+    const ONE_DAY = 24 * 60 * 60 * 1000;
+    const workerLoc = profile.location || 'Coimbatore, Tamil Nadu';
 
-  for (let i = 0; i < historicalNeeded; i++) {
-    const jobSkill = skills[(i + workerSeed) % skills.length];
-    const customer = SAMPLE_CUSTOMER_NAMES[(i + workerSeed * 3) % SAMPLE_CUSTOMER_NAMES.length];
+    for (let i = 0; i < historicalNeeded; i++) {
+      const jobSkill = skills[(i + workerSeed) % skills.length];
+      const customer = SAMPLE_CUSTOMER_NAMES[(i + workerSeed * 3) % SAMPLE_CUSTOMER_NAMES.length];
 
-    // Controlled realistic variance (+/- 10-15%) centered around the worker's base price
-    const varianceFactor = (((i * 7 + workerSeed) % 7) - 3) * 0.04;
-    const jobAmount = Math.max(150, Math.round((basePrice * (1 + varianceFactor)) / 10) * 10);
+      // Controlled realistic variance (+/- 10-15%) centered around the worker's base price
+      const varianceFactor = (((i * 7 + workerSeed) % 7) - 3) * 0.04;
+      const grossAmount = Math.max(200, Math.round((basePrice * (1 + varianceFactor)) / 10) * 10);
+      const deduction = Math.round(grossAmount * 0.10);
+      const netEarnings = grossAmount - deduction;
 
-    // Stagger dates in past days/months
-    const daysAgo = Math.floor((i + 1) * 2.5 + ((workerSeed + i) % 3));
-    const jobDate = new Date(now - daysAgo * ONE_DAY).toISOString();
+      // Stagger dates in past days/months
+      const daysAgo = Math.floor((i + 1) * 2.5 + ((workerSeed + i) % 3));
+      const jobDate = new Date(now - daysAgo * ONE_DAY).toISOString();
 
-    historicalJobs.push({
-      bookingId: `hist_${profile.workerId || profile.userId || 'w'}_${i + 1}`,
-      jobType: jobSkill,
-      scheduledDate: jobDate,
-      customerName: customer,
-      estimatedPrice: `₹${jobAmount}`,
-      payoutAmount: jobAmount,
-      status: 'Completed',
-      isLive: false
-    });
+      historicalJobs.push({
+        bookingId: 'hist_' + workerId.toLowerCase() + '_' + (i + 1),
+        jobType: jobSkill,
+        scheduledDate: jobDate,
+        customerName: customer,
+        location: workerLoc,
+        estimatedPrice: '₹' + grossAmount,
+        grossAmount,
+        deduction,
+        netEarnings,
+        payoutAmount: netEarnings,
+        status: 'Completed',
+        isLive: false,
+        isHistoricalDemo: true
+      });
+    }
   }
 
   // Combine and sort by date descending
@@ -283,14 +324,18 @@ export function getWorkerEarningsData(profile, bookings = []) {
     return dateB - dateA;
   });
 
-  const totalIncome = allCompletedJobs.reduce((sum, job) => sum + (Number(job.payoutAmount) || 0), 0);
-  const averageEarnings = allCompletedJobs.length > 0 ? Math.round(totalIncome / allCompletedJobs.length) : 0;
+  const totalGross = allCompletedJobs.reduce((sum, job) => sum + (Number(job.grossAmount) || 0), 0);
+  const totalDeductions = allCompletedJobs.reduce((sum, job) => sum + (Number(job.deduction) || 0), 0);
+  const totalNet = allCompletedJobs.reduce((sum, job) => sum + (Number(job.netEarnings) || 0), 0);
+  const averageEarnings = allCompletedJobs.length > 0 ? Math.round(totalNet / allCompletedJobs.length) : 0;
 
   return {
     totalCompletedJobs: allCompletedJobs.length,
-    totalIncome,
+    totalIncome: totalNet,
+    grossEarnings: totalGross,
+    deductions: totalDeductions,
+    netEarnings: totalNet,
     averageEarnings,
     allCompletedJobs
   };
 }
-

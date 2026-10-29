@@ -3,10 +3,11 @@ import { useAuth } from '../../context/AuthContext';
 import { getBookingsForUser, updateBookingStatus } from '../../services/bookingService';
 import Sidebar from '../../components/Sidebar';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import JobCompletionModal from '../../components/JobCompletionModal';
 import { 
   Briefcase, Calendar, Clock, MapPin, CheckCircle, 
   XCircle, Play, CheckSquare, MessageSquare, AlertCircle, 
-  IndianRupee, User, Star
+  IndianRupee, User, Star, ShieldAlert
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,6 +27,7 @@ export default function WorkerJobs() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('all'); // 'all', 'incoming', 'ongoing', 'completed'
   const [actionLoadingId, setActionLoadingId] = useState(null);
+  const [completionModalJob, setCompletionModalJob] = useState(null);
 
   const fetchJobs = useCallback(async () => {
     if (!currentUser?.uid) return;
@@ -75,6 +77,7 @@ export default function WorkerJobs() {
     { label: 'Incoming Job Requests', path: '/worker/requests', icon: Clock, badge: incomingJobs.length },
     { label: 'Active Service Tasks', path: '/worker/jobs', icon: Play, badge: ongoingJobs.length },
     { label: 'My Bookings History', path: '/worker/bookings', icon: CheckSquare },
+    { label: 'Disputes & Reports', path: '/worker/reports', icon: ShieldAlert },
     { label: 'Customer Feedbacks', path: '/worker/feedbacks', icon: Star }
   ];
 
@@ -299,22 +302,33 @@ export default function WorkerJobs() {
                       )}
 
                       {job.status === 'Accepted' && (
-                        <button
-                          type="button"
-                          disabled={actionLoadingId === job.bookingId}
-                          onClick={() => handleStatusChange(job.bookingId, 'In Progress')}
-                          className="flex-1 sm:flex-initial px-5 py-2 btn-gradient text-[#11171E] font-extrabold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-                        >
-                          <Play className="w-4 h-4" />
-                          Start Job (Begin Service)
-                        </button>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <button
+                            type="button"
+                            disabled={actionLoadingId === job.bookingId}
+                            onClick={() => handleStatusChange(job.bookingId, 'In Progress')}
+                            className="flex-1 sm:flex-initial px-4 py-2 btn-gradient text-[#11171E] font-extrabold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                          >
+                            <Play className="w-4 h-4" />
+                            Start Job
+                          </button>
+                          <button
+                            type="button"
+                            disabled={actionLoadingId === job.bookingId}
+                            onClick={() => setCompletionModalJob(job)}
+                            className="flex-1 sm:flex-initial px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                          >
+                            <CheckCircle className="w-4 h-4" />
+                            Mark Job Completed
+                          </button>
+                        </div>
                       )}
 
                       {job.status === 'In Progress' && (
                         <button
                           type="button"
                           disabled={actionLoadingId === job.bookingId}
-                          onClick={() => handleStatusChange(job.bookingId, 'Completed')}
+                          onClick={() => setCompletionModalJob(job)}
                           className="flex-1 sm:flex-initial px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                         >
                           <CheckCircle className="w-4 h-4" />
@@ -329,6 +343,19 @@ export default function WorkerJobs() {
           </div>
         )}
       </div>
+
+      {/* Geotagged Completion Modal */}
+      {completionModalJob && (
+        <JobCompletionModal
+          booking={completionModalJob}
+          workerId={currentUser.uid}
+          onClose={() => setCompletionModalJob(null)}
+          onSuccess={async () => {
+            setCompletionModalJob(null);
+            await fetchJobs();
+          }}
+        />
+      )}
     </div>
   );
 }

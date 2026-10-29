@@ -1,0 +1,127 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && (
+        request.auth.token.admin == true ||
+        request.auth.token.email.matches('.*admin.*') ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // Workers Collection
+    match /workers/{workerId} {
+      allow read: if true; // Public read for hiring and profile views
+      allow create: if isAuthenticated() && request.auth.uid == workerId;
+      allow update: if isAuthenticated() && (
+        isAdmin() || 
+        (
+          request.auth.uid == workerId &&
+          // Prevent workers from self-approving their verification status
+          (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['verified', 'adminApprovalStatus']))
+        )
+      );
+      allow delete: if isAdmin();
+    }
+
+    // Users Collection
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      allow update: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    // Bookings Collection
+    match /bookings/{bookingId} {
+      allow read: if isAuthenticated() && (
+        resource.data.customerId == request.auth.uid ||
+        resource.data.workerId == request.auth.uid ||
+        isAdmin()
+      );
+      allow create: if isAuthenticated() && 
+        request.resource.data.customerId == request.auth.uid &&
+        request.resource.data.status in ['Pending'];
+      allow update: if isAuthenticated() && (
+        isAdmin() ||
+        // Customer can cancel
+        (resource.data.customerId == request.auth.uid && request.resource.data.status == 'Cancelled') ||
+        // Worker can update status (Accepted, In Progress, Completed, Rejected)
+        (
+          resource.data.workerId == request.auth.uid &&
+          request.resource.data.status in ['Accepted', 'In Progress', 'Completed', 'Rejected']
+        )
+      );
+      allow delete: if isAdmin();
+    }
+
+    // Reviews Collection
+    match /reviews/{reviewId} {
+      allow read: if true; // Public reading of reviews
+      allow create: if isAuthenticated() && 
+        request.resource.data.customerId == request.auth.uid &&
+        request.resource.data.rating >= 1 &&
+        request.resource.data.rating <= 5;
+      allow update, delete: if isAuthenticated() && (
+        resource.data.customerId == request.auth.uid || isAdmin()
+      );
+    }
+
+    // Bulk Hiring Requests Collection
+    match /bulkHiringRequests/{requestId} {
+      allow read: if true; // Organizations and admins can read request status
+      allow create: if isAuthenticated() && request.resource.data.status in ['Pending Review'];
+      allow update: if isAuthenticated() && (
+        isAdmin() || 
+        (resource.data.customerId == request.auth.uid)
+      );
+      allow delete: if isAdmin();
+    }
+
+    // Job Completion Audit Evidence Collection
+    match /jobCompletions/{completionId} {
+      allow read: if isAuthenticated() && (
+        resource.data.workerId == request.auth.uid ||
+        isAdmin()
+      );
+      allow create: if isAuthenticated() && request.resource.data.workerId == request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+
+    // Reports & Disputes Collection
+    match /reports/{reportId} {
+      allow read: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        isAdmin()
+      );
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAuthenticated() && (
+        isAdmin() ||
+        resource.data.userId == request.auth.uid
+      );
+    }
+
+    // Notifications Collection
+    match /notifications/{notificationId} {
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isAuthenticated();
+      allow update, delete: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+    }
+
+    // Admin profiles / credentials
+    match /admins/{adminId} {
+      allow read, write: if isAdmin();
+    }
+  }
+}
+

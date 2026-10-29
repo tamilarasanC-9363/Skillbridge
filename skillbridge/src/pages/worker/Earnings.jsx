@@ -4,7 +4,7 @@ import { getWorkerProfile, getWorkerEarningsData } from '../../services/workerSe
 import { getBookingsForUser } from '../../services/bookingService';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import BackButton from '../../components/BackButton';
-import { IndianRupee, TrendingUp, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
+import { IndianRupee, TrendingUp, Calendar, ChevronLeft, ChevronRight, Percent } from 'lucide-react';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -35,7 +35,14 @@ export default function Earnings() {
   }, [currentUser]);
 
   const earningsData = getWorkerEarningsData(profile, bookings);
-  const { totalCompletedJobs, totalIncome, averageEarnings, allCompletedJobs } = earningsData;
+  const { 
+    totalCompletedJobs, 
+    grossEarnings = 0, 
+    deductions = 0, 
+    netEarnings = 0, 
+    averageEarnings, 
+    allCompletedJobs 
+  } = earningsData;
 
   const totalPages = Math.ceil(allCompletedJobs.length / ITEMS_PER_PAGE) || 1;
   const paginatedJobs = allCompletedJobs.slice(
@@ -52,53 +59,94 @@ export default function Earnings() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 animate-fade-in text-left">
+    <div className="max-w-5xl mx-auto px-4 py-8 animate-fade-in text-left">
       <BackButton to="/worker" label="Back to Dashboard" className="mb-6" />
 
       <div className="mb-6">
         <h1 className="text-2xl font-extrabold text-[#283845] dark:text-white font-heading">Earnings Summary</h1>
         <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">
-          Track payouts, average job sizes, and completed contracts history.
+          Detailed breakdown of gross billed contracts, platform fee deductions (10%), and net take-home payouts.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
-        {/* Total Income */}
-        <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 p-6 rounded-2xl shadow-xs flex items-center gap-4">
-          <div className="p-3.5 bg-[#FFA649]/15 dark:bg-[#FFA649]/20 border border-[#FFA649]/30 rounded-xl flex items-center justify-center">
-            <IndianRupee className="w-6 h-6 text-[#FFA649] stroke-[2.5px]" />
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        {/* Gross Earnings */}
+        <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 p-5 rounded-2xl shadow-xs flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-2">
+            <span className="block text-[10px] font-extrabold text-stone-400 dark:text-stone-500 uppercase tracking-wider">Gross Billed</span>
+            <div className="p-2 bg-stone-100 dark:bg-stone-800 rounded-lg">
+              <IndianRupee className="w-4 h-4 text-stone-500 dark:text-stone-300" />
+            </div>
           </div>
           <div>
-            <span className="block text-[10px] font-extrabold text-[#283845]/70 dark:text-[#FFA649] uppercase tracking-wider">Total Income</span>
-            <span className="text-xl font-bold text-[#283845] dark:text-white font-heading">
-              ₹{totalIncome.toLocaleString('en-IN')}
+            <span className="text-xl font-bold text-[#283845] dark:text-white font-heading block">
+              ₹{grossEarnings.toLocaleString('en-IN')}
             </span>
+            <span className="text-[10px] text-stone-400">Total job value</span>
+          </div>
+        </div>
+
+        {/* Platform Deductions */}
+        <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 p-5 rounded-2xl shadow-xs flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-2">
+            <span className="block text-[10px] font-extrabold text-stone-400 dark:text-stone-500 uppercase tracking-wider">Platform Fee (10%)</span>
+            <div className="p-2 bg-rose-50 dark:bg-rose-950/40 rounded-lg">
+              <Percent className="w-4 h-4 text-rose-500" />
+            </div>
+          </div>
+          <div>
+            <span className="text-xl font-bold text-rose-600 dark:text-rose-400 font-heading block">
+              -₹{deductions.toLocaleString('en-IN')}
+            </span>
+            <span className="text-[10px] text-stone-400">Insurance & service</span>
+          </div>
+        </div>
+
+        {/* Net Take-Home */}
+        <div className="bg-white dark:bg-[#1B2731] border border-[#FFA649]/40 dark:border-[#FFA649]/40 p-5 rounded-2xl shadow-xs flex flex-col justify-between bg-gradient-to-br from-[#FFA649]/5 to-transparent">
+          <div className="flex items-center justify-between mb-2">
+            <span className="block text-[10px] font-extrabold text-[#FFA649] uppercase tracking-wider">Net Payout</span>
+            <div className="p-2 bg-[#FFA649]/20 rounded-lg">
+              <IndianRupee className="w-4 h-4 text-[#FFA649]" />
+            </div>
+          </div>
+          <div>
+            <span className="text-xl font-extrabold text-[#283845] dark:text-white font-heading block">
+              ₹{netEarnings.toLocaleString('en-IN')}
+            </span>
+            <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">Net take-home</span>
           </div>
         </div>
 
         {/* Average / Job */}
-        <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 p-6 rounded-2xl shadow-xs flex items-center gap-4">
-          <div className="p-3.5 bg-emerald-100/90 dark:bg-emerald-950/80 border border-emerald-200/80 dark:border-emerald-800/60 rounded-xl flex items-center justify-center">
-            <TrendingUp className="w-6 h-6 text-emerald-600 dark:text-emerald-400 stroke-[2.5px]" />
+        <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 p-5 rounded-2xl shadow-xs flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-2">
+            <span className="block text-[10px] font-extrabold text-stone-400 dark:text-stone-500 uppercase tracking-wider">Average / Job</span>
+            <div className="p-2 bg-emerald-50 dark:bg-emerald-950/50 rounded-lg">
+              <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            </div>
           </div>
           <div>
-            <span className="block text-[10px] font-extrabold text-[#283845]/70 dark:text-[#FFA649] uppercase tracking-wider">Average / Job</span>
-            <span className="text-xl font-bold text-[#283845] dark:text-white font-heading">
+            <span className="text-xl font-bold text-[#283845] dark:text-white font-heading block">
               ₹{averageEarnings.toLocaleString('en-IN')}
             </span>
+            <span className="text-[10px] text-stone-400">Net per contract</span>
           </div>
         </div>
 
         {/* Completed Jobs */}
-        <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 p-6 rounded-2xl shadow-xs flex items-center gap-4">
-          <div className="p-3.5 bg-[#283845]/10 dark:bg-[#283845]/40 border border-[#283845]/20 dark:border-[#FFA649]/30 rounded-xl flex items-center justify-center">
-            <Calendar className="w-6 h-6 text-[#283845] dark:text-[#FFA649] stroke-[2.5px]" />
+        <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 p-5 rounded-2xl col-span-2 lg:col-span-1 shadow-xs flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-2">
+            <span className="block text-[10px] font-extrabold text-stone-400 dark:text-stone-500 uppercase tracking-wider">Completed Jobs</span>
+            <div className="p-2 bg-[#283845]/10 dark:bg-[#283845]/40 rounded-lg">
+              <Calendar className="w-4 h-4 text-[#283845] dark:text-[#FFA649]" />
+            </div>
           </div>
           <div>
-            <span className="block text-[10px] font-extrabold text-[#283845]/70 dark:text-[#FFA649] uppercase tracking-wider">Completed Jobs</span>
-            <span className="text-xl font-bold text-[#283845] dark:text-white font-heading">
+            <span className="text-xl font-bold text-[#283845] dark:text-white font-heading block">
               {totalCompletedJobs}
             </span>
+            <span className="text-[10px] text-stone-400">Verified contracts</span>
           </div>
         </div>
       </div>
@@ -123,29 +171,44 @@ export default function Earnings() {
               <table className="w-full text-xs text-left border-collapse">
                 <thead>
                   <tr className="border-b border-[#EBE5DE] dark:border-white/10 text-stone-400 dark:text-stone-400 uppercase font-bold tracking-wider">
-                    <th className="py-3 px-2">Job Type</th>
+                    <th className="py-3 px-2">Job Type & Ref</th>
                     <th className="py-3 px-2">Date</th>
                     <th className="py-3 px-2">Customer</th>
-                    <th className="py-3 px-2 text-right">Earning Payout</th>
+                    <th className="py-3 px-2 text-right">Gross Amount</th>
+                    <th className="py-3 px-2 text-right">Platform Fee (10%)</th>
+                    <th className="py-3 px-2 text-right">Net Payout</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#EBE5DE] dark:divide-white/10 text-stone-700 dark:text-stone-300">
                   {paginatedJobs.map(job => (
                     <tr key={job.bookingId} className="hover:bg-stone-50/50 dark:hover:bg-white/5 transition-colors">
-                      <td className="py-4 px-2 font-bold text-[#283845] dark:text-white flex items-center gap-1.5">
-                        {job.jobType}
-                        {job.isLive && (
-                          <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 font-extrabold uppercase">
-                            Live
-                          </span>
-                        )}
+                      <td className="py-4 px-2">
+                        <div className="font-bold text-[#283845] dark:text-white flex items-center gap-1.5">
+                          {job.jobType}
+                          {job.isLive ? (
+                            <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 font-extrabold uppercase">
+                              Live
+                            </span>
+                          ) : (
+                            <span className="text-[9px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 dark:bg-stone-800 dark:text-stone-400 font-bold uppercase">
+                              Demo
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-[10px] font-mono text-stone-400">#{job.bookingId?.slice(-8)}</span>
                       </td>
                       <td className="py-4 px-2">
                         {new Date(job.scheduledDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                       </td>
                       <td className="py-4 px-2 font-semibold text-[#283845] dark:text-white">{job.customerName}</td>
-                      <td className="py-4 px-2 font-bold text-[#283845] dark:text-[#FFA649] text-right font-mono">
-                        ₹{job.payoutAmount?.toLocaleString('en-IN') || 0}
+                      <td className="py-4 px-2 text-right font-mono text-stone-600 dark:text-stone-300">
+                        ₹{job.grossAmount?.toLocaleString('en-IN') || 0}
+                      </td>
+                      <td className="py-4 px-2 text-right font-mono text-rose-500">
+                        -₹{job.deduction?.toLocaleString('en-IN') || 0}
+                      </td>
+                      <td className="py-4 px-2 font-bold text-emerald-600 dark:text-emerald-400 text-right font-mono">
+                        ₹{job.netEarnings?.toLocaleString('en-IN') || 0}
                       </td>
                     </tr>
                   ))}

@@ -1,7 +1,7 @@
 import { db, isSimulationMode } from '../firebase/firebaseConfig.js';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { generateDefaultAIReport } from './aiVerificationService.js';
-import workersData from '../../data/workers.json' with { type: 'json' };
+import workersData from '../data/workers.json' with { type: 'json' };
 
 const CSV_WORKERS = workersData.map((w) => ({
   ...w,
@@ -233,96 +233,443 @@ if (typeof window !== 'undefined') {
   }
 }
 
-/**
- * Returns a ranked list of workers for a given job.
- * @param {string} categoryName - The category (e.g. "Plumbing")
- * @param {string} jobType - The selected job (e.g., "Pipe Leakage Repair")
- * @param {string} customerLocation - Customer's entered location (text)
- * @returns {Promise<Array>} - Sorted array of worker objects with `recommendationScore`
- */
-export async function getRecommendedWorkers(categoryName, jobType, customerLocation) {
-  let workers;
+// Normalization & Fuzzy Matching Utilities
+const STOP_WORDS = new Set([
+  'and', 'or', 'the', 'in', 'at', 'of', 'for', 'with', 'a', 'an', 'to', 'on', 'near', 'by', 'all', 'any'
+]);
 
-  if (isSimulationMode) {
-    // Local simulation retrieval
-    const stored = localStorage.getItem('sb_mock_workers');
-    const allWorkers = stored ? JSON.parse(stored) : MOCK_WORKERS;
-    
-    // Filter: matching category, verified, available
-    workers = allWorkers.filter(w => 
-      w.categories.includes(categoryName) && 
-      w.verified === true && 
-      w.availability === true
-    );
-  } else {
-    // Live Firebase Firestore query
-    try {
-      const q = query(
-        collection(db, 'workerProfiles'),
-        where('categories', 'array-contains', categoryName),
-        where('verified', '==', true),
-        where('availability', '==', true)
-      );
-      const snapshot = await getDocs(q);
-      workers = snapshot.docs.map(doc => ({ userId: doc.id, ...doc.data() }));
-    } catch (error) {
-      console.error('Error fetching workers from Firestore:', error);
-      return [];
+const GENERIC_ACTION_WORDS = new Set([
+  'repair', 'repairs', 'repairing', 'repaired',
+  'install', 'instal', 'installation', 'installations', 'installing', 'installed',
+  'fix', 'fixing', 'fixes', 'fixed',
+  'service', 'services', 'servicing',
+  'maintenance', 'work', 'works', 'working',
+  'deep', 'general', 'home', 'labor', 'specialist'
+]);
+
+const DOMAIN_CATEGORY_MAP = {
+  plumb: 'Plumbing',
+  electr: 'Electrical',
+  carpent: 'Carpentry',
+  paint: 'Painting',
+  clean: 'Cleaning',
+  mason: 'Mason / Construction',
+  construct: 'Mason / Construction',
+  plaster: 'Mason / Construction',
+  tile: 'Mason / Construction',
+  brick: 'Mason / Construction',
+  cement: 'Mason / Construction'
+};
+
+const DOMAIN_STEMS = {
+  plumbing: 'plumb', plumber: 'plumb', plumbers: 'plumb',
+  electrical: 'electr', electrician: 'electr', electricians: 'electr', electricity: 'electr',
+  carpentry: 'carpent', carpenter: 'carpent', carpenters: 'carpent',
+  painting: 'paint', painter: 'paint', painters: 'paint',
+  cleaning: 'clean', cleaner: 'clean', cleaners: 'clean',
+  masonry: 'mason', mason: 'mason', masons: 'mason',
+  construction: 'construct', contractor: 'contract',
+  plastering: 'plaster', plaster: 'plaster', plastered: 'plaster', plasters: 'plaster',
+  wiring: 'wire', wire: 'wire', wires: 'wire',
+  leakage: 'leak', leak: 'leak', leaks: 'leak', leaking: 'leak',
+  faucet: 'tap', faucets: 'tap', tap: 'tap', taps: 'tap',
+  toilet: 'toilet', toilets: 'toilet',
+  drainage: 'drain', drain: 'drain', drains: 'drain',
+  switch: 'switch', switches: 'switch',
+  repair: 'repair', repairs: 'repair', repairing: 'repair', repaired: 'repair',
+  install: 'instal', installation: 'instal', installing: 'instal', installed: 'instal'
+};
+
+export function normalizeText(text) {
+  if (!text) return '';
+  return String(text)
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^\w\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+export function matchesLocation(workerLoc, searchLoc) {
+  if (!searchLoc || !searchLoc.trim()) return true;
+  if (!workerLoc || !workerLoc.trim()) return false;
+
+  const normSearch = normalizeText(searchLoc);
+  const normWorker = normalizeText(workerLoc);
+
+  if (normWorker.includes(normSearch) || normSearch.includes(normWorker)) {
+    return true;
+  }
+
+  const LOC_FILLER = new Set(['in', 'at', 'near', 'by', 'district', 'dist', 'city', 'area', 'state', 'india', 'road', 'street']);
+  const searchTokens = normSearch.split(/[\s,]+/).filter(t => t.length >= 3 && !LOC_FILLER.has(t));
+  const workerTokens = normWorker.split(/[\s,]+/).filter(t => t.length >= 3 && !LOC_FILLER.has(t));
+
+  for (const sToken of searchTokens) {
+    for (const wToken of workerTokens) {
+      if (sToken === wToken || sToken.includes(wToken) || wToken.includes(sToken)) {
+        return true;
+      }
     }
   }
 
-  // Calculate scores and rank
-  const scoredWorkers = workers.map(worker => {
-    // 1. Rating Score: normalized (0-5 -> 0-1) * 35%
-    const ratingVal = worker.rating || 0;
-    const ratingScore = (ratingVal / 5.0) * 0.35;
+  if (normSearch.includes('tamil nadu') && (normWorker.includes('coimbatore') || normWorker.includes('chennai') || normWorker.includes('tamil nadu'))) {
+    return true;
+  }
+  if (normSearch.includes('kerala') && (normWorker.includes('kochi') || normWorker.includes('ernakulam') || normWorker.includes('thrissur') || normWorker.includes('kozhikode') || normWorker.includes('kottayam') || normWorker.includes('kerala'))) {
+    return true;
+  }
 
-    // 2. Skill Match Score: exact job match is 1.0, otherwise 0.5 * 25%
-    const hasExactSkill = worker.skills && worker.skills.includes(jobType);
-    const skillScore = (hasExactSkill ? 1.0 : 0.5) * 0.25;
+  return false;
+}
 
-    // 3. Availability Score: (availability ? 1 : 0) * 15%
-    const availabilityScore = (worker.availability ? 1.0 : 0.0) * 0.15;
+export function matchesCategoryOrSkill(worker, categoryName, jobType) {
+  const normCat = normalizeText(categoryName);
+  const normJob = normalizeText(jobType);
 
-    // 4. Location Proximity Score: text match or distance * 15%
-    let locationScore;
-    if (customerLocation && worker.location) {
-      const cLoc = customerLocation.toLowerCase().trim();
-      const wLoc = worker.location.toLowerCase().trim();
-      if (wLoc.includes(cLoc) || cLoc.includes(wLoc)) {
-        locationScore = 1.0;
-      } else {
-        // Partial text match (split into words)
-        const cWords = cLoc.split(/\s+/);
-        const wWords = wLoc.split(/\s+/);
-        const overlap = cWords.filter(w => wWords.includes(w));
-        locationScore = overlap.length > 0 ? 0.6 : 0.1;
+  const wCats = (Array.isArray(worker.categories) ? worker.categories : [worker.category])
+    .filter(Boolean)
+    .map(c => normalizeText(c));
+  const wSkills = (Array.isArray(worker.skills) ? worker.skills : String(worker.skills || '').split(';'))
+    .filter(Boolean)
+    .map(s => normalizeText(s));
+
+  // If a category was chosen, worker MUST belong to that trade category
+  if (normCat) {
+    let catMatched = wCats.some(c => c === normCat || c.includes(normCat) || normCat.includes(c));
+
+    if (!catMatched) {
+      if ((normCat.includes('mason') || normCat.includes('construct') || normCat.includes('plaster') || normCat.includes('tile')) &&
+          wCats.some(c => c.includes('mason') || c.includes('construct'))) {
+        catMatched = true;
+      } else if (normCat.includes('plumb') && wCats.some(c => c.includes('plumb'))) {
+        catMatched = true;
+      } else if (normCat.includes('electr') && wCats.some(c => c.includes('electr'))) {
+        catMatched = true;
+      } else if (normCat.includes('carpent') && wCats.some(c => c.includes('carpent'))) {
+        catMatched = true;
+      } else if (normCat.includes('paint') && wCats.some(c => c.includes('paint'))) {
+        catMatched = true;
+      } else if (normCat.includes('clean') && wCats.some(c => c.includes('clean'))) {
+        catMatched = true;
       }
-    } else {
-      locationScore = 0.5; // Neutral default if not provided
     }
-    const finalLocationScore = locationScore * 0.15;
 
-    // 5. Experience Score: normalized (Math.min(worker.experience, 10) / 10) * 10%
-    const expVal = Number(worker.experience) || 0;
-    const experienceScore = (Math.min(expVal, 10) / 10.0) * 0.10;
+    // Strictly exclude workers who do not belong to the requested category
+    if (!catMatched) {
+      return false;
+    }
 
-    // Total Score
-    const totalScore = ratingScore + skillScore + availabilityScore + finalLocationScore + experienceScore;
+    // Category matched! If no specific job requested, worker is valid.
+    if (!normJob) return true;
 
-    return {
-      ...worker,
-      recommendationScore: totalScore,
-      ratingScore,
-      skillScore,
-      availabilityScore,
-      locationScore: finalLocationScore,
-      experienceScore
-    };
-  });
+    // Check specific skill match
+    const jobMatched = wSkills.some(s => s === normJob || s.includes(normJob) || normJob.includes(s));
+    if (jobMatched) return true;
+
+    const jobTokens = tokenize(normJob).filter(t => !GENERIC_ACTION_WORDS.has(t) && t.length >= 3);
+    if (jobTokens.length > 0) {
+      for (const skill of wSkills) {
+        const sTokens = tokenize(skill);
+        if (jobTokens.some(jt => sTokens.includes(jt))) {
+          return true;
+        }
+      }
+    }
+
+    return true;
+  }
+
+  // If no category was specified, match by jobType
+  if (normJob) {
+    const jobMatched = wSkills.some(s => s === normJob || s.includes(normJob) || normJob.includes(s));
+    if (jobMatched) return true;
+
+    const jobTokens = tokenize(normJob).filter(t => !GENERIC_ACTION_WORDS.has(t));
+    if (jobTokens.length > 0) {
+      for (const skill of wSkills) {
+        const sTokens = tokenize(skill);
+        if (jobTokens.some(jt => sTokens.includes(jt))) {
+          return true;
+        }
+      }
+    }
+  }
+
+  return false;
+}
+
+export function stemWord(word) {
+  if (!word || word.length < 3) return word;
+  if (DOMAIN_STEMS[word]) return DOMAIN_STEMS[word];
+  if (word.endsWith('ies') && word.length > 4) return word.slice(0, -3) + 'y';
+  if (word.endsWith('ing') && word.length > 5) return word.slice(0, -3);
+  if (word.endsWith('ed') && word.length > 4) return word.slice(0, -2);
+  if (word.endsWith('es') && word.length > 4 && (word.endsWith('shes') || word.endsWith('ches') || word.endsWith('sses') || word.endsWith('xes'))) return word.slice(0, -2);
+  if (word.endsWith('s') && !word.endsWith('ss') && word.length > 3) return word.slice(0, -1);
+  return word;
+}
+
+export function tokenize(text) {
+  const norm = normalizeText(text);
+  if (!norm) return [];
+  return norm.split(' ').filter(w => w && !STOP_WORDS.has(w)).map(stemWord);
+}
+
+/**
+ * Calculates a multi-factor recommendation score (0-100) for a worker.
+ * Considers:
+ * - Skill & category match (0-40)
+ * - Location proximity & token match (0-25)
+ * - Verification status (5-15)
+ * - Rating (0-10)
+ * - Experience (0-5)
+ * - Completed jobs (0-5)
+ * - Availability (1-5)
+ */
+function scoreWorker(worker, categoryName, jobType, customerLocation) {
+  const normCategory = normalizeText(categoryName);
+  const normJob = normalizeText(jobType);
+  const normLoc = normalizeText(customerLocation);
+
+  const queryStrings = [normJob, normCategory].filter(Boolean);
+  const combinedQuery = queryStrings.join(' ');
+  const queryTokens = Array.from(new Set(tokenize(combinedQuery)));
+
+  // Normalize worker categories, skills, and location
+  const wCategories = (Array.isArray(worker.categories) ? worker.categories : [worker.category]).filter(Boolean);
+  const wSkills = (Array.isArray(worker.skills) ? worker.skills : String(worker.skills || '').split(';')).map(s => s.trim()).filter(Boolean);
+  const wBioNorm = normalizeText(worker.bio || '');
+
+  let skillScore = 0;
+  let matchReason = '';
+
+  // 1. Skill Matching (Check both jobType and category against all worker skills)
+  for (const skill of wSkills) {
+    const sNorm = normalizeText(skill);
+    const sTokens = tokenize(skill);
+
+    // Exact or substring match on jobType or category
+    if (normJob && (sNorm === normJob || sNorm.includes(normJob) || normJob.includes(sNorm))) {
+      skillScore = Math.max(skillScore, 40);
+      matchReason = `Direct skill match: "${skill}"`;
+      break;
+    }
+    if (normCategory && (sNorm === normCategory || sNorm.includes(normCategory) || normCategory.includes(sNorm))) {
+      skillScore = Math.max(skillScore, 38);
+      matchReason = `Skill matched category: "${skill}"`;
+      break;
+    }
+
+    // Token overlap between query and worker skill
+    const overlap = queryTokens.filter(t => sTokens.includes(t) || sTokens.some(st => st.includes(t) || t.includes(st)));
+    const substantiveOverlap = overlap.filter(t => !GENERIC_ACTION_WORDS.has(t));
+
+    if (substantiveOverlap.length > 0) {
+      const tokenScore = 30 + Math.min(8, substantiveOverlap.length * 4);
+      if (tokenScore > skillScore) {
+        skillScore = tokenScore;
+        matchReason = `Keyword match in skill: "${skill}" (${substantiveOverlap.join(', ')})`;
+      }
+    } else if (overlap.length > 0 && skillScore < 8) {
+      skillScore = 8;
+      matchReason = matchReason || `Action word overlap in skill: "${skill}"`;
+    }
+  }
+
+  // 2. Category Matching
+  for (const cat of wCategories) {
+    const cNorm = normalizeText(cat);
+    const cTokens = tokenize(cat);
+
+    if (normCategory && (cNorm === normCategory || cNorm.includes(normCategory) || normCategory.includes(cNorm))) {
+      if (skillScore < 32) {
+        skillScore = Math.max(skillScore, 32);
+        matchReason = matchReason || `Category matched: "${cat}"`;
+      }
+    } else if (normJob && (cNorm === normJob || cNorm.includes(normJob) || normJob.includes(cNorm))) {
+      if (skillScore < 32) {
+        skillScore = Math.max(skillScore, 32);
+        matchReason = matchReason || `Category matched job: "${cat}"`;
+      }
+    }
+
+    const overlap = queryTokens.filter(t => cTokens.includes(t) || cTokens.some(ct => ct.includes(t) || t.includes(ct)));
+    const substantiveOverlap = overlap.filter(t => !GENERIC_ACTION_WORDS.has(t));
+    if (substantiveOverlap.length > 0 && skillScore < 28) {
+      skillScore = Math.max(skillScore, 28);
+      matchReason = matchReason || `Keyword match in category: "${cat}" (${substantiveOverlap.join(', ')})`;
+    }
+  }
+
+  // Domain synonym mapping (e.g. plaster -> Mason / Construction, wire -> Electrical, pipe -> Plumbing)
+  for (const t of queryTokens) {
+    if (DOMAIN_CATEGORY_MAP[t]) {
+      const expectedCat = DOMAIN_CATEGORY_MAP[t];
+      if (wCategories.some(c => c.toLowerCase().includes(expectedCat.toLowerCase()) || expectedCat.toLowerCase().includes(c.toLowerCase()))) {
+        if (skillScore < 26) {
+          skillScore = 26;
+          matchReason = matchReason || `Domain aligned with ${expectedCat}`;
+        }
+      }
+    }
+  }
+
+  // 3. Bio / Broad Domain Fallback Matching
+  if (skillScore === 0) {
+    const bioTokens = tokenize(wBioNorm);
+    const bioOverlap = queryTokens.filter(t => bioTokens.includes(t) && !GENERIC_ACTION_WORDS.has(t));
+    if (bioOverlap.length > 0) {
+      skillScore = 15;
+      matchReason = `Mentioned in bio (${bioOverlap.join(', ')})`;
+    }
+  }
+
+  // 4. Strict Location Matching & Scoring (0 or 25 pts)
+  const isLocMatched = matchesLocation(worker.location, customerLocation);
+  let locationScore;
+  let locationReason;
+
+  if (normLoc) {
+    if (isLocMatched) {
+      locationScore = 25;
+      locationReason = 'Direct locality match';
+    } else {
+      locationScore = 0;
+      locationReason = 'Outside requested locality';
+    }
+  } else {
+    locationScore = 15;
+    locationReason = 'No customer location specified';
+  }
+
+  // 5. Verification Status (15 pts if verified, 5 pts if unverified)
+  const isVerified = worker.verified === true || String(worker.verified).toLowerCase() === 'true';
+  const verifyScore = isVerified ? 15 : 5;
+
+  // 6. Rating (0 - 10 pts)
+  const ratingVal = Number(worker.rating) || 0;
+  const ratingScore = ratingVal > 0 ? (Math.min(5, ratingVal) / 5) * 10 : 6;
+
+  // 7. Experience (0 - 5 pts)
+  const expVal = Number(worker.experience || worker.experienceYears || 0);
+  const expScore = (Math.min(10, Math.max(0, expVal)) / 10) * 5;
+
+  // 8. Completed Jobs (0 - 5 pts)
+  const jobsVal = Number(worker.completedJobs || 0);
+  const jobsScore = (Math.min(100, Math.max(0, jobsVal)) / 100) * 5;
+
+  // 9. Availability (5 pts if available, 1 pt if unavailable)
+  const isAvail = worker.availability === true || String(worker.availability).toLowerCase() === 'available' || String(worker.availability).toLowerCase() === 'true';
+  const availScore = isAvail ? 5 : 1;
+
+  // Total Score (out of 100)
+  const totalScore = skillScore + locationScore + verifyScore + ratingScore + expScore + jobsScore + availScore;
+
+  // Strict relevance check: Must genuinely satisfy category/skill AND location
+  const isCatOrSkillMatched = matchesCategoryOrSkill(worker, categoryName, jobType);
+  const isGenuineMatch = isLocMatched && isCatOrSkillMatched && (skillScore >= 20 || isCatOrSkillMatched);
+
+  const normalizedWorker = {
+    ...worker,
+    userId: worker.userId || worker.workerId || worker.id,
+    workerId: worker.workerId || worker.userId || worker.id,
+    name: worker.name || 'Trade Specialist',
+    category: wCategories[0] || 'General Service',
+    categories: wCategories,
+    skills: wSkills,
+    location: worker.location || 'Location upon request',
+    availability: isAvail,
+    verified: isVerified,
+    rating: ratingVal,
+    reviewCount: Number(worker.reviewCount || worker.reviews || 0),
+    experience: expVal,
+    completedJobs: jobsVal,
+    priceRange: worker.priceRange || (worker.price ? `₹${worker.price} – ₹${Number(worker.price) + 200}` : '₹300 – ₹700'),
+    recommendationScore: Number(totalScore.toFixed(1)),
+    skillScore,
+    locationScore,
+    verifyScore,
+    ratingScore,
+    experienceScore: expScore,
+    completedJobsScore: jobsScore,
+    availabilityScore: availScore,
+    matchReason: isGenuineMatch ? (matchReason ? `${matchReason} • ${locationReason}` : locationReason) : (!isLocMatched ? 'Excluded: Location does not match' : 'Excluded: Category/skills do not match'),
+    isRelevant: isGenuineMatch
+  };
+
+  return normalizedWorker;
+}
+
+/**
+ * Returns a ranked list of workers for a given job.
+ * @param {string} categoryName - The category (e.g. "Plumbing", "Mason / Construction")
+ * @param {string} jobType - The selected job (e.g., "Plastering", "Pipe Leakage Repair")
+ * @param {string} customerLocation - Customer's entered location (e.g. "Coimbatore", "Coimbatore, Tamil Nadu")
+ * @returns {Promise<Array>} - Sorted array of worker objects with `recommendationScore`
+ */
+export async function getRecommendedWorkers(categoryName, jobType, customerLocation) {
+  let allWorkers;
+
+  if (isSimulationMode) {
+    const stored = typeof localStorage !== 'undefined' ? localStorage.getItem('sb_mock_workers') : null;
+    allWorkers = stored ? JSON.parse(stored) : MOCK_WORKERS;
+  } else {
+    try {
+      const snapshot = await getDocs(collection(db, 'workerProfiles'));
+      allWorkers = snapshot.docs.map(doc => ({ userId: doc.id, ...doc.data() }));
+      if (allWorkers.length === 0) {
+        allWorkers = MOCK_WORKERS;
+      }
+    } catch (error) {
+      console.warn('Firestore fetch error, falling back to local dataset:', error);
+      const stored = typeof localStorage !== 'undefined' ? localStorage.getItem('sb_mock_workers') : null;
+      allWorkers = stored ? JSON.parse(stored) : MOCK_WORKERS;
+    }
+  }
+
+  if (!allWorkers || allWorkers.length === 0) {
+    allWorkers = MOCK_WORKERS;
+  }
+
+  // Calculate scores and evaluate strict relevance for all workers
+  const scoredWorkers = allWorkers.map(w => scoreWorker(w, categoryName, jobType, customerLocation));
+
+  // Filter only workers that genuinely satisfy both the location and service criteria
+  const matchedWorkers = scoredWorkers.filter(w => w.isRelevant);
 
   // Sort by recommendationScore descending
-  scoredWorkers.sort((a, b) => b.recommendationScore - a.recommendationScore);
+  matchedWorkers.sort((a, b) => b.recommendationScore - a.recommendationScore);
 
-  return scoredWorkers;
+  // Debugging logs for search query, selected location, worker count, and filtering results
+  const normCategory = normalizeText(categoryName);
+  const normJob = normalizeText(jobType);
+  const normLoc = normalizeText(customerLocation);
+
+  console.group(`🔍 [SkillBridge Matcher] Query: "${jobType || ''}" | Domain: "${categoryName || ''}" | Loc: "${customerLocation || ''}"`);
+  console.log('1. Customer Query:', { category: categoryName, jobType, location: customerLocation });
+  console.log('2. Normalized Query:', { normCategory, normJob, normLoc });
+  console.log('3. Workers in Database:', allWorkers.length);
+  console.log('4. Workers Matching Criteria:', matchedWorkers.length);
+  if (matchedWorkers.length > 0) {
+    console.log('5. Top Matched Specialists:');
+    matchedWorkers.slice(0, 5).forEach((w, i) => {
+      console.log(`   #${i + 1} [Score: ${w.recommendationScore}] ${w.name} | Cat: ${w.category} | Loc: ${w.location} | Match: ${w.matchReason}`);
+    });
+  } else {
+    console.log('5. No workers matched search criteria for location:', customerLocation);
+  }
+  console.log('6. All Worker Filtering Audit:', scoredWorkers.map(w => ({
+    workerId: w.workerId || w.userId,
+    name: w.name,
+    category: w.category,
+    location: w.location,
+    score: w.recommendationScore,
+    status: w.isRelevant ? 'MATCHED' : 'REJECTED',
+    reason: w.matchReason
+  })));
+  console.groupEnd();
+
+  return matchedWorkers;
 }

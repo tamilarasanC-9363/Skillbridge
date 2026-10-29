@@ -185,7 +185,7 @@ async function main() {
   const headers = headerRow.map((header) => header.trim());
 
   const validWorkers = dataRows
-    .map((row, idx) => {
+    .map((row) => {
       const record = {};
       headers.forEach((header, index) => {
         record[header] = row[index] ?? '';
@@ -200,6 +200,14 @@ async function main() {
   const jsonPath = path.join(projectRoot, 'data', 'workers.json');
   fs.writeFileSync(jsonPath, JSON.stringify(validWorkers, null, 2), 'utf8');
   console.log(`Saved local parsed dataset to ${jsonPath}`);
+
+  const srcDataDir = path.join(projectRoot, 'src', 'data');
+  if (!fs.existsSync(srcDataDir)) {
+    fs.mkdirSync(srcDataDir, { recursive: true });
+  }
+  const srcJsonPath = path.join(srcDataDir, 'workers.json');
+  fs.writeFileSync(srcJsonPath, JSON.stringify(validWorkers, null, 2), 'utf8');
+  console.log(`Saved local parsed dataset to ${srcJsonPath}`);
 
   // Connect to Firebase Firestore
   console.log('\nConnecting to Firestore Project:', firebaseConfig.projectId);

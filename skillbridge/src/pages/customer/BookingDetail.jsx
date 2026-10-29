@@ -1,12 +1,12 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getBookingById, updateBookingStatus } from '../../services/bookingService';
 import { checkReviewExists, submitReview } from '../../services/reviewService';
 import { useAuth } from '../../context/AuthContext';
 import ChatBox from '../../components/ChatBox';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import BackButton from '../../components/BackButton';
-import { Calendar, Clock, MapPin, IndianRupee, MessageSquare } from 'lucide-react';
+import { Calendar, Clock, MapPin, IndianRupee, MessageSquare, ExternalLink, ShieldCheck, AlertCircle, ShieldAlert } from 'lucide-react';
 
 const STATUS_THEMES = {
   'Pending': 'bg-[#FFA649]/15 text-[#283845] dark:text-[#FFA649] border-[#FFA649]/30 font-bold',
@@ -19,6 +19,7 @@ const STATUS_THEMES = {
 
 export default function BookingDetail() {
   const { bookingId } = useParams();
+  const navigate = useNavigate();
   const { currentUser, userRole } = useAuth();
 
   const [booking, setBooking] = useState(null);
@@ -201,18 +202,135 @@ export default function BookingDetail() {
               )}
 
               {/* Status transition details info */}
-              <div className="pt-2 border-t border-[#EBE5DE] dark:border-white/10 flex gap-4">
-                {userRole === 'customer' && ['Pending', 'Accepted'].includes(booking.status) && (
-                  <button
-                    onClick={handleCancelBooking}
-                    className="px-4 py-2 border border-rose-200 dark:border-rose-800/60 hover:bg-rose-50 dark:hover:bg-rose-950/20 text-rose-600 dark:text-rose-400 font-bold text-xs rounded-xl transition-all cursor-pointer"
-                  >
-                    Cancel Booking Request
-                  </button>
-                )}
+              <div className="pt-2 border-t border-[#EBE5DE] dark:border-white/10 flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  {userRole === 'customer' && ['Pending', 'Accepted'].includes(booking.status) && (
+                    <button
+                      onClick={handleCancelBooking}
+                      className="px-4 py-2 border border-rose-200 dark:border-rose-800/60 hover:bg-rose-50 dark:hover:bg-rose-950/20 text-rose-600 dark:text-rose-400 font-bold text-xs rounded-xl transition-all cursor-pointer"
+                    >
+                      Cancel Booking Request
+                    </button>
+                  )}
+                </div>
+                <button
+                  onClick={() => navigate(userRole === 'worker' ? `/worker/reports?bookingId=${booking.bookingId || booking.id}` : `/customer/reports?bookingId=${booking.bookingId || booking.id}`)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-amber-600 dark:text-[#FFA649] hover:bg-amber-500/10 rounded-xl transition-colors cursor-pointer"
+                >
+                  <ShieldAlert className="w-4 h-4" />
+                  Report Issue / Dispute
+                </button>
               </div>
             </div>
           </div>
+
+          {/* Job Completion Audit & Photo Evidence Section */}
+          {booking.status === 'Completed' && (
+            <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-6 sm:p-8 shadow-xs space-y-4">
+              <div className="flex items-center justify-between border-b border-[#EBE5DE] dark:border-white/10 pb-4">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 bg-emerald-50 dark:bg-emerald-950/40 rounded-xl text-emerald-600">
+                    <ShieldCheck className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-[#283845] dark:text-white font-heading">
+                      Completion Audit & Evidence
+                    </h3>
+                    <p className="text-[11px] text-stone-500 dark:text-stone-400">
+                      Photographic record & geolocation timestamp submitted by service worker.
+                    </p>
+                  </div>
+                </div>
+
+                <span className="text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                  Audit Record
+                </span>
+              </div>
+
+              {booking.completionEvidence ? (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Photo preview */}
+                    <div className="rounded-2xl overflow-hidden border border-[#EBE5DE] dark:border-white/10 bg-stone-100 dark:bg-[#11171E] relative group">
+                      <img 
+                        src={booking.completionEvidence.photoUrl} 
+                        alt="Completion Evidence" 
+                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <a 
+                        href={booking.completionEvidence.photoUrl} 
+                        target="_blank" 
+                        rel="noreferrer"
+                        className="absolute bottom-2 right-2 px-3 py-1.5 bg-[#11171E]/80 backdrop-blur-md text-white text-[11px] font-bold rounded-lg flex items-center gap-1.5 hover:bg-[#11171E] transition-colors"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        Enlarge Photo
+                      </a>
+                    </div>
+
+                    {/* Geolocation & Telemetry details */}
+                    <div className="space-y-3 text-xs bg-stone-50 dark:bg-[#11171E] p-4 rounded-2xl border border-[#EBE5DE] dark:border-white/10">
+                      <div>
+                        <span className="block text-[10px] font-extrabold text-stone-400 uppercase tracking-wider">Geolocation Verification</span>
+                        {booking.completionEvidence.coordinates ? (
+                          <div className="mt-1 space-y-1">
+                            <span className="font-mono font-bold text-[#283845] dark:text-white block">
+                              {booking.completionEvidence.coordinates.latitude}, {booking.completionEvidence.coordinates.longitude}
+                            </span>
+                            <span className="text-[11px] text-stone-500 block">
+                              Accuracy: ±{booking.completionEvidence.coordinates.accuracy || 15} meters
+                            </span>
+                            <a 
+                              href={`https://maps.google.com/?q=${booking.completionEvidence.coordinates.latitude},${booking.completionEvidence.coordinates.longitude}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-1 text-[#FFA649] font-bold hover:underline text-[11px] mt-1"
+                            >
+                              <MapPin className="w-3.5 h-3.5" /> View on Google Maps
+                            </a>
+                          </div>
+                        ) : (
+                          <span className="text-stone-500 italic mt-1 block">
+                            Location status: {booking.completionEvidence.locationStatus || 'Location permission unavailable'}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="border-t border-[#EBE5DE] dark:border-white/10 pt-2">
+                        <span className="block text-[10px] font-extrabold text-stone-400 uppercase tracking-wider">Completion Timestamp</span>
+                        <span className="font-medium text-[#283845] dark:text-stone-300 block mt-0.5">
+                          {booking.completionEvidence.submittedAt 
+                            ? new Date(booking.completionEvidence.submittedAt).toLocaleString() 
+                            : 'Logged at completion'}
+                        </span>
+                      </div>
+
+                      {booking.completionEvidence.notes && (
+                        <div className="border-t border-[#EBE5DE] dark:border-white/10 pt-2">
+                          <span className="block text-[10px] font-extrabold text-stone-400 uppercase tracking-wider">Worker Completion Notes</span>
+                          <p className="text-[#283845] dark:text-stone-300 italic mt-0.5 leading-relaxed">
+                            "{booking.completionEvidence.notes}"
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* QA Disclaimer */}
+                  <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-stone-600 dark:text-stone-400 text-[11px] leading-relaxed flex items-start gap-2">
+                    <AlertCircle className="w-4 h-4 text-[#FFA649] flex-shrink-0 mt-0.5" />
+                    <span>
+                      <strong>Audit Notice:</strong> Photographic and GPS evidence serves as supporting confirmation of work performance and is subject to client satisfaction review.
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                <div className="p-4 rounded-xl bg-stone-50 dark:bg-[#11171E] border border-[#EBE5DE] dark:border-white/10 text-xs text-stone-500 text-center">
+                  Job finalized via standard verification workflow without stored geotag audit record.
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Customer Rating and Review Submission Box */}
           {userRole === 'customer' && showReviewForm && (

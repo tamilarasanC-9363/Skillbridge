@@ -1,0 +1,31 @@
+workerId,name,category,skills,experienceYears,rating,reviews,completedJobs,location,availability,verified,price
+W001,Ramesh K,Plumbing,Pipe Leakage Repair;Toilet Repair;Drain Blockage,6,4.8,52,86,"RS Puram, Coimbatore",Available,True,450
+W002,Suresh M,Electrical,Wiring Installation;Fan Installation;Switch / Socket Repair,5,4.7,41,73,"Gandhipuram, Coimbatore",Available,True,400
+W003,Arun P,Carpentry,Door Repair;Furniture Repair;Cabinet Installation,7,4.9,61,102,"Saibaba Colony, Coimbatore",Available,True,500
+W004,Karthik R,Painting,Interior Wall Painting;Exterior Painting;Repainting,4,4.5,28,49,"Peelamedu, Coimbatore",Available,True,600
+W005,Manoj S,Cleaning,Home Deep Cleaning;Kitchen Cleaning;Bathroom Cleaning,3,4.4,25,57,"Singanallur, Coimbatore",Available,True,350
+W006,Vijay K,Plumbing,Tap / Faucet Repair;Water Tank Installation;Pipe Installation,8,4.8,67,118,"Gandhipuram, Coimbatore",Available,True,550
+W007,Prakash T,Electrical,Short-Circuit Troubleshooting;Wiring Installation;Light Installation,6,4.6,38,81,"Peelamedu, Coimbatore",Available,True,450
+W008,Dinesh V,Mason / Construction,Tile Installation;Brick Wall Construction;Plastering,9,4.7,54,96,"Ukkadam, Coimbatore",Available,True,700
+W009,Sanjay R,Painting,Exterior Painting;Repainting;Ceiling Painting,5,4.6,31,64,"Vadavalli, Coimbatore",Available,True,600
+W010,Mohan K,Cleaning,Office Cleaning;Post-Construction Cleaning;Water Tank Cleaning,4,4.3,22,46,"Race Course, Coimbatore",Available,False,400
+W011,Selvam P,Plumbing,Toilet Repair;Drain Blockage;Pipe Leakage Repair,2,4.2,14,23,"Kuniyamuthur, Coimbatore",Available,False,350
+W012,Hari S,Electrical,Fan Installation;Switch / Socket Repair;Light Installation,3,4.5,19,35,"Saibaba Colony, Coimbatore",Available,True,400
+W013,Gopi N,Carpentry,Furniture Repair;Door Repair;Custom Furniture,10,4.9,73,141,"RS Puram, Coimbatore",Available,True,650
+W014,Ravi M,Mason / Construction,Cement Work;Plastering;Tile Installation,6,4.4,30,58,"Town Hall, Coimbatore",Available,False,650
+W015,Bala J,Cleaning,Bathroom Cleaning;Kitchen Cleaning;Home Deep Cleaning,2,4.1,12,19,"Peelamedu, Coimbatore",Available,False,300
+W016,Sathish R,Plumbing,Water Tank Installation;Pipe Installation;Tap / Faucet Repair,4,4.6,29,51,"Saravanampatti, Coimbatore",Available,True,500
+W017,Rahul S,Cleaning,Kitchen Cleaning;Office Cleaning;Post-Construction Cleaning,4,4.6,39,64,"Saibaba Colony, Coimbatore",Available,True,400
+W018,Imran A,Cleaning,Post-Construction Cleaning;Water Tank Cleaning,6,4.9,58,97,"Kalapatti, Coimbatore",Available,True,450
+W019,Satish K,Plumbing,Water Tank Installation;Pipe Installation,2,4.3,18,46,"Chennai Central, Chennai",Available,False,450
+W020,Vijay R,Electrical,Short-Circuit Troubleshooting;Wiring Installation,7,4.7,64,98,"Anna Nagar, Chennai",Available,True,500
+W021,Deepak J,Carpentry,Door Repair;Cabinet Installation,4,4.5,33,57,"Velachery, Chennai",Available,True,450
+W022,Madhan P,Mason / Construction,Tile Installation;Brick Wall Construction,8,4.8,72,121,"Tambaram, Chennai",Available,True,700
+W023,Ravi S,Painting,Exterior Painting;Repainting,5,4.7,41,69,"Adyar, Chennai",Available,True,650
+W024,Firoz A,Cleaning,Home Deep Cleaning;Office Cleaning,6,4.9,79,134,"T Nagar, Chennai",Available,True,500
+W025,Gokul M,Plumbing,Drain Blockage;Toilet Repair,2,4.3,19,31,"Kochi, Kerala",Available,False,350
+W026,Nithin K,Electrical,Fan Installation;Light Installation;Repair,5,4.6,36,63,"Ernakulam, Kerala",Available,True,450
+W027,Akhil S,Carpentry,Furniture Repair;Custom Furniture,7,4.8,58,101,"Thrissur, Kerala",Available,True,600
+W028,Shyam R,Mason / Construction,Plastering;Cement Work,6,4.5,45,74,"Kozhikode, Kerala",Available,True,600
+W029,Jithin P,Painting,Interior Wall Painting;Ceiling Painting,4,4.7,29,52,"Kottayam, Kerala",Available,True,550
+W030,Nikhil T,Cleaning,Bathroom Cleaning;Kitchen Cleaning,3,4.4,21,40,"Kochi, Kerala",Available,False,350

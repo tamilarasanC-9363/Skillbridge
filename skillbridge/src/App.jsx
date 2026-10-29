@@ -20,6 +20,7 @@ import MyBookings from './pages/customer/MyBookings';
 import ChatPage from './pages/customer/ChatPage';
 import BulkHire from './pages/customer/BulkHire';
 import CustomerProfile from './pages/customer/CustomerProfile';
+import CustomerReports from './pages/customer/CustomerReports';
 
 // Worker pages
 import WorkerDashboard from './pages/worker/WorkerDashboard';
@@ -28,6 +29,7 @@ import WorkerProfileSetup from './pages/worker/WorkerProfileSetup';
 import WorkerProfileEdit from './pages/worker/WorkerProfileEdit';
 import WorkerFeedbacks from './pages/worker/WorkerFeedbacks';
 import WorkerChat from './pages/worker/WorkerChat';
+import WorkerReports from './pages/worker/WorkerReports';
 import Earnings from './pages/worker/Earnings';
 import Availability from './pages/worker/Availability';
 
@@ -99,6 +101,11 @@ export default function App() {
                   <BulkHire />
                 </ProtectedRoute>
               } />
+              <Route path="/customer/reports" element={
+                <ProtectedRoute allowedRoles={['customer']}>
+                  <CustomerReports />
+                </ProtectedRoute>
+              } />
               <Route path="/customer/profile" element={
                 <ProtectedRoute allowedRoles={['customer']}>
                   <CustomerProfile />
@@ -134,6 +141,11 @@ export default function App() {
               <Route path="/worker/requests" element={
                 <ProtectedRoute allowedRoles={['worker']}>
                   <WorkerJobs />
+                </ProtectedRoute>
+              } />
+              <Route path="/worker/reports" element={
+                <ProtectedRoute allowedRoles={['worker']}>
+                  <WorkerReports />
                 </ProtectedRoute>
               } />
               <Route path="/worker/feedbacks" element={
@@ -190,7 +202,7 @@ export default function App() {
               } />
               <Route path="/admin/bulk-hire" element={
                 <ProtectedRoute allowedRoles={['admin']}>
-                  <BulkHire />
+                  <Navigate to="/admin" replace />
                 </ProtectedRoute>
               } />
 

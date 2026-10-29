@@ -4,7 +4,7 @@ import Sidebar from '../../components/Sidebar';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { 
   Calendar, FileBarChart2, Clock, Users as UsersIcon, 
-  ShieldAlert, ClipboardList, Briefcase 
+  ShieldAlert, ClipboardList 
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -40,7 +40,6 @@ export default function BookingsList() {
     { label: 'Worker Queue', path: '/admin/verification', icon: Clock },
     { label: 'All Bookings', path: '/admin/bookings', icon: Calendar },
     { label: 'User Directory', path: '/admin/users', icon: UsersIcon },
-    { label: 'Bulk Hiring', path: '/customer/bulk-hire', icon: Briefcase },
     { label: 'Reports', path: '/admin/reports', icon: ShieldAlert }
   ];
 

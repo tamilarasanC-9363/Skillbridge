@@ -5,7 +5,7 @@ import { getBookingsForUser, updateBookingStatus } from '../../services/bookingS
 import ServiceCard from '../../components/ServiceCard';
 import BookingCard from '../../components/BookingCard';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { Briefcase, ArrowRight, ClipboardList, PlusCircle, Sparkles } from 'lucide-react';
+import { Briefcase, ArrowRight, ClipboardList, PlusCircle, Sparkles, ShieldAlert } from 'lucide-react';
 
 const CATEGORIES = [
   { name: 'Plumbing', desc: 'Pipe leakages, tap repairs, water tank installation' },
@@ -83,6 +83,34 @@ export default function CustomerDashboard() {
         </Link>
       </div>
 
+      {/* Customer Hub Navigation */}
+      <div className="flex items-center gap-2 border-b border-[#EBE5DE] dark:border-white/10 mb-8 overflow-x-auto pb-2">
+        <Link 
+          to="/customer"
+          className="px-4 py-2 rounded-xl text-xs font-bold bg-[#FFA649] text-[#11171E] shadow-xs whitespace-nowrap"
+        >
+          Dashboard Overview
+        </Link>
+        <Link 
+          to="/customer/bookings"
+          className="px-4 py-2 rounded-xl text-xs font-semibold text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors whitespace-nowrap"
+        >
+          My Bookings ({bookings.length})
+        </Link>
+        <Link 
+          to="/customer/reports"
+          className="px-4 py-2 rounded-xl text-xs font-semibold text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors flex items-center gap-1.5 whitespace-nowrap"
+        >
+          <ShieldAlert className="w-3.5 h-3.5 text-[#FFA649]" />
+          <span>Disputes & Reports</span>
+        </Link>
+        <Link 
+          to="/customer/bulk-hire"
+          className="px-4 py-2 rounded-xl text-xs font-semibold text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors whitespace-nowrap"
+        >
+          Corporate Bulk Hire
+        </Link>
+      </div>
       {/* Main Call to Action: What service do you need? */}
       <div className="mb-10">
         <h2 className="text-base sm:text-lg font-bold text-[#283845] dark:text-white font-heading mb-4">

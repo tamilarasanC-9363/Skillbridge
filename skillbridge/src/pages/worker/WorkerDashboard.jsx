@@ -5,11 +5,13 @@ import { getWorkerProfile, toggleAvailability, getWorkerEarningsData } from '../
 import { getBookingsForUser, updateBookingStatus } from '../../services/bookingService';
 import { subscribeToReviewsForWorker } from '../../services/reviewService';
 import BookingCard from '../../components/BookingCard';
+import JobCompletionModal from '../../components/JobCompletionModal';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import RatingStars from '../../components/RatingStars';
 import { 
   Users, Briefcase, CheckCircle, Clock, Star, 
-  IndianRupee, ToggleLeft, ToggleRight, ClipboardList, Info, ShieldAlert 
+  IndianRupee, ToggleLeft, ToggleRight, ClipboardList, Info, ShieldAlert,
+  MapPin, Calendar, Image as ImageIcon
 } from 'lucide-react';
 
 export default function WorkerDashboard() {
@@ -21,6 +23,7 @@ export default function WorkerDashboard() {
   const [loading, setLoading] = useState(true);
   const [availabilityLoading, setAvailabilityLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('incoming'); // incoming | active | history
+  const [completionModalBooking, setCompletionModalBooking] = useState(null);
   const reviewsUnsubscribeRef = useRef(() => {});
 
   const loadDashboardData = useCallback(async () => {
@@ -84,6 +87,14 @@ export default function WorkerDashboard() {
   };
 
   const handleBookingAction = async (bookingId, newStatus) => {
+    if (newStatus === 'Completed') {
+      const target = bookings.find(b => b.bookingId === bookingId);
+      if (target) {
+        setCompletionModalBooking(target);
+        return;
+      }
+    }
+
     try {
       await updateBookingStatus(bookingId, newStatus);
       await loadDashboardData();
@@ -123,7 +134,7 @@ export default function WorkerDashboard() {
 
   const pendingRequests = bookings.filter(b => b.status === 'Pending');
   const activeJobs = bookings.filter(b => ['Accepted', 'In Progress'].includes(b.status));
-  const completedJobs = bookings.filter(b => b.status === 'Completed');
+  // completed count derived from earningsData
 
   const earningsData = getWorkerEarningsData(profile, bookings);
 
@@ -306,7 +317,7 @@ export default function WorkerDashboard() {
               : 'border-transparent text-stone-500 hover:text-[#283845] dark:hover:text-white'
           }`}
         >
-          Completed History ({completedJobs.length})
+          Completed History ({earningsData.totalCompletedJobs})
         </button>
       </div>
 
@@ -350,24 +361,112 @@ export default function WorkerDashboard() {
           </div>
         )
       ) : (
-        completedJobs.length === 0 ? (
+        earningsData.allCompletedJobs.length === 0 ? (
           <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-12 text-center text-stone-500 shadow-xs">
             <ClipboardList className="w-12 h-12 text-stone-300 dark:text-stone-600 mx-auto mb-3" />
             <h3 className="text-sm font-bold text-[#283845] dark:text-white">No Completed History</h3>
-            <p className="text-xs text-stone-400 mt-1">Finished tasks will be logged here with customer ratings.</p>
+            <p className="text-xs text-stone-400 mt-1">Finished tasks and payment payouts will be logged here.</p>
           </div>
         ) : (
           <div className="space-y-4">
-            {completedJobs.map(b => (
-              <BookingCard 
-                key={b.bookingId}
-                booking={b}
-                role="worker"
-                onAction={handleBookingAction}
-              />
-            ))}
+            <div className="flex items-center justify-between px-1 text-xs text-stone-500 dark:text-stone-400">
+              <span>Showing all {earningsData.allCompletedJobs.length} completed contracts</span>
+              <span className="text-[11px] font-semibold">Net Earnings: <strong className="text-[#283845] dark:text-[#FFA649]">₹{earningsData.totalIncome.toLocaleString('en-IN')}</strong></span>
+            </div>
+
+            {earningsData.allCompletedJobs.map(job => {
+              const formattedDate = job.scheduledDate 
+                ? new Date(job.scheduledDate).toLocaleDateString(undefined, { 
+                    month: 'short', 
+                    day: 'numeric', 
+                    year: 'numeric' 
+                  }) 
+                : 'Completed';
+
+              return (
+                <div 
+                  key={job.bookingId}
+                  className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-2xl p-5 shadow-xs hover:border-[#FFA649]/40 transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                >
+                  <div className="space-y-1.5 flex-grow">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="text-[11px] font-mono font-bold text-stone-400">
+                        #{job.bookingId?.slice(-8).toUpperCase()}
+                      </span>
+                      <span className="px-2.5 py-0.5 text-xs font-bold rounded-full border bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/80">
+                        Completed
+                      </span>
+                      {job.isLive ? (
+                        <span className="px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                          Live Contract
+                        </span>
+                      ) : (
+                        <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400 border border-[#EBE5DE] dark:border-white/10">
+                          Historical Portfolio Job
+                        </span>
+                      )}
+                    </div>
+
+                    <h4 className="text-base font-bold text-[#283845] dark:text-white font-heading">
+                      {job.jobType}
+                    </h4>
+
+                    <div className="text-xs font-semibold text-stone-600 dark:text-stone-300">
+                      Client: <span className="font-bold text-[#283845] dark:text-white">{job.customerName}</span>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-stone-500 dark:text-stone-400 pt-0.5">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-3.5 h-3.5 text-stone-400" />
+                        {formattedDate}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <MapPin className="w-3.5 h-3.5 text-stone-400" />
+                        {job.location}
+                      </span>
+                      {job.completionEvidence?.photoUrl && (
+                        <a 
+                          href={job.completionEvidence.photoUrl} 
+                          target="_blank" 
+                          rel="noreferrer"
+                          className="flex items-center gap-1 text-[#FFA649] hover:underline font-semibold"
+                        >
+                          <ImageIcon className="w-3.5 h-3.5" />
+                          Photo Evidence
+                        </a>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex sm:flex-col items-end justify-between w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-[#EBE5DE] dark:border-white/10">
+                    <span className="text-[10px] font-extrabold text-stone-400 uppercase tracking-wider sm:block hidden">Payout</span>
+                    <div className="text-right">
+                      <div className="text-lg font-extrabold text-[#283845] dark:text-[#FFA649] font-mono">
+                        ₹{job.netEarnings?.toLocaleString('en-IN') || 0}
+                      </div>
+                      <div className="text-[10px] text-stone-400">
+                        Gross: ₹{job.grossAmount?.toLocaleString('en-IN') || 0}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )
+      )}
+
+      {/* Geotagged Completion Modal */}
+      {completionModalBooking && (
+        <JobCompletionModal
+          booking={completionModalBooking}
+          workerId={currentUser.uid}
+          onClose={() => setCompletionModalBooking(null)}
+          onSuccess={async () => {
+            setCompletionModalBooking(null);
+            await loadDashboardData();
+          }}
+        />
       )}
     </div>
   );

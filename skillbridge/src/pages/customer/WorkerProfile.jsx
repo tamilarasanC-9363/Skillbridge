@@ -147,7 +147,10 @@ export default function WorkerProfile() {
               </div>
 
               <div className="flex items-center gap-3 mt-2">
-                <RatingStars rating={worker.rating} count={worker.reviewCount} />
+                <RatingStars 
+                  rating={reviews.length > 0 ? Number((reviews.reduce((s, r) => s + Number(r.rating || 0), 0) / reviews.length).toFixed(1)) : Number(worker.rating || 0)} 
+                  count={reviews.length > 0 ? reviews.length : Number(worker.reviewCount || 0)} 
+                />
               </div>
 
               <div className="flex flex-wrap gap-2 mt-3.5">
@@ -190,29 +193,88 @@ export default function WorkerProfile() {
             </div>
           </div>
 
-          {/* Completed Work Showcase Section */}
-          <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-6 sm:p-8 shadow-xs">
-            <div className="flex items-center justify-between mb-5">
-              <div>
-                <h2 className="text-base font-bold text-[#283845] dark:text-white flex items-center gap-2 font-heading">
-                  <Sparkles className="w-4.5 h-4.5 text-[#FFA649]" />
-                  Completed Work Portfolio ({completedProjects.length})
-                </h2>
-                <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
-                  Verified project pictures and real completed job records on SkillBridge.
-                </p>
+          {/* Previous Work Portfolio Showcase */}
+          {worker.portfolio && worker.portfolio.length > 0 && (
+            <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-6 sm:p-8 shadow-xs">
+              <div className="flex items-center justify-between mb-5">
+                <div>
+                  <h2 className="text-base font-bold text-[#283845] dark:text-white flex items-center gap-2 font-heading">
+                    <Sparkles className="w-4.5 h-4.5 text-[#FFA649]" />
+                    Previous Work Portfolio ({worker.portfolio.length})
+                  </h2>
+                  <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
+                    Historical portfolio projects and on-site service delivery examples.
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {worker.portfolio.map((item, idx) => (
+                  <div 
+                    key={idx} 
+                    className="group bg-stone-50 dark:bg-[#11171E] border border-[#EBE5DE] dark:border-white/10 hover:border-[#FFA649]/60 dark:hover:border-[#FFA649]/60 rounded-2xl overflow-hidden shadow-3xs hover:shadow-md transition-all duration-300 flex flex-col"
+                  >
+                    {item.imageUrl && (
+                      <div className="relative w-full h-36 overflow-hidden bg-slate-900">
+                        <img 
+                          src={item.imageUrl} 
+                          alt={item.projectTitle || 'Portfolio Work'} 
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                          loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
+                        {item.category && (
+                          <span className="absolute top-2.5 left-2.5 bg-[#283845]/90 text-[#FFA649] border border-[#FFA649]/30 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                            {item.category}
+                          </span>
+                        )}
+                      </div>
+                    )}
+
+                    <div className="p-3.5 space-y-1.5 flex-grow flex flex-col justify-between">
+                      <div>
+                        <h4 className="text-xs font-bold text-[#283845] dark:text-white leading-snug group-hover:text-[#FFA649] transition-colors">
+                          {item.projectTitle}
+                        </h4>
+                        <p className="text-[11px] text-stone-600 dark:text-stone-300 leading-relaxed line-clamp-2 mt-1">
+                          {item.description}
+                        </p>
+                      </div>
+
+                      <div className="pt-2 border-t border-[#EBE5DE] dark:border-white/10 flex items-center justify-between text-[10px] text-stone-500 dark:text-stone-400 font-semibold">
+                        <span className="flex items-center gap-1 text-stone-600 dark:text-stone-300">
+                          <Calendar className="w-3 h-3 text-[#FFA649]" />
+                          {item.completionDate}
+                        </span>
+                        {item.location && (
+                          <span className="flex items-center gap-1 text-stone-600 dark:text-stone-300">
+                            <MapPin className="w-3 h-3 text-[#FFA649]" />
+                            {item.location}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
+          )}
 
-            {completedProjects.length === 0 ? (
-              <div className="text-center py-8 px-4 bg-stone-50/70 dark:bg-[#11171E] rounded-2xl border border-dashed border-[#EBE5DE] dark:border-white/10 space-y-2">
-                <Briefcase className="w-8 h-8 text-stone-300 dark:text-stone-600 mx-auto" />
-                <h4 className="text-xs font-bold text-[#283845] dark:text-white">No Completed Projects Yet</h4>
-                <p className="text-[11px] text-stone-500 dark:text-stone-400 max-w-sm mx-auto">
-                  Completed work images and project details will appear here automatically once this specialist completes a booking.
-                </p>
+          {/* Real Completed Jobs on SkillBridge */}
+          {completedProjects.length > 0 && (
+            <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-6 sm:p-8 shadow-xs">
+              <div className="flex items-center justify-between mb-5">
+                <div>
+                  <h2 className="text-base font-bold text-[#283845] dark:text-white flex items-center gap-2 font-heading">
+                    <CheckCircle className="w-4.5 h-4.5 text-emerald-500" />
+                    SkillBridge Completed Jobs ({completedProjects.length})
+                  </h2>
+                  <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
+                    Real jobs booked and verified directly on the SkillBridge platform.
+                  </p>
+                </div>
               </div>
-            ) : (
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {completedProjects.map((item) => {
                   const dateStr = item.completedAt || item.scheduledDate || item.createdAt;
@@ -223,22 +285,20 @@ export default function WorkerProfile() {
                   return (
                     <div 
                       key={item.bookingId} 
-                      className="group bg-stone-50 dark:bg-[#11171E] border border-[#EBE5DE] dark:border-white/10 hover:border-[#FFA649]/60 dark:hover:border-[#FFA649]/60 rounded-2xl overflow-hidden shadow-3xs hover:shadow-md transition-all duration-300 flex flex-col"
+                      className="group bg-stone-50 dark:bg-[#11171E] border border-[#EBE5DE] dark:border-white/10 hover:border-emerald-500/60 rounded-2xl overflow-hidden shadow-3xs hover:shadow-md transition-all duration-300 flex flex-col"
                     >
-                      {item.workImageUrl || item.imageUrl ? (
+                      {item.workImageUrl || item.imageUrl || item.completionEvidence?.photoUrl ? (
                         <div className="relative w-full h-36 overflow-hidden bg-slate-900">
                           <img 
-                            src={item.workImageUrl || item.imageUrl} 
+                            src={item.workImageUrl || item.imageUrl || item.completionEvidence?.photoUrl} 
                             alt={item.jobType || 'Completed Job'} 
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
                             loading="lazy"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
-                          {item.category && (
-                            <span className="absolute top-2.5 left-2.5 bg-[#283845]/90 text-[#FFA649] border border-[#FFA649]/30 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                              {item.category}
-                            </span>
-                          )}
+                          <span className="absolute top-2.5 left-2.5 bg-emerald-900/90 text-emerald-300 border border-emerald-500/30 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                            Verified Job
+                          </span>
                         </div>
                       ) : (
                         <div className="p-3 bg-stone-100 dark:bg-[#18222B] border-b border-[#EBE5DE] dark:border-white/10 flex items-center justify-between">
@@ -246,18 +306,18 @@ export default function WorkerProfile() {
                             {item.category || 'Trade Service'}
                           </span>
                           <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
-                            <CheckCircle className="w-3 h-3" /> Verified Completed Job
+                            <CheckCircle className="w-3 h-3" /> Verified Completed
                           </span>
                         </div>
                       )}
 
                       <div className="p-3.5 space-y-1.5 flex-grow flex flex-col justify-between">
                         <div>
-                          <h4 className="text-xs font-bold text-[#283845] dark:text-white leading-snug group-hover:text-[#FFA649] transition-colors">
+                          <h4 className="text-xs font-bold text-[#283845] dark:text-white leading-snug">
                             {item.jobType || 'Service Completion'}
                           </h4>
                           <p className="text-[11px] text-stone-600 dark:text-stone-300 leading-relaxed line-clamp-2 mt-1">
-                            {item.description || 'Successfully completed on-site service delivery meeting customer specifications.'}
+                            {item.completionEvidence?.notes || item.description || 'Successfully completed on-site service delivery.'}
                           </p>
                         </div>
                         <div className="pt-2 border-t border-[#EBE5DE] dark:border-white/10 flex items-center justify-between text-[10px] text-stone-500 dark:text-stone-400 font-semibold">
@@ -277,8 +337,19 @@ export default function WorkerProfile() {
                   );
                 })}
               </div>
-            )}
-          </div>
+            </div>
+          )}
+
+          {/* Empty state when worker has no history */}
+          {(!worker.portfolio || worker.portfolio.length === 0) && completedProjects.length === 0 && (
+            <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-8 text-center text-stone-500 shadow-xs">
+              <Briefcase className="w-10 h-10 text-stone-300 dark:text-stone-600 mx-auto mb-2" />
+              <h4 className="text-sm font-bold text-[#283845] dark:text-white">No previous work available yet.</h4>
+              <p className="text-xs text-stone-400 mt-1 max-w-sm mx-auto">
+                Completed work images and project portfolios will appear here as this specialist completes service jobs.
+              </p>
+            </div>
+          )}
 
           {/* Reviews List */}
           <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-6 sm:p-8 shadow-xs">
@@ -292,12 +363,12 @@ export default function WorkerProfile() {
                 {reviews.map((rev, idx) => (
                   <div key={idx} className="pt-4 first:pt-0 text-xs">
                     <div className="flex justify-between items-center mb-1.5">
-                      <span className="font-bold text-[#283845] dark:text-white">Verified Client</span>
-                      <RatingStars rating={rev.rating} showNumber={false} />
+                      <span className="font-bold text-[#283845] dark:text-white">{rev.customerName || 'Verified Client'}</span>
+                      <RatingStars rating={Number(rev.rating || 5)} showNumber={false} />
                     </div>
                     <p className="text-stone-600 dark:text-stone-300 leading-relaxed italic">"{rev.comment}"</p>
                     <span className="text-[10px] text-stone-400 block mt-2">
-                      Reviewed on {new Date(rev.createdAt).toLocaleDateString()}
+                      Reviewed on {new Date(rev.createdAt?.seconds ? rev.createdAt.seconds * 1000 : rev.createdAt).toLocaleDateString()}
                     </span>
                   </div>
                 ))}

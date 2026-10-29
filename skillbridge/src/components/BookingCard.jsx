@@ -163,20 +163,30 @@ export default function BookingCard({ booking, role, onAction, reviewed = false 
             )}
 
             {booking.status === 'Accepted' && (
-              <button 
-                onClick={() => onAction(booking.bookingId, 'In Progress')}
-                className="px-4 py-2 text-xs font-extrabold text-[#11171E] btn-gradient rounded-xl shadow-xs transition-all cursor-pointer"
-              >
-                Start Job
-              </button>
+              <div className="flex flex-wrap gap-2 w-full md:w-auto">
+                <button 
+                  onClick={() => onAction(booking.bookingId, 'In Progress')}
+                  className="flex-1 md:flex-initial px-4 py-2 text-xs font-extrabold text-[#11171E] btn-gradient rounded-xl shadow-xs transition-all cursor-pointer"
+                >
+                  Start Job
+                </button>
+                <button 
+                  onClick={() => onAction(booking.bookingId, 'Completed')}
+                  className="flex-1 md:flex-initial px-4 py-2 text-xs font-extrabold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-xs transition-all cursor-pointer flex items-center justify-center gap-1"
+                >
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  Mark Job Completed
+                </button>
+              </div>
             )}
 
             {booking.status === 'In Progress' && (
               <button 
                 onClick={() => onAction(booking.bookingId, 'Completed')}
-                className="px-4 py-2 text-xs font-extrabold text-white bg-[#283845] hover:bg-[#1E2B35] border border-[#FFA649]/30 rounded-xl shadow-xs transition-all cursor-pointer"
+                className="px-4 py-2 text-xs font-extrabold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-xs transition-all cursor-pointer flex items-center justify-center gap-1 w-full md:w-auto"
               >
-                Mark Complete
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                Mark Job Completed
               </button>
             )}
           </>

@@ -2,14 +2,75 @@ import { useEffect, useState, useCallback } from 'react';
 import { getAllWorkerProfiles, setWorkerVerificationStatus } from '../../services/workerService';
 import Sidebar from '../../components/Sidebar';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import AIVerificationCard from '../../components/AIVerificationCard';
-import VerificationEligibilityCard from '../../components/VerificationEligibilityCard';
 import { 
   Clock, CheckCircle, FileBarChart2, Users as UsersIcon, 
   Calendar, ShieldAlert, Check, X, Eye,
   Briefcase, MapPin, ShieldCheck, ExternalLink,
-  Sparkles, User, Wrench, PhoneCall
+  Sparkles, User
 } from 'lucide-react';
+
+function ProofDocumentViewer({ worker }) {
+  const proofUrl = worker?.idProofUrl || worker?.certificateUrl || worker?.proofOfWorkUrl;
+  const [loading, setLoading] = useState(Boolean(proofUrl));
+  const [error, setError] = useState(!proofUrl);
+
+  useEffect(() => {
+    if (proofUrl) {
+      setLoading(true);
+      setError(false);
+    } else {
+      setLoading(false);
+      setError(true);
+    }
+  }, [proofUrl]);
+
+  if (!proofUrl || error) {
+    return (
+      <div className="p-6 bg-stone-50 dark:bg-[#11171E] border border-dashed border-[#EBE5DE] dark:border-white/10 rounded-2xl text-center space-y-2">
+        <ShieldAlert className="w-8 h-8 text-stone-400 mx-auto" />
+        <h4 className="text-xs font-bold text-[#283845] dark:text-white">Proof Document Missing</h4>
+        <p className="text-[11px] text-stone-500 dark:text-stone-400 max-w-xs mx-auto">
+          No verification proof has been uploaded by this worker to storage, or the document could not be retrieved.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-2">
+      <div className="relative rounded-2xl overflow-hidden border border-[#EBE5DE] dark:border-white/10 bg-black/5 dark:bg-black/40 min-h-[180px] max-h-72 flex items-center justify-center">
+        {loading && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-stone-50/80 dark:bg-[#11171E]/80 backdrop-blur-xs z-10 gap-2">
+            <LoadingSpinner size="md" />
+            <span className="text-[11px] font-bold text-stone-500">Retrieving proof document...</span>
+          </div>
+        )}
+        <img
+          src={proofUrl}
+          alt="Verification Document"
+          onLoad={() => setLoading(false)}
+          onError={() => {
+            setLoading(false);
+            setError(true);
+          }}
+          className={`max-h-72 w-full object-contain transition-opacity duration-200 ${loading ? 'opacity-0' : 'opacity-100'}`}
+        />
+      </div>
+
+      <div className="flex items-center justify-between text-[11px] text-stone-500 px-1">
+        <span>Document Source: <strong className="text-[#283845] dark:text-white font-medium">Cloud Storage Proof</strong></span>
+        <a
+          href={proofUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="text-[#FFA649] font-bold hover:underline flex items-center gap-1"
+        >
+          <ExternalLink className="w-3.5 h-3.5" /> Full Size Original
+        </a>
+      </div>
+    </div>
+  );
+}
 
 export default function VerificationQueue() {
   const [workers, setWorkers] = useState([]);
@@ -119,7 +180,6 @@ export default function VerificationQueue() {
     { label: 'Worker Queue', path: '/admin/verification', icon: Clock, badge: pendingWorkers.length },
     { label: 'All Bookings', path: '/admin/bookings', icon: Calendar },
     { label: 'User Directory', path: '/admin/users', icon: UsersIcon },
-    { label: 'Bulk Hiring', path: '/customer/bulk-hire', icon: Briefcase },
     { label: 'Reports', path: '/admin/reports', icon: ShieldAlert }
   ];
 
@@ -316,7 +376,7 @@ export default function VerificationQueue() {
                       className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl border border-[#EBE5DE] dark:border-white/10 hover:bg-stone-100 dark:hover:bg-white/5 text-[#283845] dark:text-stone-300 hover:text-[#FFA649] text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       <Eye className="w-4 h-4 text-[#FFA649]" />
-                      View Proofs
+                      View Proof
                     </button>
 
                     {!worker.verified ? (
@@ -363,153 +423,77 @@ export default function VerificationQueue() {
         )}
       </div>
 
-      {/* Verification Details Modal */}
+      {/* Compact Worker Verification Proof Modal (Requirement 8) */}
       {selectedWorker && !showRejectModal && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4 select-none animate-fade-in">
+        <div 
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => setSelectedWorker(null)}
+        >
           <div 
-            className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-6 sm:p-8 max-w-2xl w-full shadow-2xl space-y-6 relative max-h-[90vh] overflow-y-auto"
+            className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-6 sm:p-7 max-w-lg w-full shadow-2xl space-y-5 relative max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Close Button */}
             <button
+              type="button"
               onClick={() => setSelectedWorker(null)}
-              className="absolute top-5 right-5 text-stone-400 hover:text-[#283845] dark:hover:text-white p-1 rounded-lg hover:bg-stone-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
+              className="absolute top-5 right-5 text-stone-400 hover:text-[#283845] dark:hover:text-white p-1.5 rounded-xl hover:bg-stone-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
 
-            {/* Top header */}
-            <div className="flex items-center gap-4 border-b border-[#EBE5DE] dark:border-white/10 pb-5">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#283845] to-[#1B2731] border border-[#FFA649]/30 shadow-xs flex flex-col items-center justify-center text-[#FFA649] flex-shrink-0">
-                <User className="w-6 h-6 mb-0.5" />
-                <span className="text-[10px] font-extrabold tracking-wider uppercase font-mono">
-                  {selectedWorker.name?.slice(0, 2) || 'SP'}
-                </span>
+            {/* Worker Summary Header */}
+            <div className="flex items-center gap-3.5 pr-8">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#283845] to-[#1B2731] border border-[#FFA649]/30 shadow-xs flex items-center justify-center text-[#FFA649] flex-shrink-0 font-bold font-mono text-sm">
+                {selectedWorker.name?.slice(0, 2).toUpperCase() || 'SP'}
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-xl font-bold text-[#283845] dark:text-white font-heading">{selectedWorker.name}</h2>
+                  <h2 className="text-lg font-bold text-[#283845] dark:text-white font-heading leading-snug">
+                    {selectedWorker.name}
+                  </h2>
                   {selectedWorker.verified ? (
-                    <span className="px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400">
+                    <span className="px-2 py-0.5 text-[9px] font-bold rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400">
                       ✓ Verified
                     </span>
                   ) : (
-                    <span className="px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-[#FFA649]/15 border border-[#FFA649]/30 text-[#283845] dark:text-[#FFA649]">
-                      Pending Audit
+                    <span className="px-2 py-0.5 text-[9px] font-bold rounded-full bg-[#FFA649]/15 border border-[#FFA649]/30 text-[#283845] dark:text-[#FFA649]">
+                      Pending Review
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
-                  Worker ID: <span className="text-[#283845] dark:text-white font-mono">{selectedWorker.userId}</span> • {selectedWorker.categories?.join(', ')} • {selectedWorker.experience || 0} Yrs Experience
-                </p>
-              </div>
-            </div>
-
-            {/* Bio / Profile summary */}
-            {selectedWorker.bio && (
-              <div className="bg-stone-50 dark:bg-[#11171E] border border-[#EBE5DE] dark:border-white/10 rounded-2xl p-4 text-xs text-stone-600 dark:text-stone-300 leading-relaxed">
-                <span className="block text-[10px] font-extrabold text-[#283845]/70 dark:text-[#FFA649] uppercase tracking-wider mb-1">Professional Bio</span>
-                "{selectedWorker.bio}"
-              </div>
-            )}
-
-            {/* 4-Criteria Verification Eligibility Card */}
-            <VerificationEligibilityCard worker={selectedWorker} />
-
-            {/* AI Automated Verification Scorecard */}
-            {selectedWorker.aiAuditReport && (
-              <AIVerificationCard report={selectedWorker.aiAuditReport} />
-            )}
-
-            {/* Submitted Work Verification Proofs */}
-            <div className="space-y-3">
-              <h3 className="text-xs font-bold text-[#283845] dark:text-stone-300 uppercase tracking-wider flex items-center gap-1.5">
-                <Wrench className="w-3.5 h-3.5 text-[#FFA649]" />
-                SkillBridge Work Verification Submissions
-              </h3>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Proof of Work Card */}
-                <div className="bg-stone-50 dark:bg-[#11171E] border border-[#EBE5DE] dark:border-white/10 rounded-2xl p-4 space-y-3 hover:border-[#FFA649]/40 transition-all">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#283845] dark:text-white flex items-center gap-1.5">
-                      <Wrench className="w-4 h-4 text-[#FFA649]" />
-                      Proof of Work ({selectedWorker.proofOfWorkType ? selectedWorker.proofOfWorkType.replace(/_/g, ' ') : 'Job Evidence'})
-                    </span>
-                    <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-md capitalize">
-                      Submitted
-                    </span>
-                  </div>
-
-                  <div className="h-36 rounded-xl overflow-hidden bg-slate-900 border border-[#EBE5DE] dark:border-white/10 relative group">
-                    <img 
-                      src={selectedWorker.proofOfWorkUrl || selectedWorker.idProofUrl || 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80'} 
-                      alt="Proof of Work"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                    />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                      <a 
-                        href={selectedWorker.proofOfWorkUrl || selectedWorker.idProofUrl || '#'} 
-                        target="_blank" 
-                        rel="noreferrer"
-                        className="px-3 py-1.5 btn-gradient text-[#11171E] text-[11px] font-bold rounded-lg flex items-center gap-1 shadow-md"
-                      >
-                        <ExternalLink className="w-3.5 h-3.5" /> Full Size Proof
-                      </a>
-                    </div>
-                  </div>
-
-                  {selectedWorker.proofDescription && (
-                    <p className="text-[11px] text-stone-600 dark:text-stone-300 italic">
-                      "{selectedWorker.proofDescription}"
-                    </p>
-                  )}
-                </div>
-
-                {/* Local Reference / Referee Card */}
-                <div className="bg-stone-50 dark:bg-[#11171E] border border-[#EBE5DE] dark:border-white/10 rounded-2xl p-4 space-y-3 hover:border-[#FFA649]/40 transition-all flex flex-col justify-between">
-                  <div className="space-y-2.5">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-[#283845] dark:text-white flex items-center gap-1.5">
-                        <PhoneCall className="w-4 h-4 text-[#FFA649]" />
-                        Local Client / Contractor Reference
-                      </span>
-                      <span className="text-[10px] text-[#FFA649] font-bold bg-[#FFA649]/10 px-2 py-0.5 rounded-md">
-                        {selectedWorker.localReference ? 'Provided' : 'Optional'}
-                      </span>
-                    </div>
-
-                    {selectedWorker.localReference ? (
-                      <div className="p-3 bg-white dark:bg-[#18222B] rounded-xl border border-[#EBE5DE] dark:border-white/10 space-y-1 text-xs">
-                        <div className="font-bold text-[#283845] dark:text-white">
-                          {selectedWorker.localReference.name}
-                        </div>
-                        <div className="text-[11px] text-stone-500 dark:text-stone-400">
-                          Relationship: <strong className="text-stone-700 dark:text-stone-200">{selectedWorker.localReference.relation || 'Previous Customer'}</strong>
-                        </div>
-                        <div className="text-[11px] font-mono text-[#FFA649]">
-                          Phone: {selectedWorker.localReference.phone}
-                        </div>
-                      </div>
-                    ) : (
-                      <p className="text-[11px] text-stone-500 dark:text-stone-400">
-                        No external referee attached. Verification will proceed based on profile photo and proof of work analysis.
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="p-2.5 rounded-xl bg-emerald-500/5 border border-emerald-500/20 text-[10px] text-emerald-700 dark:text-emerald-300">
-                    ✓ Verified via SkillBridge Work Verification System
-                  </div>
+                <div className="flex flex-wrap items-center gap-x-2 text-[11px] text-stone-500 dark:text-stone-400 mt-0.5">
+                  <span className="font-mono text-[#283845] dark:text-stone-300">#{selectedWorker.userId}</span>
+                  <span>•</span>
+                  <span>{selectedWorker.categories?.join(', ')}</span>
+                  <span>•</span>
+                  <span>{selectedWorker.location || 'Local Area'}</span>
+                  <span>•</span>
+                  <span>{selectedWorker.experience || 0} yrs exp</span>
                 </div>
               </div>
             </div>
+
+            {/* Proof Document Viewer */}
+            <div className="space-y-2">
+              <span className="block text-[10px] font-extrabold text-stone-400 uppercase tracking-wider">
+                Uploaded Identity / Certification Document
+              </span>
+              <ProofDocumentViewer worker={selectedWorker} />
+            </div>
+
+            {selectedWorker.proofDescription && (
+              <p className="text-xs text-stone-600 dark:text-stone-300 italic bg-stone-50 dark:bg-[#11171E] p-3 rounded-xl border border-[#EBE5DE] dark:border-white/10">
+                "{selectedWorker.proofDescription}"
+              </p>
+            )}
 
             {/* Modal Bottom Actions */}
-            <div className="pt-4 border-t border-[#EBE5DE] dark:border-white/10 flex items-center justify-end gap-3">
+            <div className="pt-3 border-t border-[#EBE5DE] dark:border-white/10 flex items-center justify-end gap-2.5">
               <button
                 type="button"
                 onClick={() => setSelectedWorker(null)}
-                className="px-4 py-2.5 rounded-xl border border-[#EBE5DE] dark:border-white/10 text-stone-600 dark:text-stone-300 hover:text-[#283845] dark:hover:text-white text-xs font-bold cursor-pointer"
+                className="px-4 py-2 rounded-xl border border-[#EBE5DE] dark:border-white/10 text-stone-600 dark:text-stone-300 hover:text-[#283845] dark:hover:text-white text-xs font-bold cursor-pointer"
               >
                 Close
               </button>
@@ -519,18 +503,18 @@ export default function VerificationQueue() {
                   <button
                     type="button"
                     onClick={() => setShowRejectModal(true)}
-                    className="px-5 py-2.5 border border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                    className="px-4 py-2 border border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-xl text-xs font-bold transition-all cursor-pointer"
                   >
-                    Reject Verification
+                    Reject
                   </button>
                   <button
                     type="button"
                     onClick={() => handleApprove(selectedWorker.userId)}
                     disabled={actioningUserId === selectedWorker.userId}
-                    className="px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:brightness-110 text-white text-xs font-bold rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
+                    className="px-5 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:brightness-110 text-white text-xs font-bold rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
                   >
                     <Check className="w-4 h-4" />
-                    Approve & Verify Badge
+                    Approve & Verify
                   </button>
                 </>
               ) : (

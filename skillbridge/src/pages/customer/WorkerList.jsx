@@ -4,7 +4,7 @@ import { getRecommendedWorkers } from '../../services/recommendationService';
 import WorkerCard from '../../components/WorkerCard';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import BackButton from '../../components/BackButton';
-import { RefreshCw, Star, Info, ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
+import { RefreshCw, Star, Info, ChevronDown, ChevronUp, Sparkles, MapPin } from 'lucide-react';
 
 export default function WorkerList() {
   const { state } = useLocation();
@@ -131,9 +131,32 @@ export default function WorkerList() {
           {error}
         </div>
       ) : workers.length === 0 ? (
-        <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-10 text-center shadow-xs">
-          <p className="text-base font-bold text-[#283845] dark:text-white">No available specialists matched your exact query.</p>
-          <p className="text-xs text-stone-500 dark:text-stone-400 mt-2">Try adjusting the service locality or expanding to neighboring pin codes.</p>
+        <div className="bg-white dark:bg-[#1B2731] border border-[#EBE5DE] dark:border-white/10 rounded-3xl p-10 text-center shadow-xs space-y-4">
+          <div className="w-14 h-14 rounded-2xl bg-[#FFA649]/15 border border-[#FFA649]/30 text-[#FFA649] flex items-center justify-center mx-auto">
+            <MapPin className="w-7 h-7" />
+          </div>
+          <div>
+            <h3 className="text-lg font-bold text-[#283845] dark:text-white font-heading">
+              No results found for this location
+            </h3>
+            <p className="text-xs text-stone-500 dark:text-stone-400 mt-1 max-w-md mx-auto">
+              We couldn't find any specialists for <strong className="text-[#283845] dark:text-white">{searchCriteria.jobType || searchCriteria.category}</strong> in <strong className="text-[#283845] dark:text-white">{searchCriteria.location}</strong>.
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+            <button
+              onClick={() => navigate(`/customer/search?category=${encodeURIComponent(searchCriteria.category)}`)}
+              className="px-5 py-2.5 text-xs font-extrabold text-[#11171E] btn-gradient rounded-xl shadow-xs cursor-pointer"
+            >
+              Change Location
+            </button>
+            <button
+              onClick={() => navigate('/customer/search')}
+              className="px-5 py-2.5 text-xs font-bold text-[#283845] dark:text-stone-300 border border-[#EBE5DE] dark:border-white/10 hover:bg-stone-100 dark:hover:bg-white/5 rounded-xl cursor-pointer"
+            >
+              Search Again
+            </button>
+          </div>
         </div>
       ) : (
         <div className="space-y-4">

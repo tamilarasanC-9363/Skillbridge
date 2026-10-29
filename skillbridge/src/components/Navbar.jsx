@@ -101,6 +101,11 @@ export default function Navbar() {
                       active={pathname === '/customer/bookings' || pathname.startsWith('/customer/booking/') || pathname.startsWith('/customer/chat/')} 
                     />
                     <NavTab 
+                      to="/customer/reports" 
+                      label="Reports" 
+                      active={pathname === '/customer/reports'} 
+                    />
+                    <NavTab 
                       to="/customer/bulk-hire" 
                       label="Bulk Hire" 
                       active={pathname === '/customer/bulk-hire'} 
@@ -114,6 +119,11 @@ export default function Navbar() {
                       to="/worker/bookings" 
                       label="My Jobs" 
                       active={pathname === '/worker/bookings' || pathname === '/worker/requests'} 
+                    />
+                    <NavTab 
+                      to="/worker/reports" 
+                      label="Reports" 
+                      active={pathname === '/worker/reports'} 
                     />
                     <NavTab 
                       to="/worker/earnings" 
@@ -264,6 +274,13 @@ export default function Navbar() {
                       My Bookings & History
                     </Link>
                     <Link 
+                      to="/customer/reports" 
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800/80"
+                    >
+                      Disputes & Reports
+                    </Link>
+                    <Link 
                       to="/customer/bulk-hire" 
                       onClick={() => setMobileMenuOpen(false)}
                       className="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800/80"
@@ -281,6 +298,13 @@ export default function Navbar() {
                       className="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800/80"
                     >
                       Job Requests & Tasks
+                    </Link>
+                    <Link 
+                      to="/worker/reports" 
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800/80"
+                    >
+                      Disputes & Reports
                     </Link>
                     <Link 
                       to="/worker/earnings" 
@@ -314,6 +338,13 @@ export default function Navbar() {
                       className="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800/80"
                     >
                       All Platform Bookings
+                    </Link>
+                    <Link 
+                      to="/admin/reports" 
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800/80"
+                    >
+                      Disputes & Reports
                     </Link>
                   </>
                 )}

@@ -3,7 +3,7 @@ import Sidebar from '../../components/Sidebar';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { 
   Users as UsersIcon, FileBarChart2, Clock, 
-  Calendar, ShieldAlert, Briefcase, Mail, Phone 
+  Calendar, ShieldAlert, Mail, Phone 
 } from 'lucide-react';
 
 export default function UsersList() {
@@ -31,7 +31,6 @@ export default function UsersList() {
     { label: 'Worker Queue', path: '/admin/verification', icon: Clock },
     { label: 'All Bookings', path: '/admin/bookings', icon: Calendar },
     { label: 'User Directory', path: '/admin/users', icon: UsersIcon },
-    { label: 'Bulk Hiring', path: '/customer/bulk-hire', icon: Briefcase },
     { label: 'Reports', path: '/admin/reports', icon: ShieldAlert }
   ];
 

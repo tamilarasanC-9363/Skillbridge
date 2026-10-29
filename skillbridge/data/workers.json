@@ -1,228 +1,477 @@
 [
   {
+    "id": "W001",
+    "rating": 4.7,
+    "category": "Plumbing",
     "workerId": "W001",
+    "completedJobs": 86,
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "experience": 6,
+    "profileImageUrl": null,
+    "reviewCount": 6,
+    "priceRange": "₹450 – ₹650",
+    "portfolio": [
+      {
+        "projectTitle": "Concealed Pipeline Replacement - RS Puram",
+        "category": "Plumbing",
+        "description": "Complete replacement of aging concealed galvanized pipes with CPVC high-pressure piping.",
+        "location": "RS Puram, Coimbatore",
+        "completionDate": "2026-10-05",
+        "imageUrl": "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Dual-Flush Cistern & Faucet Fitment - RS Puram",
+        "category": "Plumbing",
+        "description": "Installation of wall-hung WC fixtures and premium quarter-turn taps with pressure regulators.",
+        "location": "RS Puram, Coimbatore",
+        "completionDate": "2026-08-31",
+        "imageUrl": "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Apartment Sump & Tank Automation - RS Puram",
+        "category": "Plumbing",
+        "description": "Configured automated multi-inlet overhead water storage distribution with overflow bypass valves.",
+        "location": "RS Puram, Coimbatore",
+        "completionDate": "2026-07-27",
+        "imageUrl": "https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ],
+    "price": 450,
+    "location": "RS Puram, Coimbatore",
+    "updatedAt": "2026-08-20T14:20:17.756Z",
+    "bio": "Experienced Plumbing specialist with 6+ years of verified on-site service delivery in RS Puram, Coimbatore.",
+    "email": "w001@skillbridge.demo",
+    "createdAt": "2026-08-20T14:20:17.754Z",
     "userId": "W001",
     "name": "Ramesh K",
-    "email": "w001@skillbridge.demo",
-    "profileImageUrl": null,
-    "category": "Plumbing",
-    "categories": [
-      "Plumbing"
-    ],
     "skills": [
       "Pipe Leakage Repair",
       "Toilet Repair",
       "Drain Blockage"
     ],
-    "experience": 6,
-    "experienceYears": 6,
-    "rating": 4.8,
-    "reviewCount": 52,
-    "completedJobs": 86,
-    "location": "RS Puram, Coimbatore",
     "availability": true,
-    "verified": true,
-    "price": 450,
-    "priceRange": "₹450 – ₹650",
-    "bio": "Experienced Plumbing specialist with 6+ years of verified on-site service delivery in RS Puram, Coimbatore.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
     "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
-    "createdAt": "2026-08-20T14:20:17.754Z",
-    "updatedAt": "2026-08-20T14:20:17.756Z"
+    "categories": [
+      "Plumbing"
+    ],
+    "experienceYears": 6,
+    "verified": true
   },
   {
+    "id": "W002",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "availability": true,
+    "price": 400,
     "workerId": "W002",
-    "userId": "W002",
-    "name": "Suresh M",
-    "email": "w002@skillbridge.demo",
-    "profileImageUrl": null,
     "category": "Electrical",
-    "categories": [
-      "Electrical"
-    ],
+    "reviewCount": 6,
     "skills": [
       "Wiring Installation",
       "Fan Installation",
       "Switch / Socket Repair"
     ],
-    "experience": 5,
-    "experienceYears": 5,
-    "rating": 4.7,
-    "reviewCount": 41,
-    "completedJobs": 73,
-    "location": "Gandhipuram, Coimbatore",
-    "availability": true,
-    "verified": true,
-    "price": 400,
-    "priceRange": "₹400 – ₹600",
     "bio": "Experienced Electrical specialist with 5+ years of verified on-site service delivery in Gandhipuram, Coimbatore.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "profileImageUrl": null,
+    "location": "Gandhipuram, Coimbatore",
     "createdAt": "2026-08-20T14:20:17.756Z",
-    "updatedAt": "2026-08-20T14:20:17.756Z"
+    "userId": "W002",
+    "categories": [
+      "Electrical"
+    ],
+    "portfolio": [
+      {
+        "projectTitle": "Distribution Board & MCB Rewiring - Gandhipuram",
+        "category": "Electrical",
+        "description": "Upgraded 3-phase modular distribution panel with RCCB earth leakage protection.",
+        "location": "Gandhipuram, Coimbatore",
+        "completionDate": "2026-09-27",
+        "imageUrl": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Commercial Office LED & Inverter Setup - Gandhipuram",
+        "category": "Electrical",
+        "description": "Installed commercial energy-efficient LED panel lighting and 5kVA backup UPS inverter.",
+        "location": "Gandhipuram, Coimbatore",
+        "completionDate": "2026-08-23",
+        "imageUrl": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Residential Short-Circuit Isolation - Gandhipuram",
+        "category": "Electrical",
+        "description": "Diagnosed conduit insulation failure, re-pulled fire-retardant wiring across living hall.",
+        "location": "Gandhipuram, Coimbatore",
+        "completionDate": "2026-07-19",
+        "imageUrl": "https://images.unsplash.com/photo-1498084393753-b411b2d26b34?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ],
+    "experienceYears": 5,
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "experience": 5,
+    "updatedAt": "2026-08-20T14:20:17.756Z",
+    "completedJobs": 73,
+    "verified": true,
+    "name": "Suresh M",
+    "priceRange": "₹400 – ₹600",
+    "email": "w002@skillbridge.demo",
+    "rating": 4.7
   },
   {
-    "workerId": "W003",
+    "id": "W003",
     "userId": "W003",
-    "name": "Arun P",
+    "experienceYears": 7,
+    "priceRange": "₹500 – ₹700",
     "email": "w003@skillbridge.demo",
-    "profileImageUrl": null,
-    "category": "Carpentry",
-    "categories": [
-      "Carpentry"
-    ],
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.756Z",
     "skills": [
       "Door Repair",
       "Furniture Repair",
       "Cabinet Installation"
     ],
     "experience": 7,
-    "experienceYears": 7,
-    "rating": 4.9,
-    "reviewCount": 61,
-    "completedJobs": 102,
-    "location": "Saibaba Colony, Coimbatore",
-    "availability": true,
+    "name": "Arun P",
     "verified": true,
+    "completedJobs": 102,
+    "profileImageUrl": null,
+    "workerId": "W003",
+    "category": "Carpentry",
+    "portfolio": [
+      {
+        "projectTitle": "Custom Teak Modular Wardrobe - Saibaba Colony",
+        "category": "Carpentry",
+        "description": "Handcrafted floor-to-ceiling 3-door sliding wardrobe with soft-close Blum runners.",
+        "location": "Saibaba Colony, Coimbatore",
+        "completionDate": "2026-10-04",
+        "imageUrl": "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Solid Teak Main Door Frame & Polish - Saibaba Colony",
+        "category": "Carpentry",
+        "description": "Precision carved traditional entry door installed with multi-point brass security mortise lock.",
+        "location": "Saibaba Colony, Coimbatore",
+        "completionDate": "2026-08-30",
+        "imageUrl": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Kitchen Overhead Wall Cabinet Units - Saibaba Colony",
+        "category": "Carpentry",
+        "description": "Built moisture-resistant marine ply overhead cabinets with hydraulic lift hinges.",
+        "location": "Saibaba Colony, Coimbatore",
+        "completionDate": "2026-07-26",
+        "imageUrl": "https://images.unsplash.com/photo-1505798577917-a65157d3320a?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ],
+    "rating": 4.8,
+    "reviewCount": 6,
+    "availability": true,
+    "updatedAt": "2026-08-20T14:20:17.756Z",
+    "categories": [
+      "Carpentry"
+    ],
     "price": 500,
-    "priceRange": "₹500 – ₹700",
-    "bio": "Experienced Carpentry specialist with 7+ years of verified on-site service delivery in Saibaba Colony, Coimbatore.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
     "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
-    "createdAt": "2026-08-20T14:20:17.756Z",
-    "updatedAt": "2026-08-20T14:20:17.756Z"
+    "location": "Saibaba Colony, Coimbatore",
+    "bio": "Experienced Carpentry specialist with 7+ years of verified on-site service delivery in Saibaba Colony, Coimbatore."
   },
   {
-    "workerId": "W004",
-    "userId": "W004",
-    "name": "Karthik R",
-    "email": "w004@skillbridge.demo",
+    "id": "W004",
+    "experience": 4,
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "verified": true,
     "profileImageUrl": null,
-    "category": "Painting",
-    "categories": [
-      "Painting"
-    ],
+    "rating": 4.7,
+    "price": 600,
+    "createdAt": "2026-08-20T14:20:17.756Z",
+    "priceRange": "₹600 – ₹800",
+    "reviewCount": 6,
+    "updatedAt": "2026-08-20T14:20:17.756Z",
     "skills": [
       "Interior Wall Painting",
       "Exterior Painting",
       "Repainting"
     ],
-    "experience": 4,
-    "experienceYears": 4,
-    "rating": 4.5,
-    "reviewCount": 28,
-    "completedJobs": 49,
-    "location": "Peelamedu, Coimbatore",
-    "availability": true,
-    "verified": true,
-    "price": 600,
-    "priceRange": "₹600 – ₹800",
+    "email": "w004@skillbridge.demo",
     "bio": "Experienced Painting specialist with 4+ years of verified on-site service delivery in Peelamedu, Coimbatore.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "location": "Peelamedu, Coimbatore",
+    "portfolio": [
+      {
+        "projectTitle": "Velvet Touch Emulsion Finish - Peelamedu",
+        "category": "Painting",
+        "description": "Putty leveling, primer application, and dual-coat luxury sheen emulsion for 3BHK flat.",
+        "location": "Peelamedu, Coimbatore",
+        "completionDate": "2026-09-26",
+        "imageUrl": "https://images.unsplash.com/photo-1534349762230-e0cadf78f5da?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Exterior Weatherproof Silicon Coating - Peelamedu",
+        "category": "Painting",
+        "description": "High-durability antifungal exterior weather guard application on two-story villa facade.",
+        "location": "Peelamedu, Coimbatore",
+        "completionDate": "2026-08-22",
+        "imageUrl": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Textured Accent Feature Wall - Peelamedu",
+        "category": "Painting",
+        "description": "Metallic stencil and rustic textured plaster feature wall created for modern living lounge.",
+        "location": "Peelamedu, Coimbatore",
+        "completionDate": "2026-07-18",
+        "imageUrl": "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ],
+    "name": "Karthik R",
+    "availability": true,
+    "workerId": "W004",
+    "category": "Painting",
+    "userId": "W004",
+    "completedJobs": 49,
+    "categories": [
+      "Painting"
+    ],
     "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
-    "createdAt": "2026-08-20T14:20:17.756Z",
-    "updatedAt": "2026-08-20T14:20:17.756Z"
+    "experienceYears": 4
   },
   {
-    "workerId": "W005",
+    "id": "W005",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "updatedAt": "2026-08-20T14:20:17.756Z",
     "userId": "W005",
-    "name": "Manoj S",
-    "email": "w005@skillbridge.demo",
-    "profileImageUrl": null,
-    "category": "Cleaning",
-    "categories": [
-      "Cleaning"
+    "bio": "Experienced Cleaning specialist with 3+ years of verified on-site service delivery in Singanallur, Coimbatore.",
+    "portfolio": [
+      {
+        "projectTitle": "Post-Renovation Heavy Debris Clean - Singanallur",
+        "category": "Cleaning",
+        "description": "Comprehensive chemical scrubbing of paint splatters, grout haze removal, and window buffing.",
+        "location": "Singanallur, Coimbatore",
+        "completionDate": "2026-10-03",
+        "imageUrl": "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Kitchen & Chimney Degreasing Service - Singanallur",
+        "category": "Cleaning",
+        "description": "Industrial steam cleaning and baffle filter decarbonization for commercial residential kitchen.",
+        "location": "Singanallur, Coimbatore",
+        "completionDate": "2026-08-29",
+        "imageUrl": "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Hospital-Grade Bathroom Sanitization - Singanallur",
+        "category": "Cleaning",
+        "description": "Scale descaling on ceramic tiles, fixture polishing, and high-pressure steam floor disinfection.",
+        "location": "Singanallur, Coimbatore",
+        "completionDate": "2026-07-25",
+        "imageUrl": "https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
     ],
+    "completedJobs": 57,
+    "priceRange": "₹350 – ₹550",
+    "workerId": "W005",
+    "category": "Cleaning",
+    "experience": 3,
+    "name": "Manoj S",
+    "location": "Singanallur, Coimbatore",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "experienceYears": 3,
+    "email": "w005@skillbridge.demo",
     "skills": [
       "Home Deep Cleaning",
       "Kitchen Cleaning",
       "Bathroom Cleaning"
     ],
-    "experience": 3,
-    "experienceYears": 3,
-    "rating": 4.4,
-    "reviewCount": 25,
-    "completedJobs": 57,
-    "location": "Singanallur, Coimbatore",
+    "price": 350,
+    "categories": [
+      "Cleaning"
+    ],
+    "rating": 4.8,
     "availability": true,
     "verified": true,
-    "price": 350,
-    "priceRange": "₹350 – ₹550",
-    "bio": "Experienced Cleaning specialist with 3+ years of verified on-site service delivery in Singanallur, Coimbatore.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
-    "createdAt": "2026-08-20T14:20:17.756Z",
-    "updatedAt": "2026-08-20T14:20:17.756Z"
+    "reviewCount": 6,
+    "profileImageUrl": null,
+    "createdAt": "2026-08-20T14:20:17.756Z"
   },
   {
-    "workerId": "W006",
+    "id": "W006",
+    "experience": 8,
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
     "userId": "W006",
-    "name": "Vijay K",
-    "email": "w006@skillbridge.demo",
-    "profileImageUrl": null,
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "workerId": "W006",
     "category": "Plumbing",
-    "categories": [
-      "Plumbing"
-    ],
+    "reviewCount": 6,
+    "profileImageUrl": null,
+    "location": "Gandhipuram, Coimbatore",
+    "completedJobs": 118,
+    "email": "w006@skillbridge.demo",
+    "priceRange": "₹550 – ₹750",
     "skills": [
       "Tap / Faucet Repair",
       "Water Tank Installation",
       "Pipe Installation"
     ],
-    "experience": 8,
-    "experienceYears": 8,
-    "rating": 4.8,
-    "reviewCount": 67,
-    "completedJobs": 118,
-    "location": "Gandhipuram, Coimbatore",
-    "availability": true,
-    "verified": true,
-    "price": 550,
-    "priceRange": "₹550 – ₹750",
-    "bio": "Experienced Plumbing specialist with 8+ years of verified on-site service delivery in Gandhipuram, Coimbatore.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
     "createdAt": "2026-08-20T14:20:17.756Z",
-    "updatedAt": "2026-08-20T14:20:17.756Z"
+    "updatedAt": "2026-08-20T14:20:17.756Z",
+    "price": 550,
+    "availability": true,
+    "portfolio": [
+      {
+        "projectTitle": "Concealed Pipeline Replacement - Gandhipuram",
+        "category": "Plumbing",
+        "description": "Complete replacement of aging concealed galvanized pipes with CPVC high-pressure piping.",
+        "location": "Gandhipuram, Coimbatore",
+        "completionDate": "2026-09-25",
+        "imageUrl": "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Dual-Flush Cistern & Faucet Fitment - Gandhipuram",
+        "category": "Plumbing",
+        "description": "Installation of wall-hung WC fixtures and premium quarter-turn taps with pressure regulators.",
+        "location": "Gandhipuram, Coimbatore",
+        "completionDate": "2026-08-21",
+        "imageUrl": "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Apartment Sump & Tank Automation - Gandhipuram",
+        "category": "Plumbing",
+        "description": "Configured automated multi-inlet overhead water storage distribution with overflow bypass valves.",
+        "location": "Gandhipuram, Coimbatore",
+        "completionDate": "2026-07-17",
+        "imageUrl": "https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ],
+    "rating": 4.7,
+    "bio": "Experienced Plumbing specialist with 8+ years of verified on-site service delivery in Gandhipuram, Coimbatore.",
+    "name": "Vijay K",
+    "verified": true,
+    "experienceYears": 8,
+    "categories": [
+      "Plumbing"
+    ]
   },
   {
-    "workerId": "W007",
-    "userId": "W007",
-    "name": "Prakash T",
-    "email": "w007@skillbridge.demo",
-    "profileImageUrl": null,
-    "category": "Electrical",
-    "categories": [
-      "Electrical"
-    ],
+    "id": "W007",
+    "location": "Peelamedu, Coimbatore",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "experienceYears": 6,
     "skills": [
       "Short-Circuit Troubleshooting",
       "Wiring Installation",
       "Light Installation"
     ],
-    "experience": 6,
-    "experienceYears": 6,
-    "rating": 4.6,
-    "reviewCount": 38,
-    "completedJobs": 81,
-    "location": "Peelamedu, Coimbatore",
-    "availability": true,
-    "verified": true,
-    "price": 450,
-    "priceRange": "₹450 – ₹650",
-    "bio": "Experienced Electrical specialist with 6+ years of verified on-site service delivery in Peelamedu, Coimbatore.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "name": "Prakash T",
+    "userId": "W007",
+    "categories": [
+      "Electrical"
+    ],
+    "email": "w007@skillbridge.demo",
+    "workerId": "W007",
+    "category": "Electrical",
     "createdAt": "2026-08-20T14:20:17.756Z",
-    "updatedAt": "2026-08-20T14:20:17.756Z"
+    "updatedAt": "2026-08-20T14:20:17.756Z",
+    "verified": true,
+    "experience": 6,
+    "bio": "Experienced Electrical specialist with 6+ years of verified on-site service delivery in Peelamedu, Coimbatore.",
+    "price": 450,
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "profileImageUrl": null,
+    "completedJobs": 81,
+    "portfolio": [
+      {
+        "projectTitle": "Distribution Board & MCB Rewiring - Peelamedu",
+        "category": "Electrical",
+        "description": "Upgraded 3-phase modular distribution panel with RCCB earth leakage protection.",
+        "location": "Peelamedu, Coimbatore",
+        "completionDate": "2026-10-02",
+        "imageUrl": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Commercial Office LED & Inverter Setup - Peelamedu",
+        "category": "Electrical",
+        "description": "Installed commercial energy-efficient LED panel lighting and 5kVA backup UPS inverter.",
+        "location": "Peelamedu, Coimbatore",
+        "completionDate": "2026-08-28",
+        "imageUrl": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Residential Short-Circuit Isolation - Peelamedu",
+        "category": "Electrical",
+        "description": "Diagnosed conduit insulation failure, re-pulled fire-retardant wiring across living hall.",
+        "location": "Peelamedu, Coimbatore",
+        "completionDate": "2026-07-24",
+        "imageUrl": "https://images.unsplash.com/photo-1498084393753-b411b2d26b34?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ],
+    "availability": true,
+    "reviewCount": 6,
+    "rating": 4.8,
+    "priceRange": "₹450 – ₹650"
   },
   {
-    "workerId": "W008",
-    "userId": "W008",
-    "name": "Dinesh V",
-    "email": "w008@skillbridge.demo",
-    "profileImageUrl": null,
+    "id": "W008",
     "category": "Mason / Construction",
+    "workerId": "W008",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "profileImageUrl": null,
+    "availability": true,
+    "updatedAt": "2026-08-20T14:20:17.756Z",
+    "price": 700,
+    "completedJobs": 97,
+    "reviewCount": 6,
+    "name": "Dinesh V",
+    "verificationEligibility": {
+      "eligibilityScore": 100,
+      "isVerified": true,
+      "badgeLabel": "Verified Worker",
+      "isEligible": true,
+      "metCount": 3,
+      "criteria": {
+        "experience": {
+          "detail": "9 Years field experience",
+          "current": 9,
+          "required": 2,
+          "met": true,
+          "label": "Trade Experience (≥ 2 Years)"
+        },
+        "workVerification": {
+          "label": "SkillBridge Work Verification",
+          "met": true,
+          "status": "Approved by Admin",
+          "detail": "Profile photo, proof of work & trade credentials approved by Admin"
+        },
+        "rating": {
+          "current": 4,
+          "met": true,
+          "label": "Client Satisfaction (Rating ≥ 4.0)",
+          "required": 4,
+          "detail": "4 / 5.0 Star Rating"
+        }
+      },
+      "totalCriteria": 3,
+      "disclaimer": "SkillBridge Work Verification audits practical proof of work and client feedback before issuing Verified Worker badges."
+    },
+    "verified": true,
+    "rating": 4.7,
+    "experience": 9,
     "categories": [
       "Mason / Construction"
     ],
@@ -231,338 +480,704 @@
       "Brick Wall Construction",
       "Plastering"
     ],
-    "experience": 9,
-    "experienceYears": 9,
-    "rating": 4.7,
-    "reviewCount": 54,
-    "completedJobs": 96,
+    "email": "w008@skillbridge.demo",
+    "createdAt": "2026-08-20T14:20:17.756Z",
     "location": "Ukkadam, Coimbatore",
-    "availability": true,
-    "verified": true,
-    "price": 700,
+    "userId": "W008",
     "priceRange": "₹700 – ₹900",
+    "portfolio": [
+      {
+        "projectTitle": "Vitrified Floor Tiling & Grouting - Ukkadam",
+        "category": "Mason / Construction",
+        "description": "Precision laser-leveled anti-skid floor tiling with epoxy grouting in master kitchen.",
+        "location": "Ukkadam, Coimbatore",
+        "completionDate": "2026-10-09",
+        "imageUrl": "https://images.unsplash.com/photo-1541888946425-d0fbb186f5f7?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Interlocking Paver Driveway & Wall - Ukkadam",
+        "category": "Mason / Construction",
+        "description": "Constructed brick perimeter boundary wall and laid 60mm heavy vehicle interlocking pavers.",
+        "location": "Ukkadam, Coimbatore",
+        "completionDate": "2026-09-04",
+        "imageUrl": "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Structural Plastering & Sealing - Ukkadam",
+        "category": "Mason / Construction",
+        "description": "Repaired cracked exterior masonry with polymer-modified cement mortar and elastomeric basecoat.",
+        "location": "Ukkadam, Coimbatore",
+        "completionDate": "2026-07-31",
+        "imageUrl": "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ],
     "bio": "Experienced Mason / Construction specialist with 9+ years of verified on-site service delivery in Ukkadam, Coimbatore.",
     "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
-    "createdAt": "2026-08-20T14:20:17.756Z",
-    "updatedAt": "2026-08-20T14:20:17.756Z"
+    "experienceYears": 9
   },
   {
-    "workerId": "W009",
-    "userId": "W009",
-    "name": "Sanjay R",
-    "email": "w009@skillbridge.demo",
-    "profileImageUrl": null,
-    "category": "Painting",
-    "categories": [
-      "Painting"
+    "id": "W009",
+    "updatedAt": "2026-08-20T14:20:17.756Z",
+    "completedJobs": 64,
+    "location": "Vadavalli, Coimbatore",
+    "bio": "Experienced Painting specialist with 5+ years of verified on-site service delivery in Vadavalli, Coimbatore.",
+    "portfolio": [
+      {
+        "projectTitle": "Velvet Touch Emulsion Finish - Vadavalli",
+        "category": "Painting",
+        "description": "Putty leveling, primer application, and dual-coat luxury sheen emulsion for 3BHK flat.",
+        "location": "Vadavalli, Coimbatore",
+        "completionDate": "2026-10-01",
+        "imageUrl": "https://images.unsplash.com/photo-1534349762230-e0cadf78f5da?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Exterior Weatherproof Silicon Coating - Vadavalli",
+        "category": "Painting",
+        "description": "High-durability antifungal exterior weather guard application on two-story villa facade.",
+        "location": "Vadavalli, Coimbatore",
+        "completionDate": "2026-08-27",
+        "imageUrl": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Textured Accent Feature Wall - Vadavalli",
+        "category": "Painting",
+        "description": "Metallic stencil and rustic textured plaster feature wall created for modern living lounge.",
+        "location": "Vadavalli, Coimbatore",
+        "completionDate": "2026-07-23",
+        "imageUrl": "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
     ],
     "skills": [
       "Exterior Painting",
       "Repainting",
       "Ceiling Painting"
     ],
-    "experience": 5,
-    "experienceYears": 5,
-    "rating": 4.6,
-    "reviewCount": 31,
-    "completedJobs": 64,
-    "location": "Vadavalli, Coimbatore",
     "availability": true,
-    "verified": true,
-    "price": 600,
     "priceRange": "₹600 – ₹800",
-    "bio": "Experienced Painting specialist with 5+ years of verified on-site service delivery in Vadavalli, Coimbatore.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "email": "w009@skillbridge.demo",
+    "experience": 5,
     "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
-    "createdAt": "2026-08-20T14:20:17.756Z",
-    "updatedAt": "2026-08-20T14:20:17.756Z"
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "experienceYears": 5,
+    "workerId": "W009",
+    "category": "Painting",
+    "userId": "W009",
+    "verified": true,
+    "name": "Sanjay R",
+    "categories": [
+      "Painting"
+    ],
+    "price": 600,
+    "reviewCount": 6,
+    "profileImageUrl": null,
+    "rating": 4.7,
+    "createdAt": "2026-08-20T14:20:17.756Z"
   },
   {
-    "workerId": "W010",
-    "userId": "W010",
-    "name": "Mohan K",
-    "email": "w010@skillbridge.demo",
+    "id": "W010",
+    "createdAt": "2026-08-20T14:20:17.756Z",
     "profileImageUrl": null,
-    "category": "Cleaning",
+    "location": "Race Course, Coimbatore",
     "categories": [
       "Cleaning"
     ],
+    "price": 400,
+    "rating": 4.8,
+    "name": "Mohan K",
+    "availability": true,
+    "bio": "Experienced Cleaning specialist with 4+ years of verified on-site service delivery in Race Course, Coimbatore.",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "completedJobs": 46,
+    "workerId": "W010",
+    "category": "Cleaning",
+    "reviewCount": 6,
+    "verified": false,
+    "priceRange": "₹400 – ₹600",
+    "userId": "W010",
+    "experienceYears": 4,
+    "experience": 4,
+    "email": "w010@skillbridge.demo",
+    "portfolio": [
+      {
+        "projectTitle": "Post-Renovation Heavy Debris Clean - Race Course",
+        "category": "Cleaning",
+        "description": "Comprehensive chemical scrubbing of paint splatters, grout haze removal, and window buffing.",
+        "location": "Race Course, Coimbatore",
+        "completionDate": "2026-10-03",
+        "imageUrl": "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Kitchen & Chimney Degreasing Service - Race Course",
+        "category": "Cleaning",
+        "description": "Industrial steam cleaning and baffle filter decarbonization for commercial residential kitchen.",
+        "location": "Race Course, Coimbatore",
+        "completionDate": "2026-08-29",
+        "imageUrl": "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Hospital-Grade Bathroom Sanitization - Race Course",
+        "category": "Cleaning",
+        "description": "Scale descaling on ceramic tiles, fixture polishing, and high-pressure steam floor disinfection.",
+        "location": "Race Course, Coimbatore",
+        "completionDate": "2026-07-25",
+        "imageUrl": "https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ],
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
     "skills": [
       "Office Cleaning",
       "Post-Construction Cleaning",
       "Water Tank Cleaning"
     ],
-    "experience": 4,
-    "experienceYears": 4,
-    "rating": 4.3,
-    "reviewCount": 22,
-    "completedJobs": 46,
-    "location": "Race Course, Coimbatore",
-    "availability": true,
-    "verified": false,
-    "price": 400,
-    "priceRange": "₹400 – ₹600",
-    "bio": "Experienced Cleaning specialist with 4+ years of verified on-site service delivery in Race Course, Coimbatore.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
-    "createdAt": "2026-08-20T14:20:17.756Z",
     "updatedAt": "2026-08-20T14:20:17.756Z"
   },
   {
-    "workerId": "W011",
-    "userId": "W011",
+    "id": "W011",
+    "experienceYears": 2,
+    "rating": 4.7,
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "verified": false,
     "name": "Selvam P",
-    "email": "w011@skillbridge.demo",
-    "profileImageUrl": null,
-    "category": "Plumbing",
+    "createdAt": "2026-08-20T14:20:17.756Z",
+    "completedJobs": 23,
     "categories": [
       "Plumbing"
     ],
+    "email": "w011@skillbridge.demo",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "price": 350,
+    "updatedAt": "2026-08-20T14:20:17.756Z",
+    "profileImageUrl": null,
+    "experience": 2,
+    "reviewCount": 6,
+    "userId": "W011",
+    "portfolio": [
+      {
+        "projectTitle": "Concealed Pipeline Replacement - Kuniyamuthur",
+        "category": "Plumbing",
+        "description": "Complete replacement of aging concealed galvanized pipes with CPVC high-pressure piping.",
+        "location": "Kuniyamuthur, Coimbatore",
+        "completionDate": "2026-09-25",
+        "imageUrl": "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Dual-Flush Cistern & Faucet Fitment - Kuniyamuthur",
+        "category": "Plumbing",
+        "description": "Installation of wall-hung WC fixtures and premium quarter-turn taps with pressure regulators.",
+        "location": "Kuniyamuthur, Coimbatore",
+        "completionDate": "2026-08-21",
+        "imageUrl": "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Apartment Sump & Tank Automation - Kuniyamuthur",
+        "category": "Plumbing",
+        "description": "Configured automated multi-inlet overhead water storage distribution with overflow bypass valves.",
+        "location": "Kuniyamuthur, Coimbatore",
+        "completionDate": "2026-07-17",
+        "imageUrl": "https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ],
+    "workerId": "W011",
+    "category": "Plumbing",
+    "location": "Kuniyamuthur, Coimbatore",
+    "availability": true,
+    "bio": "Experienced Plumbing specialist with 2+ years of verified on-site service delivery in Kuniyamuthur, Coimbatore.",
+    "priceRange": "₹350 – ₹550",
     "skills": [
       "Toilet Repair",
       "Drain Blockage",
       "Pipe Leakage Repair"
-    ],
-    "experience": 2,
-    "experienceYears": 2,
-    "rating": 4.2,
-    "reviewCount": 14,
-    "completedJobs": 23,
-    "location": "Kuniyamuthur, Coimbatore",
-    "availability": true,
-    "verified": false,
-    "price": 350,
-    "priceRange": "₹350 – ₹550",
-    "bio": "Experienced Plumbing specialist with 2+ years of verified on-site service delivery in Kuniyamuthur, Coimbatore.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
-    "createdAt": "2026-08-20T14:20:17.756Z",
-    "updatedAt": "2026-08-20T14:20:17.756Z"
+    ]
   },
   {
-    "workerId": "W012",
+    "id": "W012",
     "userId": "W012",
-    "name": "Hari S",
+    "location": "Saibaba Colony, Coimbatore",
     "email": "w012@skillbridge.demo",
-    "profileImageUrl": null,
-    "category": "Electrical",
-    "categories": [
-      "Electrical"
-    ],
+    "experienceYears": 3,
+    "bio": "Experienced Electrical specialist with 3+ years of verified on-site service delivery in Saibaba Colony, Coimbatore.",
+    "name": "Hari S",
+    "createdAt": "2026-08-20T14:20:17.756Z",
     "skills": [
       "Fan Installation",
       "Switch / Socket Repair",
       "Light Installation"
     ],
-    "experience": 3,
-    "experienceYears": 3,
-    "rating": 4.5,
-    "reviewCount": 19,
-    "completedJobs": 35,
-    "location": "Saibaba Colony, Coimbatore",
-    "availability": true,
-    "verified": true,
-    "price": 400,
-    "priceRange": "₹400 – ₹600",
-    "bio": "Experienced Electrical specialist with 3+ years of verified on-site service delivery in Saibaba Colony, Coimbatore.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "categories": [
+      "Electrical"
+    ],
     "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
-    "createdAt": "2026-08-20T14:20:17.756Z",
-    "updatedAt": "2026-08-20T14:20:17.757Z"
+    "availability": true,
+    "workerId": "W012",
+    "category": "Electrical",
+    "portfolio": [
+      {
+        "projectTitle": "Distribution Board & MCB Rewiring - Saibaba Colony",
+        "category": "Electrical",
+        "description": "Upgraded 3-phase modular distribution panel with RCCB earth leakage protection.",
+        "location": "Saibaba Colony, Coimbatore",
+        "completionDate": "2026-10-02",
+        "imageUrl": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Commercial Office LED & Inverter Setup - Saibaba Colony",
+        "category": "Electrical",
+        "description": "Installed commercial energy-efficient LED panel lighting and 5kVA backup UPS inverter.",
+        "location": "Saibaba Colony, Coimbatore",
+        "completionDate": "2026-08-28",
+        "imageUrl": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Residential Short-Circuit Isolation - Saibaba Colony",
+        "category": "Electrical",
+        "description": "Diagnosed conduit insulation failure, re-pulled fire-retardant wiring across living hall.",
+        "location": "Saibaba Colony, Coimbatore",
+        "completionDate": "2026-07-24",
+        "imageUrl": "https://images.unsplash.com/photo-1498084393753-b411b2d26b34?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ],
+    "rating": 4.7,
+    "verified": true,
+    "profileImageUrl": null,
+    "reviewCount": 6,
+    "updatedAt": "2026-08-20T14:20:17.757Z",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "experience": 3,
+    "priceRange": "₹400 – ₹600",
+    "price": 400,
+    "completedJobs": 35
   },
   {
-    "workerId": "W013",
-    "userId": "W013",
-    "name": "Gopi N",
-    "email": "w013@skillbridge.demo",
-    "profileImageUrl": null,
-    "category": "Carpentry",
+    "id": "W013",
     "categories": [
       "Carpentry"
     ],
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "name": "Gopi N",
+    "rating": 4.8,
+    "reviewCount": 6,
+    "profileImageUrl": null,
+    "verified": true,
+    "email": "w013@skillbridge.demo",
+    "bio": "Experienced Carpentry specialist with 10+ years of verified on-site service delivery in RS Puram, Coimbatore.",
+    "priceRange": "₹650 – ₹850",
+    "availability": true,
+    "price": 650,
+    "workerId": "W013",
+    "category": "Carpentry",
+    "completedJobs": 141,
+    "userId": "W013",
+    "portfolio": [
+      {
+        "projectTitle": "Custom Teak Modular Wardrobe - RS Puram",
+        "category": "Carpentry",
+        "description": "Handcrafted floor-to-ceiling 3-door sliding wardrobe with soft-close Blum runners.",
+        "location": "RS Puram, Coimbatore",
+        "completionDate": "2026-10-09",
+        "imageUrl": "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Solid Teak Main Door Frame & Polish - RS Puram",
+        "category": "Carpentry",
+        "description": "Precision carved traditional entry door installed with multi-point brass security mortise lock.",
+        "location": "RS Puram, Coimbatore",
+        "completionDate": "2026-09-04",
+        "imageUrl": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Kitchen Overhead Wall Cabinet Units - RS Puram",
+        "category": "Carpentry",
+        "description": "Built moisture-resistant marine ply overhead cabinets with hydraulic lift hinges.",
+        "location": "RS Puram, Coimbatore",
+        "completionDate": "2026-07-31",
+        "imageUrl": "https://images.unsplash.com/photo-1505798577917-a65157d3320a?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ],
+    "location": "RS Puram, Coimbatore",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
     "skills": [
       "Furniture Repair",
       "Door Repair",
       "Custom Furniture"
     ],
+    "updatedAt": "2026-08-20T14:20:17.757Z",
     "experience": 10,
-    "experienceYears": 10,
-    "rating": 4.9,
-    "reviewCount": 73,
-    "completedJobs": 141,
-    "location": "RS Puram, Coimbatore",
-    "availability": true,
-    "verified": true,
-    "price": 650,
-    "priceRange": "₹650 – ₹850",
-    "bio": "Experienced Carpentry specialist with 10+ years of verified on-site service delivery in RS Puram, Coimbatore.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
-    "createdAt": "2026-08-20T14:20:17.757Z",
-    "updatedAt": "2026-08-20T14:20:17.757Z"
+    "experienceYears": 10
   },
   {
-    "workerId": "W014",
-    "userId": "W014",
+    "id": "W014",
+    "completedJobs": 58,
+    "experienceYears": 6,
+    "price": 650,
+    "priceRange": "₹650 – ₹850",
     "name": "Ravi M",
-    "email": "w014@skillbridge.demo",
-    "profileImageUrl": null,
-    "category": "Mason / Construction",
-    "categories": [
-      "Mason / Construction"
+    "verified": false,
+    "userId": "W014",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "bio": "Experienced Mason / Construction specialist with 6+ years of verified on-site service delivery in Town Hall, Coimbatore.",
+    "portfolio": [
+      {
+        "projectTitle": "Vitrified Floor Tiling & Grouting - Town Hall",
+        "category": "Mason / Construction",
+        "description": "Precision laser-leveled anti-skid floor tiling with epoxy grouting in master kitchen.",
+        "location": "Town Hall, Coimbatore",
+        "completionDate": "2026-10-01",
+        "imageUrl": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Interlocking Paver Driveway & Wall - Town Hall",
+        "category": "Mason / Construction",
+        "description": "Constructed brick perimeter boundary wall and laid 60mm heavy vehicle interlocking pavers.",
+        "location": "Town Hall, Coimbatore",
+        "completionDate": "2026-08-27",
+        "imageUrl": "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Structural Plastering & Sealing - Town Hall",
+        "category": "Mason / Construction",
+        "description": "Repaired cracked exterior masonry with polymer-modified cement mortar and elastomeric basecoat.",
+        "location": "Town Hall, Coimbatore",
+        "completionDate": "2026-07-23",
+        "imageUrl": "https://images.unsplash.com/photo-1541888946425-d0fbb186f5f7?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
     ],
+    "experience": 6,
     "skills": [
       "Cement Work",
       "Plastering",
       "Tile Installation"
     ],
-    "experience": 6,
-    "experienceYears": 6,
-    "rating": 4.4,
-    "reviewCount": 30,
-    "completedJobs": 58,
-    "location": "Town Hall, Coimbatore",
-    "availability": true,
-    "verified": false,
-    "price": 650,
-    "priceRange": "₹650 – ₹850",
-    "bio": "Experienced Mason / Construction specialist with 6+ years of verified on-site service delivery in Town Hall, Coimbatore.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "updatedAt": "2026-08-20T14:20:17.757Z",
     "createdAt": "2026-08-20T14:20:17.757Z",
-    "updatedAt": "2026-08-20T14:20:17.757Z"
+    "profileImageUrl": null,
+    "rating": 4.8,
+    "availability": true,
+    "location": "Town Hall, Coimbatore",
+    "categories": [
+      "Mason / Construction"
+    ],
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "email": "w014@skillbridge.demo",
+    "workerId": "W014",
+    "category": "Mason / Construction",
+    "reviewCount": 6
   },
   {
-    "workerId": "W015",
-    "userId": "W015",
-    "name": "Bala J",
-    "email": "w015@skillbridge.demo",
-    "profileImageUrl": null,
-    "category": "Cleaning",
+    "id": "W015",
     "categories": [
       "Cleaning"
     ],
+    "completedJobs": 19,
+    "updatedAt": "2026-08-20T14:20:17.757Z",
+    "userId": "W015",
+    "reviewCount": 6,
+    "portfolio": [
+      {
+        "projectTitle": "Post-Renovation Heavy Debris Clean - Peelamedu",
+        "category": "Cleaning",
+        "description": "Comprehensive chemical scrubbing of paint splatters, grout haze removal, and window buffing.",
+        "location": "Peelamedu, Coimbatore",
+        "completionDate": "2026-10-08",
+        "imageUrl": "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Kitchen & Chimney Degreasing Service - Peelamedu",
+        "category": "Cleaning",
+        "description": "Industrial steam cleaning and baffle filter decarbonization for commercial residential kitchen.",
+        "location": "Peelamedu, Coimbatore",
+        "completionDate": "2026-09-03",
+        "imageUrl": "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Hospital-Grade Bathroom Sanitization - Peelamedu",
+        "category": "Cleaning",
+        "description": "Scale descaling on ceramic tiles, fixture polishing, and high-pressure steam floor disinfection.",
+        "location": "Peelamedu, Coimbatore",
+        "completionDate": "2026-07-30",
+        "imageUrl": "https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ],
+    "name": "Bala J",
+    "availability": true,
     "skills": [
       "Bathroom Cleaning",
       "Kitchen Cleaning",
       "Home Deep Cleaning"
     ],
-    "experience": 2,
-    "experienceYears": 2,
-    "rating": 4.1,
-    "reviewCount": 12,
-    "completedJobs": 19,
-    "location": "Peelamedu, Coimbatore",
-    "availability": true,
-    "verified": false,
-    "price": 300,
-    "priceRange": "₹300 – ₹500",
     "bio": "Experienced Cleaning specialist with 2+ years of verified on-site service delivery in Peelamedu, Coimbatore.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "price": 300,
+    "experienceYears": 2,
+    "verified": false,
+    "rating": 4.8,
+    "email": "w015@skillbridge.demo",
+    "workerId": "W015",
+    "category": "Cleaning",
+    "priceRange": "₹300 – ₹500",
     "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "profileImageUrl": null,
+    "experience": 2,
     "createdAt": "2026-08-20T14:20:17.757Z",
-    "updatedAt": "2026-08-20T14:20:17.757Z"
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "location": "Peelamedu, Coimbatore"
   },
   {
-    "workerId": "W016",
+    "id": "W016",
+    "experience": 4,
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
     "userId": "W016",
-    "name": "Sathish R",
-    "email": "w016@skillbridge.demo",
-    "profileImageUrl": null,
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "workerId": "W016",
     "category": "Plumbing",
-    "categories": [
-      "Plumbing"
-    ],
+    "reviewCount": 6,
+    "location": "Saravanampatti, Coimbatore",
+    "profileImageUrl": null,
+    "completedJobs": 51,
+    "email": "w016@skillbridge.demo",
     "skills": [
       "Water Tank Installation",
       "Pipe Installation",
       "Tap / Faucet Repair"
     ],
-    "experience": 4,
-    "experienceYears": 4,
-    "rating": 4.6,
-    "reviewCount": 29,
-    "completedJobs": 51,
-    "location": "Saravanampatti, Coimbatore",
-    "availability": true,
-    "verified": true,
-    "price": 500,
     "priceRange": "₹500 – ₹700",
-    "bio": "Experienced Plumbing specialist with 4+ years of verified on-site service delivery in Saravanampatti, Coimbatore.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
     "createdAt": "2026-08-20T14:20:17.757Z",
-    "updatedAt": "2026-08-20T14:20:17.757Z"
+    "updatedAt": "2026-08-20T14:20:17.757Z",
+    "price": 500,
+    "availability": true,
+    "portfolio": [
+      {
+        "projectTitle": "Concealed Pipeline Replacement - Saravanampatti",
+        "category": "Plumbing",
+        "description": "Complete replacement of aging concealed galvanized pipes with CPVC high-pressure piping.",
+        "location": "Saravanampatti, Coimbatore",
+        "completionDate": "2026-09-30",
+        "imageUrl": "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Dual-Flush Cistern & Faucet Fitment - Saravanampatti",
+        "category": "Plumbing",
+        "description": "Installation of wall-hung WC fixtures and premium quarter-turn taps with pressure regulators.",
+        "location": "Saravanampatti, Coimbatore",
+        "completionDate": "2026-08-26",
+        "imageUrl": "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Apartment Sump & Tank Automation - Saravanampatti",
+        "category": "Plumbing",
+        "description": "Configured automated multi-inlet overhead water storage distribution with overflow bypass valves.",
+        "location": "Saravanampatti, Coimbatore",
+        "completionDate": "2026-07-22",
+        "imageUrl": "https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ],
+    "rating": 4.7,
+    "bio": "Experienced Plumbing specialist with 4+ years of verified on-site service delivery in Saravanampatti, Coimbatore.",
+    "name": "Sathish R",
+    "verified": true,
+    "experienceYears": 4,
+    "categories": [
+      "Plumbing"
+    ]
   },
   {
-    "workerId": "W017",
-    "userId": "W017",
-    "name": "Rahul S",
-    "email": "w017@skillbridge.demo",
-    "profileImageUrl": null,
-    "category": "Cleaning",
-    "categories": [
-      "Cleaning"
+    "id": "W017",
+    "portfolio": [
+      {
+        "projectTitle": "Post-Renovation Heavy Debris Clean - Saibaba Colony",
+        "category": "Cleaning",
+        "description": "Comprehensive chemical scrubbing of paint splatters, grout haze removal, and window buffing.",
+        "location": "Saibaba Colony, Coimbatore",
+        "completionDate": "2026-10-07",
+        "imageUrl": "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Kitchen & Chimney Degreasing Service - Saibaba Colony",
+        "category": "Cleaning",
+        "description": "Industrial steam cleaning and baffle filter decarbonization for commercial residential kitchen.",
+        "location": "Saibaba Colony, Coimbatore",
+        "completionDate": "2026-09-02",
+        "imageUrl": "https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Hospital-Grade Bathroom Sanitization - Saibaba Colony",
+        "category": "Cleaning",
+        "description": "Scale descaling on ceramic tiles, fixture polishing, and high-pressure steam floor disinfection.",
+        "location": "Saibaba Colony, Coimbatore",
+        "completionDate": "2026-07-29",
+        "imageUrl": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
     ],
     "skills": [
       "Kitchen Cleaning",
       "Office Cleaning",
       "Post-Construction Cleaning"
     ],
-    "experience": 4,
-    "experienceYears": 4,
-    "rating": 4.6,
-    "reviewCount": 39,
-    "completedJobs": 64,
-    "location": "Saibaba Colony, Coimbatore",
-    "availability": true,
-    "verified": true,
-    "price": 400,
-    "priceRange": "₹400 – ₹600",
-    "bio": "Experienced Cleaning specialist with 4+ years of verified on-site service delivery in Saibaba Colony, Coimbatore.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
-    "createdAt": "2026-08-20T14:20:17.757Z",
-    "updatedAt": "2026-08-20T14:20:17.757Z"
-  },
-  {
-    "workerId": "W018",
-    "userId": "W018",
-    "name": "Imran A",
-    "email": "w018@skillbridge.demo",
-    "profileImageUrl": null,
-    "category": "Cleaning",
+    "updatedAt": "2026-08-20T14:20:17.757Z",
     "categories": [
       "Cleaning"
     ],
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "price": 400,
+    "userId": "W017",
+    "experienceYears": 4,
+    "verified": true,
+    "name": "Rahul S",
+    "reviewCount": 6,
+    "availability": true,
+    "category": "Cleaning",
+    "workerId": "W017",
+    "priceRange": "₹400 – ₹600",
+    "completedJobs": 64,
+    "email": "w017@skillbridge.demo",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "rating": 4.8,
+    "experience": 4,
+    "profileImageUrl": null,
+    "location": "Saibaba Colony, Coimbatore",
+    "bio": "Experienced Cleaning specialist with 4+ years of verified on-site service delivery in Saibaba Colony, Coimbatore."
+  },
+  {
+    "id": "W018",
+    "experience": 6,
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "userId": "W018",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "workerId": "W018",
+    "category": "Cleaning",
+    "reviewCount": 6,
+    "location": "Kalapatti, Coimbatore",
+    "profileImageUrl": null,
+    "completedJobs": 97,
+    "email": "w018@skillbridge.demo",
     "skills": [
       "Post-Construction Cleaning",
       "Water Tank Cleaning"
     ],
-    "experience": 6,
-    "experienceYears": 6,
-    "rating": 4.9,
-    "reviewCount": 58,
-    "completedJobs": 97,
-    "location": "Kalapatti, Coimbatore",
-    "availability": true,
-    "verified": true,
-    "price": 450,
     "priceRange": "₹450 – ₹650",
-    "bio": "Experienced Cleaning specialist with 6+ years of verified on-site service delivery in Kalapatti, Coimbatore.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
     "createdAt": "2026-08-20T14:20:17.757Z",
-    "updatedAt": "2026-08-20T14:20:17.757Z"
+    "updatedAt": "2026-08-20T14:20:17.757Z",
+    "price": 450,
+    "availability": true,
+    "portfolio": [
+      {
+        "projectTitle": "Post-Renovation Heavy Debris Clean - Kalapatti",
+        "category": "Cleaning",
+        "description": "Comprehensive chemical scrubbing of paint splatters, grout haze removal, and window buffing.",
+        "location": "Kalapatti, Coimbatore",
+        "completionDate": "2026-09-29",
+        "imageUrl": "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Kitchen & Chimney Degreasing Service - Kalapatti",
+        "category": "Cleaning",
+        "description": "Industrial steam cleaning and baffle filter decarbonization for commercial residential kitchen.",
+        "location": "Kalapatti, Coimbatore",
+        "completionDate": "2026-08-25",
+        "imageUrl": "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Hospital-Grade Bathroom Sanitization - Kalapatti",
+        "category": "Cleaning",
+        "description": "Scale descaling on ceramic tiles, fixture polishing, and high-pressure steam floor disinfection.",
+        "location": "Kalapatti, Coimbatore",
+        "completionDate": "2026-07-21",
+        "imageUrl": "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ],
+    "rating": 4.7,
+    "bio": "Experienced Cleaning specialist with 6+ years of verified on-site service delivery in Kalapatti, Coimbatore.",
+    "name": "Imran A",
+    "verified": true,
+    "experienceYears": 6,
+    "categories": [
+      "Cleaning"
+    ]
   },
   {
-    "workerId": "W019",
-    "userId": "W019",
-    "name": "Satish K",
-    "email": "w019@skillbridge.demo",
-    "profileImageUrl": null,
+    "id": "W019",
+    "rating": 4.5,
+    "location": "Chennai Central, Chennai",
+    "experience": 2,
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "portfolio": [
+      {
+        "projectTitle": "Concealed Pipeline Replacement - Chennai Central",
+        "category": "Plumbing",
+        "description": "Complete replacement of aging concealed galvanized pipes with CPVC high-pressure piping.",
+        "location": "Chennai Central, Chennai",
+        "completionDate": "2026-10-06",
+        "imageUrl": "https://images.unsplash.com/photo-1542013936693-884638332954?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Dual-Flush Cistern & Faucet Fitment - Chennai Central",
+        "category": "Plumbing",
+        "description": "Installation of wall-hung WC fixtures and premium quarter-turn taps with pressure regulators.",
+        "location": "Chennai Central, Chennai",
+        "completionDate": "2026-09-01",
+        "imageUrl": "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Apartment Sump & Tank Automation - Chennai Central",
+        "category": "Plumbing",
+        "description": "Configured automated multi-inlet overhead water storage distribution with overflow bypass valves.",
+        "location": "Chennai Central, Chennai",
+        "completionDate": "2026-07-28",
+        "imageUrl": "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ],
+    "bio": "Experienced Plumbing specialist with 2+ years of verified on-site service delivery in Chennai Central, Chennai.",
+    "priceRange": "₹450 – ₹650",
+    "experienceYears": 2,
+    "price": 450,
+    "updatedAt": "2026-08-20T14:20:17.757Z",
     "category": "Plumbing",
+    "workerId": "W019",
+    "email": "w019@skillbridge.demo",
+    "verified": false,
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "userId": "W019",
+    "completedJobs": 46,
+    "availability": true,
+    "name": "Satish K",
+    "reviewCount": 6,
     "categories": [
       "Plumbing"
     ],
@@ -570,29 +1185,25 @@
       "Water Tank Installation",
       "Pipe Installation"
     ],
-    "experience": 2,
-    "experienceYears": 2,
-    "rating": 4.3,
-    "reviewCount": 18,
-    "completedJobs": 46,
-    "location": "Chennai Central, Chennai",
-    "availability": true,
-    "verified": false,
-    "price": 450,
-    "priceRange": "₹450 – ₹650",
-    "bio": "Experienced Plumbing specialist with 2+ years of verified on-site service delivery in Chennai Central, Chennai.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
-    "createdAt": "2026-08-20T14:20:17.757Z",
-    "updatedAt": "2026-08-20T14:20:17.757Z"
+    "profileImageUrl": null
   },
   {
-    "workerId": "W020",
-    "userId": "W020",
-    "name": "Vijay R",
-    "email": "w020@skillbridge.demo",
-    "profileImageUrl": null,
+    "id": "W020",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
     "category": "Electrical",
+    "workerId": "W020",
+    "profileImageUrl": null,
+    "priceRange": "₹500 – ₹700",
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "experience": 7,
+    "location": "Anna Nagar, Chennai",
+    "bio": "Experienced Electrical specialist with 7+ years of verified on-site service delivery in Anna Nagar, Chennai.",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "reviewCount": 6,
+    "email": "w020@skillbridge.demo",
+    "rating": 4.8,
+    "price": 500,
+    "experienceYears": 7,
     "categories": [
       "Electrical"
     ],
@@ -600,321 +1211,672 @@
       "Short-Circuit Troubleshooting",
       "Wiring Installation"
     ],
-    "experience": 7,
-    "experienceYears": 7,
-    "rating": 4.7,
-    "reviewCount": 64,
-    "completedJobs": 98,
-    "location": "Anna Nagar, Chennai",
-    "availability": true,
     "verified": true,
-    "price": 500,
-    "priceRange": "₹500 – ₹700",
-    "bio": "Experienced Electrical specialist with 7+ years of verified on-site service delivery in Anna Nagar, Chennai.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
-    "createdAt": "2026-08-20T14:20:17.757Z",
-    "updatedAt": "2026-08-20T14:20:17.757Z"
+    "updatedAt": "2026-08-20T14:20:17.757Z",
+    "availability": false,
+    "userId": "W020",
+    "portfolio": [
+      {
+        "projectTitle": "Distribution Board & MCB Rewiring - Anna Nagar",
+        "category": "Electrical",
+        "description": "Upgraded 3-phase modular distribution panel with RCCB earth leakage protection.",
+        "location": "Anna Nagar, Chennai",
+        "completionDate": "2026-10-08",
+        "imageUrl": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Commercial Office LED & Inverter Setup - Anna Nagar",
+        "category": "Electrical",
+        "description": "Installed commercial energy-efficient LED panel lighting and 5kVA backup UPS inverter.",
+        "location": "Anna Nagar, Chennai",
+        "completionDate": "2026-09-03",
+        "imageUrl": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Residential Short-Circuit Isolation - Anna Nagar",
+        "category": "Electrical",
+        "description": "Diagnosed conduit insulation failure, re-pulled fire-retardant wiring across living hall.",
+        "location": "Anna Nagar, Chennai",
+        "completionDate": "2026-07-30",
+        "imageUrl": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ],
+    "completedJobs": 98,
+    "name": "Vijay R"
   },
   {
-    "workerId": "W021",
-    "userId": "W021",
-    "name": "Deepak J",
-    "email": "w021@skillbridge.demo",
-    "profileImageUrl": null,
-    "category": "Carpentry",
+    "id": "W021",
     "categories": [
       "Carpentry"
     ],
+    "bio": "Experienced Carpentry specialist with 4+ years of verified on-site service delivery in Velachery, Chennai.",
+    "completedJobs": 57,
+    "profileImageUrl": null,
     "skills": [
       "Door Repair",
       "Cabinet Installation"
     ],
-    "experience": 4,
-    "experienceYears": 4,
-    "rating": 4.5,
-    "reviewCount": 33,
-    "completedJobs": 57,
-    "location": "Velachery, Chennai",
-    "availability": true,
-    "verified": true,
-    "price": 450,
-    "priceRange": "₹450 – ₹650",
-    "bio": "Experienced Carpentry specialist with 4+ years of verified on-site service delivery in Velachery, Chennai.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "reviewCount": 6,
     "createdAt": "2026-08-20T14:20:17.757Z",
-    "updatedAt": "2026-08-20T14:20:17.757Z"
+    "verified": true,
+    "name": "Deepak J",
+    "userId": "W021",
+    "email": "w021@skillbridge.demo",
+    "price": 450,
+    "experienceYears": 4,
+    "priceRange": "₹450 – ₹650",
+    "availability": true,
+    "workerId": "W021",
+    "category": "Carpentry",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "location": "Velachery, Chennai",
+    "updatedAt": "2026-08-20T14:20:17.757Z",
+    "experience": 4,
+    "rating": 4.7,
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "portfolio": [
+      {
+        "projectTitle": "Custom Teak Modular Wardrobe - Velachery",
+        "category": "Carpentry",
+        "description": "Handcrafted floor-to-ceiling 3-door sliding wardrobe with soft-close Blum runners.",
+        "location": "Velachery, Chennai",
+        "completionDate": "2026-09-30",
+        "imageUrl": "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Solid Teak Main Door Frame & Polish - Velachery",
+        "category": "Carpentry",
+        "description": "Precision carved traditional entry door installed with multi-point brass security mortise lock.",
+        "location": "Velachery, Chennai",
+        "completionDate": "2026-08-26",
+        "imageUrl": "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Kitchen Overhead Wall Cabinet Units - Velachery",
+        "category": "Carpentry",
+        "description": "Built moisture-resistant marine ply overhead cabinets with hydraulic lift hinges.",
+        "location": "Velachery, Chennai",
+        "completionDate": "2026-07-22",
+        "imageUrl": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ]
   },
   {
-    "workerId": "W022",
+    "id": "W022",
     "userId": "W022",
-    "name": "Madhan P",
+    "location": "Tambaram, Chennai",
+    "experienceYears": 8,
     "email": "w022@skillbridge.demo",
-    "profileImageUrl": null,
-    "category": "Mason / Construction",
-    "categories": [
-      "Mason / Construction"
-    ],
+    "bio": "Experienced Mason / Construction specialist with 8+ years of verified on-site service delivery in Tambaram, Chennai.",
+    "name": "Madhan P",
+    "createdAt": "2026-08-20T14:20:17.757Z",
     "skills": [
       "Tile Installation",
       "Brick Wall Construction"
     ],
-    "experience": 8,
-    "experienceYears": 8,
-    "rating": 4.8,
-    "reviewCount": 72,
-    "completedJobs": 121,
-    "location": "Tambaram, Chennai",
+    "categories": [
+      "Mason / Construction"
+    ],
     "availability": true,
-    "verified": true,
-    "price": 700,
-    "priceRange": "₹700 – ₹900",
-    "bio": "Experienced Mason / Construction specialist with 8+ years of verified on-site service delivery in Tambaram, Chennai.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
     "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
-    "createdAt": "2026-08-20T14:20:17.757Z",
-    "updatedAt": "2026-08-20T14:20:17.757Z"
+    "workerId": "W022",
+    "category": "Mason / Construction",
+    "rating": 4.7,
+    "profileImageUrl": null,
+    "verified": true,
+    "reviewCount": 6,
+    "updatedAt": "2026-08-20T14:20:17.757Z",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "experience": 8,
+    "priceRange": "₹700 – ₹900",
+    "price": 700,
+    "completedJobs": 121,
+    "portfolio": [
+      {
+        "projectTitle": "Vitrified Floor Tiling & Grouting - Tambaram",
+        "category": "Mason / Construction",
+        "description": "Precision laser-leveled anti-skid floor tiling with epoxy grouting in master kitchen.",
+        "location": "Tambaram, Chennai",
+        "completionDate": "2026-10-07",
+        "imageUrl": "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Interlocking Paver Driveway & Wall - Tambaram",
+        "category": "Mason / Construction",
+        "description": "Constructed brick perimeter boundary wall and laid 60mm heavy vehicle interlocking pavers.",
+        "location": "Tambaram, Chennai",
+        "completionDate": "2026-09-02",
+        "imageUrl": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Structural Plastering & Sealing - Tambaram",
+        "category": "Mason / Construction",
+        "description": "Repaired cracked exterior masonry with polymer-modified cement mortar and elastomeric basecoat.",
+        "location": "Tambaram, Chennai",
+        "completionDate": "2026-07-29",
+        "imageUrl": "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ]
   },
   {
-    "workerId": "W023",
-    "userId": "W023",
-    "name": "Ravi S",
+    "id": "W023",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "rating": 4.7,
+    "experienceYears": 5,
+    "experience": 5,
     "email": "w023@skillbridge.demo",
-    "profileImageUrl": null,
+    "availability": true,
+    "workerId": "W023",
     "category": "Painting",
-    "categories": [
-      "Painting"
-    ],
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "completedJobs": 69,
+    "location": "Adyar, Chennai",
+    "priceRange": "₹650 – ₹850",
+    "bio": "Experienced Painting specialist with 5+ years of verified on-site service delivery in Adyar, Chennai.",
+    "userId": "W023",
+    "profileImageUrl": null,
+    "name": "Ravi S",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "updatedAt": "2026-08-20T14:20:17.757Z",
     "skills": [
       "Exterior Painting",
       "Repainting"
     ],
-    "experience": 5,
-    "experienceYears": 5,
-    "rating": 4.7,
-    "reviewCount": 41,
-    "completedJobs": 69,
-    "location": "Adyar, Chennai",
-    "availability": true,
     "verified": true,
+    "reviewCount": 6,
     "price": 650,
-    "priceRange": "₹650 – ₹850",
-    "bio": "Experienced Painting specialist with 5+ years of verified on-site service delivery in Adyar, Chennai.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
-    "createdAt": "2026-08-20T14:20:17.757Z",
-    "updatedAt": "2026-08-20T14:20:17.757Z"
+    "categories": [
+      "Painting"
+    ],
+    "portfolio": [
+      {
+        "projectTitle": "Velvet Touch Emulsion Finish - Adyar",
+        "category": "Painting",
+        "description": "Putty leveling, primer application, and dual-coat luxury sheen emulsion for 3BHK flat.",
+        "location": "Adyar, Chennai",
+        "completionDate": "2026-09-29",
+        "imageUrl": "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Exterior Weatherproof Silicon Coating - Adyar",
+        "category": "Painting",
+        "description": "High-durability antifungal exterior weather guard application on two-story villa facade.",
+        "location": "Adyar, Chennai",
+        "completionDate": "2026-08-25",
+        "imageUrl": "https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Textured Accent Feature Wall - Adyar",
+        "category": "Painting",
+        "description": "Metallic stencil and rustic textured plaster feature wall created for modern living lounge.",
+        "location": "Adyar, Chennai",
+        "completionDate": "2026-07-21",
+        "imageUrl": "https://images.unsplash.com/photo-1574359411659-15573a27fd0c?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ]
   },
   {
-    "workerId": "W024",
-    "userId": "W024",
-    "name": "Firoz A",
+    "id": "W024",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "rating": 4.7,
+    "experienceYears": 6,
+    "experience": 6,
     "email": "w024@skillbridge.demo",
-    "profileImageUrl": null,
     "category": "Cleaning",
-    "categories": [
-      "Cleaning"
-    ],
+    "workerId": "W024",
+    "availability": true,
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "completedJobs": 134,
+    "location": "T Nagar, Chennai",
+    "priceRange": "₹500 – ₹700",
+    "bio": "Experienced Cleaning specialist with 6+ years of verified on-site service delivery in T Nagar, Chennai.",
+    "userId": "W024",
+    "profileImageUrl": null,
+    "name": "Firoz A",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "updatedAt": "2026-08-20T14:20:17.757Z",
     "skills": [
       "Home Deep Cleaning",
       "Office Cleaning"
     ],
-    "experience": 6,
-    "experienceYears": 6,
-    "rating": 4.9,
-    "reviewCount": 79,
-    "completedJobs": 134,
-    "location": "T Nagar, Chennai",
-    "availability": true,
     "verified": true,
+    "reviewCount": 6,
     "price": 500,
-    "priceRange": "₹500 – ₹700",
-    "bio": "Experienced Cleaning specialist with 6+ years of verified on-site service delivery in T Nagar, Chennai.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
-    "createdAt": "2026-08-20T14:20:17.757Z",
-    "updatedAt": "2026-08-20T14:20:17.757Z"
+    "categories": [
+      "Cleaning"
+    ],
+    "portfolio": [
+      {
+        "projectTitle": "Post-Renovation Heavy Debris Clean - T Nagar",
+        "category": "Cleaning",
+        "description": "Comprehensive chemical scrubbing of paint splatters, grout haze removal, and window buffing.",
+        "location": "T Nagar, Chennai",
+        "completionDate": "2026-10-06",
+        "imageUrl": "https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Kitchen & Chimney Degreasing Service - T Nagar",
+        "category": "Cleaning",
+        "description": "Industrial steam cleaning and baffle filter decarbonization for commercial residential kitchen.",
+        "location": "T Nagar, Chennai",
+        "completionDate": "2026-09-01",
+        "imageUrl": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Hospital-Grade Bathroom Sanitization - T Nagar",
+        "category": "Cleaning",
+        "description": "Scale descaling on ceramic tiles, fixture polishing, and high-pressure steam floor disinfection.",
+        "location": "T Nagar, Chennai",
+        "completionDate": "2026-07-28",
+        "imageUrl": "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ]
   },
   {
+    "id": "W025",
+    "experience": 2,
+    "location": "Kochi, Kerala",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
     "workerId": "W025",
-    "userId": "W025",
-    "name": "Gokul M",
-    "email": "w025@skillbridge.demo",
-    "profileImageUrl": null,
     "category": "Plumbing",
-    "categories": [
-      "Plumbing"
-    ],
+    "priceRange": "₹350 – ₹550",
+    "availability": true,
+    "email": "w025@skillbridge.demo",
+    "updatedAt": "2026-08-20T14:20:17.757Z",
+    "experienceYears": 2,
+    "reviewCount": 6,
+    "rating": 4.5,
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "price": 350,
+    "bio": "Experienced Plumbing specialist with 2+ years of verified on-site service delivery in Kochi, Kerala.",
+    "verified": false,
     "skills": [
       "Drain Blockage",
       "Toilet Repair"
     ],
-    "experience": 2,
-    "experienceYears": 2,
-    "rating": 4.3,
-    "reviewCount": 19,
     "completedJobs": 31,
-    "location": "Kochi, Kerala",
-    "availability": true,
-    "verified": false,
-    "price": 350,
-    "priceRange": "₹350 – ₹550",
-    "bio": "Experienced Plumbing specialist with 2+ years of verified on-site service delivery in Kochi, Kerala.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
-    "createdAt": "2026-08-20T14:20:17.757Z",
-    "updatedAt": "2026-08-20T14:20:17.757Z"
+    "categories": [
+      "Plumbing"
+    ],
+    "name": "Gokul M",
+    "profileImageUrl": null,
+    "userId": "W025",
+    "portfolio": [
+      {
+        "projectTitle": "Concealed Pipeline Replacement - Kochi",
+        "category": "Plumbing",
+        "description": "Complete replacement of aging concealed galvanized pipes with CPVC high-pressure piping.",
+        "location": "Kochi, Kerala",
+        "completionDate": "2026-09-28",
+        "imageUrl": "https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Dual-Flush Cistern & Faucet Fitment - Kochi",
+        "category": "Plumbing",
+        "description": "Installation of wall-hung WC fixtures and premium quarter-turn taps with pressure regulators.",
+        "location": "Kochi, Kerala",
+        "completionDate": "2026-08-24",
+        "imageUrl": "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Apartment Sump & Tank Automation - Kochi",
+        "category": "Plumbing",
+        "description": "Configured automated multi-inlet overhead water storage distribution with overflow bypass valves.",
+        "location": "Kochi, Kerala",
+        "completionDate": "2026-07-20",
+        "imageUrl": "https://images.unsplash.com/photo-1542013936693-884638332954?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ]
   },
   {
-    "workerId": "W026",
-    "userId": "W026",
+    "id": "W026",
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "experience": 5,
     "name": "Nithin K",
-    "email": "w026@skillbridge.demo",
-    "profileImageUrl": null,
+    "location": "Ernakulam, Kerala",
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "userId": "W026",
+    "experienceYears": 5,
+    "priceRange": "₹450 – ₹650",
+    "workerId": "W026",
     "category": "Electrical",
-    "categories": [
-      "Electrical"
-    ],
+    "email": "w026@skillbridge.demo",
+    "bio": "Experienced Electrical specialist with 5+ years of verified on-site service delivery in Ernakulam, Kerala.",
     "skills": [
       "Fan Installation",
       "Light Installation",
       "Repair"
     ],
-    "experience": 5,
-    "experienceYears": 5,
-    "rating": 4.6,
-    "reviewCount": 36,
     "completedJobs": 63,
-    "location": "Ernakulam, Kerala",
-    "availability": true,
-    "verified": true,
+    "rating": 4.7,
     "price": 450,
-    "priceRange": "₹450 – ₹650",
-    "bio": "Experienced Electrical specialist with 5+ years of verified on-site service delivery in Ernakulam, Kerala.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "verified": true,
+    "availability": true,
+    "reviewCount": 6,
+    "categories": [
+      "Electrical"
+    ],
     "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
-    "createdAt": "2026-08-20T14:20:17.757Z",
-    "updatedAt": "2026-08-20T14:20:17.757Z"
+    "updatedAt": "2026-08-20T14:20:17.757Z",
+    "profileImageUrl": null,
+    "portfolio": [
+      {
+        "projectTitle": "Distribution Board & MCB Rewiring - Ernakulam",
+        "category": "Electrical",
+        "description": "Upgraded 3-phase modular distribution panel with RCCB earth leakage protection.",
+        "location": "Ernakulam, Kerala",
+        "completionDate": "2026-10-05",
+        "imageUrl": "https://images.unsplash.com/photo-1498084393753-b411b2d26b34?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Commercial Office LED & Inverter Setup - Ernakulam",
+        "category": "Electrical",
+        "description": "Installed commercial energy-efficient LED panel lighting and 5kVA backup UPS inverter.",
+        "location": "Ernakulam, Kerala",
+        "completionDate": "2026-08-31",
+        "imageUrl": "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Residential Short-Circuit Isolation - Ernakulam",
+        "category": "Electrical",
+        "description": "Diagnosed conduit insulation failure, re-pulled fire-retardant wiring across living hall.",
+        "location": "Ernakulam, Kerala",
+        "completionDate": "2026-07-27",
+        "imageUrl": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ]
   },
   {
-    "workerId": "W027",
-    "userId": "W027",
-    "name": "Akhil S",
-    "email": "w027@skillbridge.demo",
-    "profileImageUrl": null,
-    "category": "Carpentry",
-    "categories": [
-      "Carpentry"
-    ],
+    "id": "W027",
     "skills": [
       "Furniture Repair",
       "Custom Furniture"
     ],
-    "experience": 7,
-    "experienceYears": 7,
-    "rating": 4.8,
-    "reviewCount": 58,
+    "categories": [
+      "Carpentry"
+    ],
+    "verified": true,
+    "reviewCount": 6,
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "profileImageUrl": null,
+    "userId": "W027",
+    "price": 600,
+    "bio": "Experienced Carpentry specialist with 7+ years of verified on-site service delivery in Thrissur, Kerala.",
+    "availability": true,
+    "priceRange": "₹600 – ₹800",
+    "email": "w027@skillbridge.demo",
+    "name": "Akhil S",
     "completedJobs": 101,
     "location": "Thrissur, Kerala",
-    "availability": true,
-    "verified": true,
-    "price": 600,
-    "priceRange": "₹600 – ₹800",
-    "bio": "Experienced Carpentry specialist with 7+ years of verified on-site service delivery in Thrissur, Kerala.",
+    "updatedAt": "2026-08-20T14:20:17.757Z",
+    "workerId": "W027",
+    "category": "Carpentry",
+    "rating": 4.8,
     "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
     "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
-    "createdAt": "2026-08-20T14:20:17.757Z",
-    "updatedAt": "2026-08-20T14:20:17.757Z"
+    "experience": 7,
+    "experienceYears": 7,
+    "portfolio": [
+      {
+        "projectTitle": "Custom Teak Modular Wardrobe - Thrissur",
+        "category": "Carpentry",
+        "description": "Handcrafted floor-to-ceiling 3-door sliding wardrobe with soft-close Blum runners.",
+        "location": "Thrissur, Kerala",
+        "completionDate": "2026-09-27",
+        "imageUrl": "https://images.unsplash.com/photo-1505798577917-a65157d3320a?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Solid Teak Main Door Frame & Polish - Thrissur",
+        "category": "Carpentry",
+        "description": "Precision carved traditional entry door installed with multi-point brass security mortise lock.",
+        "location": "Thrissur, Kerala",
+        "completionDate": "2026-08-23",
+        "imageUrl": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Kitchen Overhead Wall Cabinet Units - Thrissur",
+        "category": "Carpentry",
+        "description": "Built moisture-resistant marine ply overhead cabinets with hydraulic lift hinges.",
+        "location": "Thrissur, Kerala",
+        "completionDate": "2026-07-19",
+        "imageUrl": "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ]
   },
   {
-    "workerId": "W028",
-    "userId": "W028",
+    "id": "W028",
+    "updatedAt": "2026-08-20T14:20:17.757Z",
+    "verificationEligibility": {
+      "isVerified": true,
+      "badgeLabel": "Verified Worker",
+      "eligibilityScore": 100,
+      "isEligible": true,
+      "criteria": {
+        "experience": {
+          "required": 2,
+          "label": "Trade Experience (≥ 2 Years)",
+          "detail": "6 Years field experience",
+          "current": 6,
+          "met": true
+        },
+        "rating": {
+          "detail": "3 / 5.0 Star Rating",
+          "current": 3,
+          "met": true,
+          "required": 4,
+          "label": "Client Satisfaction (Rating ≥ 4.0)"
+        },
+        "workVerification": {
+          "status": "Approved by Admin",
+          "met": true,
+          "detail": "Profile photo, proof of work & trade credentials approved by Admin",
+          "label": "SkillBridge Work Verification"
+        }
+      },
+      "metCount": 3,
+      "disclaimer": "SkillBridge Work Verification audits practical proof of work and client feedback before issuing Verified Worker badges.",
+      "totalCriteria": 3
+    },
+    "experience": 6,
     "name": "Shyam R",
-    "email": "w028@skillbridge.demo",
+    "completedJobs": 75,
     "profileImageUrl": null,
-    "category": "Mason / Construction",
-    "categories": [
-      "Mason / Construction"
-    ],
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "rating": 4.5,
+    "verified": true,
+    "priceRange": "₹600 – ₹800",
+    "price": 600,
     "skills": [
       "Plastering",
       "Cement Work"
     ],
-    "experience": 6,
     "experienceYears": 6,
-    "rating": 4.5,
-    "reviewCount": 45,
-    "completedJobs": 74,
-    "location": "Kozhikode, Kerala",
+    "reviewCount": 6,
+    "email": "w028@skillbridge.demo",
+    "workerId": "W028",
+    "category": "Mason / Construction",
+    "categories": [
+      "Mason / Construction"
+    ],
     "availability": true,
-    "verified": true,
-    "price": 600,
-    "priceRange": "₹600 – ₹800",
-    "bio": "Experienced Mason / Construction specialist with 6+ years of verified on-site service delivery in Kozhikode, Kerala.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "location": "Kozhikode, Kerala",
+    "userId": "W028",
     "createdAt": "2026-08-20T14:20:17.757Z",
-    "updatedAt": "2026-08-20T14:20:17.757Z"
+    "bio": "Experienced Mason / Construction specialist with 6+ years of verified on-site service delivery in Kozhikode, Kerala.",
+    "portfolio": [
+      {
+        "projectTitle": "Vitrified Floor Tiling & Grouting - Kozhikode",
+        "category": "Mason / Construction",
+        "description": "Precision laser-leveled anti-skid floor tiling with epoxy grouting in master kitchen.",
+        "location": "Kozhikode, Kerala",
+        "completionDate": "2026-10-04",
+        "imageUrl": "https://images.unsplash.com/photo-1541888946425-d0fbb186f5f7?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Interlocking Paver Driveway & Wall - Kozhikode",
+        "category": "Mason / Construction",
+        "description": "Constructed brick perimeter boundary wall and laid 60mm heavy vehicle interlocking pavers.",
+        "location": "Kozhikode, Kerala",
+        "completionDate": "2026-08-30",
+        "imageUrl": "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Structural Plastering & Sealing - Kozhikode",
+        "category": "Mason / Construction",
+        "description": "Repaired cracked exterior masonry with polymer-modified cement mortar and elastomeric basecoat.",
+        "location": "Kozhikode, Kerala",
+        "completionDate": "2026-07-26",
+        "imageUrl": "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ]
   },
   {
-    "workerId": "W029",
-    "userId": "W029",
-    "name": "Jithin P",
-    "email": "w029@skillbridge.demo",
-    "profileImageUrl": null,
-    "category": "Painting",
+    "id": "W029",
+    "bio": "Experienced Painting specialist with 4+ years of verified on-site service delivery in Kottayam, Kerala.",
     "categories": [
       "Painting"
     ],
+    "completedJobs": 52,
+    "profileImageUrl": null,
     "skills": [
       "Interior Wall Painting",
       "Ceiling Painting"
     ],
-    "experience": 4,
-    "experienceYears": 4,
-    "rating": 4.7,
-    "reviewCount": 29,
-    "completedJobs": 52,
-    "location": "Kottayam, Kerala",
-    "availability": true,
-    "verified": true,
-    "price": 550,
-    "priceRange": "₹550 – ₹750",
-    "bio": "Experienced Painting specialist with 4+ years of verified on-site service delivery in Kottayam, Kerala.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "reviewCount": 6,
     "createdAt": "2026-08-20T14:20:17.757Z",
-    "updatedAt": "2026-08-20T14:20:17.757Z"
+    "verified": true,
+    "name": "Jithin P",
+    "email": "w029@skillbridge.demo",
+    "userId": "W029",
+    "experienceYears": 4,
+    "priceRange": "₹550 – ₹750",
+    "price": 550,
+    "availability": true,
+    "workerId": "W029",
+    "category": "Painting",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "location": "Kottayam, Kerala",
+    "updatedAt": "2026-08-20T14:20:17.757Z",
+    "experience": 4,
+    "rating": 4.7,
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "portfolio": [
+      {
+        "projectTitle": "Velvet Touch Emulsion Finish - Kottayam",
+        "category": "Painting",
+        "description": "Putty leveling, primer application, and dual-coat luxury sheen emulsion for 3BHK flat.",
+        "location": "Kottayam, Kerala",
+        "completionDate": "2026-09-26",
+        "imageUrl": "https://images.unsplash.com/photo-1534349762230-e0cadf78f5da?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Exterior Weatherproof Silicon Coating - Kottayam",
+        "category": "Painting",
+        "description": "High-durability antifungal exterior weather guard application on two-story villa facade.",
+        "location": "Kottayam, Kerala",
+        "completionDate": "2026-08-22",
+        "imageUrl": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Textured Accent Feature Wall - Kottayam",
+        "category": "Painting",
+        "description": "Metallic stencil and rustic textured plaster feature wall created for modern living lounge.",
+        "location": "Kottayam, Kerala",
+        "completionDate": "2026-07-18",
+        "imageUrl": "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ]
   },
   {
-    "workerId": "W030",
-    "userId": "W030",
-    "name": "Nikhil T",
-    "email": "w030@skillbridge.demo",
-    "profileImageUrl": null,
+    "id": "W030",
+    "rating": 4.8,
+    "experienceYears": 3,
+    "priceRange": "₹350 – ₹550",
+    "createdAt": "2026-08-20T14:20:17.757Z",
+    "location": "Kochi, Kerala",
+    "completedJobs": 40,
     "category": "Cleaning",
+    "workerId": "W030",
+    "availability": true,
+    "experience": 3,
+    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "price": 350,
+    "bio": "Experienced Cleaning specialist with 3+ years of verified on-site service delivery in Kochi, Kerala.",
+    "email": "w030@skillbridge.demo",
     "categories": [
       "Cleaning"
     ],
+    "userId": "W030",
+    "name": "Nikhil T",
+    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+    "profileImageUrl": null,
+    "verified": false,
     "skills": [
       "Bathroom Cleaning",
       "Kitchen Cleaning"
     ],
-    "experience": 3,
-    "experienceYears": 3,
-    "rating": 4.4,
-    "reviewCount": 21,
-    "completedJobs": 40,
-    "location": "Kochi, Kerala",
-    "availability": true,
-    "verified": false,
-    "price": 350,
-    "priceRange": "₹350 – ₹550",
-    "bio": "Experienced Cleaning specialist with 3+ years of verified on-site service delivery in Kochi, Kerala.",
-    "idProofUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-    "certificateUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
-    "createdAt": "2026-08-20T14:20:17.757Z",
-    "updatedAt": "2026-08-20T14:20:17.757Z"
+    "updatedAt": "2026-08-20T14:20:17.757Z",
+    "reviewCount": 6,
+    "portfolio": [
+      {
+        "projectTitle": "Post-Renovation Heavy Debris Clean - Kochi",
+        "category": "Cleaning",
+        "description": "Comprehensive chemical scrubbing of paint splatters, grout haze removal, and window buffing.",
+        "location": "Kochi, Kerala",
+        "completionDate": "2026-09-28",
+        "imageUrl": "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Kitchen & Chimney Degreasing Service - Kochi",
+        "category": "Cleaning",
+        "description": "Industrial steam cleaning and baffle filter decarbonization for commercial residential kitchen.",
+        "location": "Kochi, Kerala",
+        "completionDate": "2026-08-24",
+        "imageUrl": "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      },
+      {
+        "projectTitle": "Hospital-Grade Bathroom Sanitization - Kochi",
+        "category": "Cleaning",
+        "description": "Scale descaling on ceramic tiles, fixture polishing, and high-pressure steam floor disinfection.",
+        "location": "Kochi, Kerala",
+        "completionDate": "2026-07-20",
+        "imageUrl": "https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=800&q=80",
+        "isDemoPortfolio": true
+      }
+    ]
   }
 ]

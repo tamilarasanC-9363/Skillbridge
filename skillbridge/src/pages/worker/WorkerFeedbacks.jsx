@@ -5,7 +5,7 @@ import { subscribeToReviewsForWorker } from '../../services/reviewService';
 import Sidebar from '../../components/Sidebar';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import RatingStars from '../../components/RatingStars';
-import { Briefcase, CalendarDays, CheckSquare, Clock, Play, Star, UserRound } from 'lucide-react';
+import { Briefcase, CalendarDays, CheckSquare, Clock, Play, Star, UserRound, ShieldAlert } from 'lucide-react';
 
 export default function WorkerFeedbacks() {
   const { currentUser } = useAuth();
@@ -68,6 +68,7 @@ export default function WorkerFeedbacks() {
     { label: 'Incoming Job Requests', path: '/worker/requests', icon: Clock },
     { label: 'Active Service Tasks', path: '/worker/jobs', icon: Play },
     { label: 'My Bookings History', path: '/worker/bookings', icon: CheckSquare },
+    { label: 'Disputes & Reports', path: '/worker/reports', icon: ShieldAlert },
     { label: 'Customer Feedbacks', path: '/worker/feedbacks', icon: Star }
   ];
 

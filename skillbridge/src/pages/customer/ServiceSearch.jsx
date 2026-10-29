@@ -34,10 +34,23 @@ const CATEGORY_JOBS = {
   ]
 };
 
+function resolveCategory(cat) {
+  if (!cat) return 'Plumbing';
+  const c = cat.toLowerCase();
+  if (c.includes('mason') || c.includes('tile') || c.includes('construct') || c.includes('plaster')) return 'Mason / Construction';
+  if (c.includes('paint')) return 'Painting';
+  if (c.includes('clean')) return 'Cleaning';
+  if (c.includes('electr')) return 'Electrical';
+  if (c.includes('carpent')) return 'Carpentry';
+  if (c.includes('plumb')) return 'Plumbing';
+  return cat;
+}
+
 export default function ServiceSearch() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const categoryParam = searchParams.get('category') || 'Plumbing';
+  const rawCategory = searchParams.get('category');
+  const categoryParam = resolveCategory(rawCategory);
 
   const [category, setCategory] = useState(categoryParam);
   const [selectedJob, setSelectedJob] = useState('');

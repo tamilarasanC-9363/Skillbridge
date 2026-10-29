@@ -8,7 +8,7 @@ import {
 } from 'firebase/auth';
 import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs } from 'firebase/firestore';
 
-import workersData from '../../data/workers.json';
+import workersData from '../data/workers.json';
 
 // Initial pre-seeded accounts for simulation mode
 export const MOCK_USERS = {
